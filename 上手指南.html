@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>act-combat-design · 上手指南</title>
+<style>
+  :root{
+    --bg:#eef2f8; --paper:#ffffff; --ink:#1a2332; --muted:#5a6578;
+    --accent:#1e40af; --accent2:#3b82f6; --steel:#3a7ca5; --line:#cbd5e1; --line2:#e2e8f0;
+    --hl:#dbeafe; --ok:#1f7a4d; --warn:#b45309; --card:#f6f9fd;
+    --shadow:0 2px 14px rgba(30,64,175,.07);
+    --font:"Microsoft YaHei","微软雅黑",-apple-system,"PingFang SC",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15.5px;line-height:1.8;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  code{font-family:Consolas,"Cascadia Code",monospace;background:#eaf0f9;color:#16357a;padding:1px 6px;border-radius:4px;font-size:.92em;}
+
+  /* ===== 布局 ===== */
+  .wrap{max-width:1460px;margin:0 auto;padding:0 28px;display:flex;gap:34px;align-items:flex-start;}
+  .side{position:sticky;top:0;width:228px;flex:0 0 228px;height:100vh;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;padding-top:15vh;}
+  nav.toc{background:var(--paper);border:1px solid var(--line2);border-radius:12px;padding:14px 12px;box-shadow:var(--shadow);font-size:13.5px;max-height:72vh;overflow:auto;}
+  nav.toc .t{font-weight:700;color:var(--muted);font-size:12px;letter-spacing:.5px;padding:4px 8px 8px;}
+  nav.toc a{display:block;color:var(--muted);padding:6px 10px;border-radius:7px;border-left:3px solid transparent;margin:1px 0;}
+  nav.toc a:hover{background:var(--card);text-decoration:none;color:var(--ink);}
+  nav.toc a.active{color:var(--accent);background:var(--hl);border-left-color:var(--accent);font-weight:600;}
+  main{flex:1 1 auto;min-width:0;padding-bottom:80px;}
+
+  /* ===== 头部 ===== */
+  header.hero{background:linear-gradient(135deg,#1e3a8a,#1e40af 55%,#3a7ca5);color:#fff;border-radius:16px;padding:38px 40px;margin:20px 0 26px;box-shadow:0 8px 30px rgba(30,64,175,.22);}
+  header.hero h1{margin:0 0 8px;font-size:30px;letter-spacing:.5px;}
+  header.hero .sub{font-size:16px;opacity:.95;line-height:1.7;}
+  header.hero .en{font-size:13px;opacity:.8;margin-top:6px;}
+  .tags{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;}
+  .tags span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:4px 12px;border-radius:20px;font-size:12.5px;}
+
+  section{background:var(--paper);border:1px solid var(--line2);border-radius:14px;padding:24px 28px;margin:0 0 22px;box-shadow:var(--shadow);scroll-margin-top:16px;}
+  section>h2{margin:0 0 4px;font-size:21px;color:var(--accent);display:flex;align-items:center;gap:10px;}
+  section>h2 .no{display:inline-flex;width:28px;height:28px;background:var(--accent);color:#fff;border-radius:8px;align-items:center;justify-content:center;font-size:14px;flex:0 0 28px;}
+  section>.lead{color:var(--muted);margin:6px 0 18px;}
+  h3{font-size:16.5px;margin:22px 0 8px;color:#16357a;}
+  h3::before{content:"◆ ";color:var(--steel);font-size:.85em;}
+
+  /* ===== 卡片网格 ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:14px 0;}
+  .card{background:var(--card);border:1px solid var(--line2);border-radius:11px;padding:15px 16px;}
+  .card .ic{font-size:21px;}
+  .card b{display:block;margin:6px 0 4px;color:var(--ink);font-size:15px;}
+  .card p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.7;}
+
+  /* ===== 图解 ===== */
+  .fig{background:#f4f8fd;border:1px dashed var(--line);border-radius:12px;padding:20px;margin:16px 0;}
+  .fig .cap{text-align:center;color:var(--muted);font-size:12.5px;margin-top:10px;}
+  .flow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .node{background:#fff;border:1.5px solid var(--accent2);border-radius:10px;padding:12px 14px;text-align:center;min-width:110px;flex:1 1 0;}
+  .node .h{font-weight:700;color:var(--accent);font-size:14px;}
+  .node .d{color:var(--muted);font-size:12px;margin-top:3px;line-height:1.5;}
+  .node.alt{border-color:var(--steel);}
+  .node.alt .h{color:var(--steel);}
+  .arrow{display:flex;align-items:center;color:var(--accent2);font-size:22px;font-weight:bold;}
+  .two-layer{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .layer{border-radius:11px;padding:16px 18px;}
+  .layer.keep{background:#e8f3ec;border:1.5px solid #9cc9af;}
+  .layer.keep .lh{color:#1f7a4d;}
+  .layer.proj{background:#fdeee3;border:1.5px solid #e0b48a;}
+  .layer.proj .lh{color:#b45309;}
+  .layer .lh{font-weight:700;font-size:15px;margin-bottom:6px;}
+  .layer p{margin:0;color:#3b454f;font-size:13.5px;}
+  .layer .ex{margin-top:8px;font-size:12.5px;color:var(--muted);}
+
+  /* ===== 折叠 ===== */
+  details{border:1px solid var(--line2);border-radius:10px;margin:10px 0;overflow:hidden;background:var(--card);}
+  details>summary{cursor:pointer;padding:12px 16px;font-weight:600;color:var(--ink);list-style:none;display:flex;align-items:center;justify-content:space-between;background:#eef4fb;user-select:none;}
+  details>summary::-webkit-details-marker{display:none;}
+  details>summary .chev{transition:transform .2s;color:var(--accent);font-size:13px;}
+  details[open]>summary .chev{transform:rotate(90deg);}
+  details>summary:hover{background:#e3edf9;}
+  details .body{padding:14px 18px;}
+
+  /* ===== 表格 ===== */
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;}
+  th,td{border:1px solid var(--line2);padding:9px 12px;text-align:left;vertical-align:top;}
+  th{background:#eef4fb;color:#16357a;font-weight:700;}
+  tr:nth-child(even) td{background:#fafcff;}
+
+  .filelist{display:flex;flex-direction:column;gap:7px;}
+  .filelist .f{display:flex;gap:10px;align-items:baseline;padding:7px 10px;border-radius:8px;background:#fff;border:1px solid var(--line2);}
+  .filelist .f code{flex:0 0 auto;}
+  .filelist .f span{color:var(--muted);font-size:13px;}
+
+  .pill{display:inline-block;background:var(--hl);color:var(--accent);border:1px solid #b6cdf3;border-radius:6px;padding:1px 8px;font-size:12.5px;font-weight:600;margin:0 2px;}
+  .steps{counter-reset:s;list-style:none;padding:0;margin:14px 0;}
+  .steps li{counter-increment:s;position:relative;padding:12px 16px 12px 52px;background:var(--card);border:1px solid var(--line2);border-radius:10px;margin-bottom:10px;}
+  .steps li::before{content:counter(s);position:absolute;left:14px;top:12px;width:26px;height:26px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;}
+  .note{background:#fff8eb;border:1px solid #f0d9a8;border-left:4px solid var(--warn);border-radius:8px;padding:10px 14px;margin:12px 0;font-size:14px;color:#6b4d12;}
+  .ok{background:#eef7f1;border:1px solid #b9dcc7;border-left:4px solid var(--ok);border-radius:8px;padding:10px 14px;margin:12px 0;font-size:14px;color:#1c5a39;}
+
+  .toc-top{display:block;width:100%;margin-top:10px;background:var(--paper);color:var(--muted);border:1px solid var(--line2);box-shadow:var(--shadow);padding:11px 10px;border-radius:12px;cursor:pointer;font-size:13.5px;font-weight:600;font-family:var(--font);transition:background .18s,color .18s,border-color .18s;}
+  .toc-top:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+  @media(max-width:880px){
+    .wrap{flex-direction:column;padding:0 14px;}
+    .side{position:static;width:100%;flex:none;height:auto;display:block;padding-top:0;}
+    nav.toc{max-height:none;}
+    .two-layer{grid-template-columns:1fr;}
+    header.hero{padding:28px 22px;}
+    header.hero h1{font-size:24px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="side">
+  <nav class="toc" id="toc">
+    <div class="t">目录</div>
+    <a href="#what">① 这是什么</a>
+    <a href="#why">② 核心优点</a>
+    <a href="#kb">③ 知识库囊括什么</a>
+    <a href="#can">④ 能做什么</a>
+    <a href="#how">⑤ 怎么用</a>
+    <a href="#modes">⑥ 两种协作模式</a>
+    <a href="#tree">⑦ 目录结构</a>
+    <a href="#examples">⑧ 自带示例</a>
+    <a href="#start">⑨ 快速开始</a>
+    <a href="#faq">⑩ 常见问题</a>
+  </nav>
+  <button class="toc-top" id="totop" title="回到顶部">↑ 回到顶部</button>
+  </div>
+
+  <main>
+
+    <header class="hero">
+      <h1>⚔️ act-combat-design</h1>
+      <div class="sub">一套<strong>项目无关</strong>的二次元 / 动作游戏（ACT）<strong>战斗设计方法论 + 行业知识库</strong>，可被任意 AI agent（Claude、GPT、Cursor…）使用，帮你设计可给策划 / 美术审阅的<strong>玩家角色</strong>与<strong>怪物 Boss</strong>。</div>
+      <div class="en">A project-agnostic anime / action-game combat-design methodology &amp; knowledge base, usable by any AI agent.</div>
+      <div class="tags">
+        <span>🎮 角色 &amp; Boss 设计</span><span>🧩 不预设战斗体系</span><span>🤖 任意 agent 开箱</span><span>📚 70+ 游戏借鉴库</span><span>📄 审阅 HTML + 落地 xlsx</span>
+      </div>
+    </header>
+
+    <p style="color:var(--muted);margin:0 0 22px;">本页是<strong>给人读的上手指南</strong>——看完你会知道它是什么、好在哪、知识库有什么、能做什么、怎么上手。配套文档：<a href="README.md">README.md</a>（仓库说明）· <a href="USAGE.md">USAGE.md</a>（各 agent 加载方式 + 可粘贴 system prompt）· <a href="SKILL.md">SKILL.md</a>（方法论入口）。</p>
+
+    <!-- ① 这是什么 -->
+    <section id="what">
+      <h2><span class="no">1</span>这是什么</h2>
+      <div class="lead">把"设计一个动作游戏角色 / Boss"沉淀成一套可复用的<strong>方法论</strong>，背后配一座<strong>行业知识库</strong>。它最关键的特点是 —— <strong>不预设任何一套战斗体系</strong>。</div>
+
+      <div class="fig">
+        <div class="two-layer">
+          <div class="layer keep">
+            <div class="lh">🟢 方法论 + 行业知识库（可迁移，跟着你走）</div>
+            <p>设计流程、5 维质量标尺、42 条元规则、跨游戏借鉴库、角色原型 / Boss 范式、打击感 / 数值 / Boss AI 工程基线……</p>
+            <div class="ex">这部分是<strong>所有项目通用</strong>的，开箱即用。</div>
+          </div>
+          <div class="layer proj">
+            <div class="lh">🟠 你项目的战斗设定（每个项目自己定义）</div>
+            <p>招式集、视觉预警契约、受击 / CC 分类、分类轴、帧率、命名、配队、养成……</p>
+            <div class="ex">本方法论<strong>不强加</strong>这些（不假设有"固定 9 招 / 红光必闪 / 协力技 / 命座"），而是引导你在 <a href="conventions/TEMPLATE.md"><code>conventions/TEMPLATE.md</code></a> 里把<strong>你项目自己的</strong>约定填好。</div>
+          </div>
+        </div>
+        <div class="cap">▲ 核心理念：通用方法论替你把活干；项目专属设定由你定义，互不绑架。</div>
+      </div>
+
+      <p>正因为这条分界，<strong>同一套 skill 能服务任何 ACT 项目</strong>——二次元抽卡手游、单机硬核动作、横版清关都行；换个项目，只要重填一份"约定"即可。</p>
+    </section>
+
+    <!-- ② 核心优点 -->
+    <section id="why">
+      <h2><span class="no">2</span>核心优点</h2>
+      <div class="grid">
+        <div class="card"><div class="ic">🧩</div><b>项目无关，不强加体系</b><p>战斗设定由各项目自定义；方法论只提供"设计空间菜单 + 留空模板 + 中性示例"，绝不把某家的"9 招 / 红光 / 命座"塞给你。</p></div>
+        <div class="card"><div class="ic">🤖</div><b>任意 agent 开箱即用</b><p>纯 markdown 知识库 + 可粘贴 system prompt，Claude Code 当 skill、GPT / Claude.ai / Cursor 当上传文件，都能跑。</p></div>
+        <div class="card"><div class="ic">📑</div><b>审阅 / 落地分离</b><p>设计稿（给人评审"好不好"）与生产资源表（给美术 / 程序"照着做"）分两套产出，互不淹没。</p></div>
+        <div class="card"><div class="ic">🙋</div><b>默认人审 + 可选全自动</b><p>默认在关键决策点停下来跟你一起定；你说"完全出一版"就一口气出全套 + 标好假设。</p></div>
+        <div class="card"><div class="ic">📚</div><b>厚实的行业知识库</b><p>角色原型、Boss 范式、42 条元规则、70+ 游戏借鉴、打击感 / 数值 / Boss AI 工程基线 —— 设计有据可依，不拍脑袋。</p></div>
+        <div class="card"><div class="ic">🎁</div><b>自带模板 + 完整示例</b><p>审阅级 HTML 模板 + 资源表模板 + 两个从零做好的示例（角色「苍岚」、Boss「孤鸦」），照葫芦画瓢。</p></div>
+      </div>
+    </section>
+
+    <!-- ③ 知识库 -->
+    <section id="kb">
+      <h2><span class="no">3</span>知识库囊括了什么</h2>
+      <div class="lead">知识库（<code>references/</code>，21 份中文文档）按职责分五组。点开看每组细目：</div>
+
+      <div class="fig">
+        <div class="flow">
+          <div class="node"><div class="h">方法论核心</div><div class="d">怎么设计</div></div>
+          <div class="node"><div class="h">设计库</div><div class="d">原型 / 范式</div></div>
+          <div class="node"><div class="h">横向知识</div><div class="d">跨游戏 / 配队</div></div>
+          <div class="node"><div class="h">工程基线</div><div class="d">手感 / 数值 / AI</div></div>
+          <div class="node"><div class="h">产出工具链</div><div class="d">HTML / xlsx</div></div>
+        </div>
+        <div class="cap">▲ 五组知识，从"怎么想"到"怎么落地产出"全覆盖。</div>
+      </div>
+
+      <details open><summary>🧠 方法论核心 —— 怎么设计 <span class="chev">▸</span></summary>
+        <div class="body filelist">
+          <div class="f"><code>design-doc-structure.md</code><span>设计文档的 sheet 结构与字段</span></div>
+          <div class="f"><code>moveset-design.md</code><span>招式集设计法（各招式类型的设计手艺；不预设固定招式）</span></div>
+          <div class="f"><code>design-aesthetics.md</code><span>5 维质量标尺 + 战斗节奏理论（判断设计好坏）</span></div>
+          <div class="f"><code>meta-rules.md</code><span>🌟 42 条元规则 + 机制创新 5 步法（思维核心）</span></div>
+          <div class="f"><code>anti-patterns.md</code><span>16 条设计反模式自检清单</span></div>
+        </div>
+      </details>
+
+      <details><summary>🗂️ 设计库 —— 原型 / 范式 <span class="chev">▸</span></summary>
+        <div class="body filelist">
+          <div class="f"><code>character-archetypes.md</code> <code>+ extended</code><span>角色机制原型库（从业界 30+ 款游戏抽象）</span></div>
+          <div class="f"><code>boss-paradigms.md</code> <code>+ extended</code><span>Boss 设计范式库（16 种范式 + 详解）</span></div>
+        </div>
+      </details>
+
+      <details><summary>🌐 横向知识 —— 跨游戏 / 配队 <span class="chev">▸</span></summary>
+        <div class="body filelist">
+          <div class="f"><code>cross-game-reference.md</code><span>跨游戏借鉴库（按主题索引，70+ 款游戏样本）</span></div>
+          <div class="f"><code>team-comp-principles.md</code><span>配队设计方法论（25 元规则 + 核心出伤点 + 辅助三层模型）</span></div>
+          <div class="f"><code>team-comp-cases.md</code><span>配队案例库（神配队解构 / Roguelite / 反派群组）</span></div>
+          <div class="f"><code>team-comp-gacha-trends.md</code><span>2024–2026 二游配队趋势调研（时效性强）</span></div>
+        </div>
+      </details>
+
+      <details><summary>🔧 工程基线 —— 手感 / 数值 / AI <span class="chev">▸</span></summary>
+        <div class="body filelist">
+          <div class="f"><code>hit-feel-tech.md</code><span>打击感技术（Hit-Stop / Camera Shake / 音效 / VFX / Haptic 参数基线）</span></div>
+          <div class="f"><code>numbers-and-progression.md</code><span>数值与养成（伤害公式 / 击破系统 / buff 叠加 / 抽卡命座哲学，买断可跳过）</span></div>
+          <div class="f"><code>boss-ai-and-arena.md</code><span>Boss AI 工程化原则 + 场地参战 8 模式</span></div>
+        </div>
+      </details>
+
+      <details><summary>🛠️ 产出工具链 —— HTML / xlsx <span class="chev">▸</span></summary>
+        <div class="body filelist">
+          <div class="f"><code>vfx-requirements.md</code><span>特效需求规范（三段式 / 优先级 / 复用）</span></div>
+          <div class="f"><code>dual-arena-boss.md</code><span>叙事型 / 双场 Boss 编排范式</span></div>
+          <div class="f"><code>review-html-doc.md</code> <code>+ components</code> <code>+ markup-kit</code><span>审阅级 HTML 文档范式 + 组件实现 + 评审标记套件</span></div>
+          <div class="f"><code>resource-xlsx-generation.md</code><span>把设计稿转成团队"美术资源需求 xlsx"（配 <code>scripts/</code>）</span></div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ④ 能做什么 -->
+    <section id="can">
+      <h2><span class="no">4</span>能做什么</h2>
+      <div class="lead">两类设计对象 × 两个产出方向。</div>
+      <div class="grid">
+        <div class="card"><div class="ic">🧍</div><b>玩家角色设计</b><p>从蓝本 / 定位 / 机制灵感，到逐招玩法、动作帧、特效、程序需求的完整设计。</p></div>
+        <div class="card"><div class="ic">👹</div><b>怪物 / Boss 设计</b><p>阶段化框架、技能详情、AI &amp; 连招策略、动作 / 特效 / 程序需求；含双场战范式。</p></div>
+      </div>
+
+      <div class="fig">
+        <div class="flow">
+          <div class="node alt"><div class="h">设计草稿</div><div class="d">markdown，跟你确认</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="h">审阅方向</div><div class="d">审阅级交互 HTML<br>给策划 / 美术评审</div></div>
+          <div class="node"><div class="h">落地方向</div><div class="d">资源需求 md → xlsx<br>给美术 / 程序照着做</div></div>
+        </div>
+        <div class="cap">▲ 先 markdown 草稿确认方向，再分两个方向产出：审阅稿（叙事 / 评审）+ 落地稿（逐资产逐帧）。</div>
+      </div>
+      <p>审阅级 HTML 是一份<strong>可交互的单文件评审稿</strong>：技能卡、阶段表、金 / 紫预警标注、评审备注、改动留痕、贴图贴视频、一键导出回传 —— 拿来给团队评审、迭代到定稿。</p>
+    </section>
+
+    <!-- ⑤ 怎么用 -->
+    <section id="how">
+      <h2><span class="no">5</span>怎么用</h2>
+
+      <h3>第一步：定义"你项目的战斗约定"（Phase 0）</h3>
+      <p>这是地基。用 <a href="conventions/TEMPLATE.md"><code>conventions/TEMPLATE.md</code></a> 把你项目的招式集 / 视觉预警 / 受击分类 / 帧率 / 命名 / 配队 / 养成定下来（可让 AI 帮你填）。想看填好的样子 → <a href="conventions/example-conventions.md"><code>example-conventions.md</code></a>。</p>
+
+      <h3>第二步：跟 AI 说"设计 XXX 角色 / Boss"，走 6 Phase 流程</h3>
+      <div class="fig">
+        <div class="flow">
+          <div class="node alt"><div class="h">Phase 0</div><div class="d">载入项目约定</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="h">收集输入</div><div class="d">蓝本 / 定位 / 机制</div></div>
+          <div class="arrow">→</div>
+          <div class="node" style="border-color:var(--warn)"><div class="h" style="color:var(--warn)">高层框架 ⏸</div><div class="d">停下确认方向</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="h">逐招展开</div><div class="d">动作 / 特效需求</div></div>
+          <div class="arrow">→</div>
+          <div class="node"><div class="h">整合产出</div><div class="d">审阅 HTML / 落地 xlsx</div></div>
+        </div>
+        <div class="cap">▲ ⏸ 处会停下来跟你确认（默认人审模式，详见第 ⑥ 节）。</div>
+      </div>
+
+      <h3>第三步：把 skill 加载到你的 AI 工具</h3>
+      <table>
+        <tr><th>工具</th><th>怎么加载</th><th>怎么触发</th></tr>
+        <tr><td><b>Claude Code</b></td><td>整个文件夹放进 <code>~/.claude/skills/</code>（全局）或项目 <code>.claude/skills/</code></td><td>说「设计 XXX 角色」/「设计 XXX Boss」/「战斗策划专家」<strong>自动触发</strong></td></tr>
+        <tr><td><b>GPT / ChatGPT</b></td><td>Custom GPT：把 md 上传到 Knowledge；把 <a href="USAGE.md">USAGE.md</a> 里的 system prompt 填进 Instructions</td><td>加载后直接说「帮我设计一个 XX 角色 / Boss」</td></tr>
+        <tr><td><b>Claude.ai</b></td><td>新建 Project，md 加进 Project knowledge，system prompt 填进 Instructions</td><td>同上，自然语言提需求</td></tr>
+        <tr><td><b>Cursor 等</b></td><td>仓库放进工作区，以 <code>SKILL.md</code> 为入口，按需读 <code>references/</code></td><td><code>@SKILL.md</code> 引用后提需求</td></tr>
+      </table>
+      <div class="note">💡 <strong>非 Claude 的 agent 没有自动触发</strong>——把 <a href="USAGE.md">USAGE.md</a> 里那段<strong>可直接粘贴的 system prompt</strong> 设好，再自然提需求即可。Custom GPT 有 20 文件上限，可只传核心子集，或用 Claude Projects / API（无此限制）。</div>
+    </section>
+
+    <!-- ⑥ 协作模式 -->
+    <section id="modes">
+      <h2><span class="no">6</span>两种协作模式</h2>
+      <div class="lead">战斗设计需要人拍板。默认替你把关；显式要求时才全自动。</div>
+      <div class="two-layer">
+        <div class="layer keep">
+          <div class="lh">🙋 默认 · 人审协作</div>
+          <p>在 3 类<strong>重大决策点必停</strong>，和你一起定：</p>
+          <p style="margin-top:8px;">① 设计输入（中文名 / 定位 / 机制方向，必问）<br>② 高层框架（"这个方向行不行"）<br>③ 定稿前（草稿改到满意、你说"定了"才转实际产出）</p>
+          <div class="ex">铁律：设计必须经人工审核 + 协作改定，才进入实际产出。</div>
+        </div>
+        <div class="layer proj">
+          <div class="lh">🤖 可选 · 全自动出稿</div>
+          <p>当你<strong>明确说</strong>「你完全出一版」/「全自动出」/「自己出全套不用问我」时：</p>
+          <p style="margin-top:8px;">· 不在决策点停，一口气出全套<br>· 该问的设计选择自己合理推测拍板<br>· 产出里<strong>集中列出"替你做了哪些假设"</strong></p>
+          <div class="ex">产出标注「自动草案 · 投产前仍建议人工过一遍」。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 目录结构 -->
+    <section id="tree">
+      <h2><span class="no">7</span>目录结构</h2>
+      <pre style="background:#0f1f3d;color:#cfe0f7;padding:18px 20px;border-radius:12px;overflow:auto;font-family:Consolas,monospace;font-size:13.5px;line-height:1.7;">act-combat-design/
+├─ <b style="color:#7fb2ff">上手指南.html</b>          ← 本页（图文上手指南）
+├─ README.md / USAGE.md / LICENSE
+├─ SKILL.md             方法论入口（6 Phase + 引用索引）
+├─ conventions/         ★ 定义你项目的战斗约定（TEMPLATE + 范例）
+├─ references/          知识库（21 份：方法论 + 知识 + 工程基线 + 工具链）
+├─ templates/           空白模板：审阅级 HTML + 落地资源需求
+├─ scripts/             xlsx inspect / 生成脚本（Windows-only）
+└─ output/              产出区（按单位分文件夹）
+   ├─ characters/cang-lan/   示例角色「苍岚」：md/ 源稿 + 审阅 HTML + 资源 xlsx
+   └─ bosses/gu-ya/          示例 Boss「孤鸦」：md/ 源稿 + 审阅 HTML + 资源 xlsx</pre>
+      <div class="note">📁 <strong>每个单位一个文件夹</strong>：markdown 源稿放 <code>&lt;单位&gt;/md/</code>，渲染成品（HTML / xlsx）放单位根目录。你自己的产出也照此结构落 <code>output/</code> 下。</div>
+    </section>
+
+    <!-- ⑧ 示例 -->
+    <section id="examples">
+      <h2><span class="no">8</span>自带示例</h2>
+      <div class="lead">两个从零做好的原创示例（IP 无关，虚构项目《孤刃行》），演示"约定 → 角色 / Boss → 审阅稿 + 落地稿"全流程。<strong>不需要可整个删除。</strong></div>
+      <div class="grid">
+        <div class="card">
+          <div class="ic">🗡️</div><b>角色「苍岚」</b>
+          <p>薙刀女武者，核心机制「势」蓄力层数（蓄到几层放的实时博弈）。</p>
+          <p style="margin-top:8px;">
+            <a href="output/characters/cang-lan/苍岚-审阅稿.html">审阅 HTML</a> ·
+            <a href="output/characters/cang-lan/md/苍岚-战斗设计.md">设计稿</a> ·
+            <a href="output/characters/cang-lan/md/苍岚-资源需求.md">资源 md</a> ·
+            <a href="output/characters/cang-lan/苍岚-资源需求.xlsx">xlsx</a>
+          </p>
+        </div>
+        <div class="card">
+          <div class="ic">🐦‍⬛</div><b>Boss「孤鸦」</b>
+          <p>独眼浪人，苍岚宿敌；镜像玩家「势」的拔刀蓄势博弈，金 / 紫预警决斗。</p>
+          <p style="margin-top:8px;">
+            <a href="output/bosses/gu-ya/孤鸦-审阅稿.html">审阅 HTML</a> ·
+            <a href="output/bosses/gu-ya/md/孤鸦-Boss设计.md">设计稿</a> ·
+            <a href="output/bosses/gu-ya/md/孤鸦-资源需求.md">资源 md</a> ·
+            <a href="output/bosses/gu-ya/孤鸦-资源需求.xlsx">xlsx</a>
+          </p>
+        </div>
+      </div>
+      <div class="ok">✅ 建议先打开<strong>「苍岚」或「孤鸦」的审阅 HTML</strong>，亲手点点看交互（折叠目录 / 评审备注 / 资源表增删 / 导出）——这就是本方法论审阅方向产出的样子。</div>
+    </section>
+
+    <!-- ⑨ 快速开始 -->
+    <section id="start">
+      <h2><span class="no">9</span>快速开始</h2>
+      <ol class="steps">
+        <li>读 <a href="USAGE.md"><b>USAGE.md</b></a>，按你用的 AI 工具选加载方式（Claude Code / GPT / Claude.ai / Cursor）。</li>
+        <li>填 <a href="conventions/TEMPLATE.md"><b>conventions/TEMPLATE.md</b></a>（或让 AI 帮你填）——把<strong>你项目的战斗约定</strong>定下来。</li>
+        <li>跟 AI 说「<b>设计 XXX 角色</b>」或「<b>设计 XXX Boss</b>」，按 6 Phase 流程走；想一步到位就说「<b>完全出一版</b>」。</li>
+        <li>想看样板 → 打开 <a href="output/bosses/gu-ya/孤鸦-审阅稿.html"><b>孤鸦审阅稿</b></a> 或 <a href="output/characters/cang-lan/苍岚-审阅稿.html"><b>苍岚审阅稿</b></a>。</li>
+      </ol>
+    </section>
+
+    <!-- ⑩ FAQ -->
+    <section id="faq">
+      <h2><span class="no">10</span>常见问题</h2>
+      <details><summary>它会不会把某家公司的战斗体系强加给我？<span class="chev">▸</span></summary>
+        <div class="body"><p>不会。这正是它的设计初衷——招式集、视觉预警、受击分类、分类轴、命座、配队等<strong>全部由你项目自定义</strong>（写在 <code>conventions/</code>）。知识库里凡是具体体系都明确标注为"示例 / 项目自定义"，不作默认。</p></div>
+      </details>
+      <details><summary>只有 Claude 能用吗？GPT 行不行？<span class="chev">▸</span></summary>
+        <div class="body"><p>任意 agent 都行。纯 markdown + 可粘贴 system prompt，不依赖任何 agent 的私有机制。GPT / Claude.ai / Cursor 见 <a href="USAGE.md">USAGE.md</a>。Claude Code 可作为 skill 自动触发。</p></div>
+      </details>
+      <details><summary>设计稿一定要人审吗？能让 AI 全自动出吗？<span class="chev">▸</span></summary>
+        <div class="body"><p>默认<strong>人审协作</strong>（关键处停下来一起定，再产出）；但你明确说"完全出一版"时可<strong>全自动</strong>出全套 + 列出所做假设。即便全自动，产出也标注"投产前建议人工过一遍"。详见第 ⑥ 节。</p></div>
+      </details>
+      <details><summary>资源 xlsx 在非 Windows 上能生成吗？<span class="chev">▸</span></summary>
+        <div class="body"><p>xlsx 生成脚本（<code>scripts/</code>，PowerShell + Excel COM）<strong>仅 Windows + Excel / WPS</strong>。非 Windows 用通用的 markdown 资源表（<code>templates/blank-resource-requirements.md</code>）即可，内容一样，只是格式。</p></div>
+      </details>
+      <details><summary>自带的示例（苍岚 / 孤鸦）会污染我的项目吗？<span class="chev">▸</span></summary>
+        <div class="body"><p>不会。它们是放在 <code>output/</code> 下、明确标注"示例·可删"的演示产出。不需要直接删掉两个文件夹即可。</p></div>
+      </details>
+    </section>
+
+    <footer style="text-align:center;color:var(--muted);font-size:13px;padding:10px 0 30px;">
+      act-combat-design · 二次元 / ACT 战斗设计方法论 + 行业知识库 · <a href="LICENSE">MIT</a><br>
+      知识库引用的商业游戏均为研究 / 设计参考。
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // 目录高亮 + 回顶
+  var secs = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  var links = {};
+  document.querySelectorAll('nav.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+  var totop = document.getElementById('totop');
+  function onScroll(){
+    var y = window.scrollY + 120, cur = null;
+    secs.forEach(function(s){ if(s.offsetTop <= y) cur = s.id; });
+    Object.keys(links).forEach(function(id){ links[id].classList.toggle('active', id === cur); });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  totop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+</script>
+</body>
+</html>

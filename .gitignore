@@ -1,0 +1,29 @@
+# ── output/ 产出区 ──────────────────────────────────────────────
+# 你自己生成的设计稿默认不纳入版本控制;但仓库自带的示例产出
+# (output/characters/cang-lan、output/bosses/gu-ya)要保留追踪。
+output/*
+!output/README.md
+!output/characters/
+!output/bosses/
+
+output/characters/*
+!output/characters/.gitkeep
+!output/characters/cang-lan/
+
+output/bosses/*
+!output/bosses/.gitkeep
+!output/bosses/gu-ya/
+
+# 脚本临时产出
+scripts/output/
+*.tmp
+*.log
+~$*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
