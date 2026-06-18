@@ -185,6 +185,8 @@
 
 **设计空间**：见 [numbers-and-progression.md](../references/numbers-and-progression.md)（伤害公式 5 大架构 / 击破系统 6 要素 / buff 叠加 4 模式）。这里只需记下你的选择：
 
+> 🔬 定完公式后，用 [numbers-and-progression.md](../references/numbers-and-progression.md) § 十「数值建模验证」的流程（脚本建模 → 独立 agent 对抗验证 → 设计稿内嵌可视化）压测命座 / 养成梯度，对照 § 五健康阈值自检。
+
 **📝 你的项目**：
 - 伤害公式架构：________
 - 是否有击破 / 韧性系统：________
@@ -203,4 +205,4 @@
 ---
 
 > ✅ 填完以上，你就有了一份**项目专属的战斗约定**。设计任何角色 / Boss 时，AI 会以它为准。
-> 想直接看一份填好的 → [example-conventions.md](example-conventions.md)。
+> 想直接看填好的 → 买断制 [example-conventions.md](example-conventions.md)《孤刃行》 / gacha [example-conventions-gacha.md](example-conventions-gacha.md)《星澜纪》。

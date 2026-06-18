@@ -136,14 +136,14 @@
 
     <header class="hero">
       <h1>⚔️ act-combat-design</h1>
-      <div class="sub">一套<strong>项目无关</strong>的二次元 / 动作游戏（ACT）<strong>战斗设计方法论 + 行业知识库</strong>，可被任意 AI agent（Claude、GPT、Cursor…）使用，帮你设计可给策划 / 美术审阅的<strong>玩家角色</strong>与<strong>怪物 Boss</strong>。</div>
-      <div class="en">A project-agnostic anime / action-game combat-design methodology &amp; knowledge base, usable by any AI agent.</div>
+      <div class="sub">一套<strong>广泛通用</strong>的二次元 / 动作（ACT）游戏<strong>战斗设计方法论 + 行业知识库</strong> —— <strong>任意 AI agent</strong>（Claude、GPT、Cursor…）开箱即用，帮你把角色与 Boss 的战斗设计做成<strong>可复用流程</strong>，产出<strong>可直接评审落地的设计稿</strong>。</div>
+      <div class="en">A broadly-applicable anime / action-game combat-design methodology &amp; knowledge base, usable by any AI agent.</div>
       <div class="tags">
         <span>🎮 角色 &amp; Boss 设计</span><span>🧩 不预设战斗体系</span><span>🤖 任意 agent 开箱</span><span>📚 70+ 游戏借鉴库</span><span>📄 审阅 HTML + 落地 xlsx</span>
       </div>
     </header>
 
-    <p style="color:var(--muted);margin:0 0 22px;">本页是<strong>给人读的上手指南</strong>——看完你会知道它是什么、好在哪、知识库有什么、能做什么、怎么上手。配套文档：<a href="README.md">README.md</a>（仓库说明）· <a href="USAGE.md">USAGE.md</a>（各 agent 加载方式 + 可粘贴 system prompt）· <a href="SKILL.md">SKILL.md</a>（方法论入口）。</p>
+    <p style="color:var(--muted);margin:0 0 22px;">本页是<strong>给人读的上手指南</strong>——看完你会知道它是什么、好在哪、知识库有什么、能做什么、怎么上手。配套文档：<a href="README.md">README.md</a>（仓库说明）· <a href="USAGE.md">USAGE.md</a>（各 agent 加载方式 + 可粘贴 system prompt）· <a href="SKILL.md">SKILL.md</a>（方法论入口）· <a href="CHANGELOG.html">CHANGELOG</a>（每次更了啥）。</p>
 
     <!-- ① 这是什么 -->
     <section id="what">
@@ -185,7 +185,7 @@
     <!-- ③ 知识库 -->
     <section id="kb">
       <h2><span class="no">3</span>知识库囊括了什么</h2>
-      <div class="lead">知识库（<code>references/</code>，21 份中文文档）按职责分五组。点开看每组细目：</div>
+      <div class="lead">知识库（<code>references/</code>，23 份中文文档）按职责分五组。点开看每组细目：</div>
 
       <div class="fig">
         <div class="flow">
@@ -237,6 +237,7 @@
           <div class="f"><code>vfx-requirements.md</code><span>特效需求规范（三段式 / 优先级 / 复用）</span></div>
           <div class="f"><code>dual-arena-boss.md</code><span>叙事型 / 双场 Boss 编排范式</span></div>
           <div class="f"><code>review-html-doc.md</code> <code>+ components</code> <code>+ markup-kit</code><span>审阅级 HTML 文档范式 + 组件实现 + 评审标记套件</span></div>
+          <div class="f"><code>effect-progression-design.md</code><span>效果与养成设计范式（技能附带 / 命座 / 养成物 / 属性 / 数值验证 7 章 + 3 图 + 注解四要素）</span></div>
           <div class="f"><code>resource-xlsx-generation.md</code><span>把设计稿转成团队"美术资源需求 xlsx"（配 <code>scripts/</code>）</span></div>
         </div>
       </details>
@@ -245,10 +246,11 @@
     <!-- ④ 能做什么 -->
     <section id="can">
       <h2><span class="no">4</span>能做什么</h2>
-      <div class="lead">两类设计对象 × 两个产出方向。</div>
+      <div class="lead">角色 / Boss 完整设计 + 效果养成专项 × 两个产出方向。</div>
       <div class="grid">
         <div class="card"><div class="ic">🧍</div><b>玩家角色设计</b><p>从蓝本 / 定位 / 机制灵感，到逐招玩法、动作帧、特效、程序需求的完整设计。</p></div>
         <div class="card"><div class="ic">👹</div><b>怪物 / Boss 设计</b><p>阶段化框架、技能详情、AI &amp; 连招策略、动作 / 特效 / 程序需求；含双场战范式。</p></div>
+        <div class="card"><div class="ic">📈</div><b>效果与养成设计</b><p>给已有角色单独展开「技能附带效果 + 命座 / 养成物解锁 + 属性投放 + 数值建模验证」，产出带图示 + 算的过程的审阅稿（gacha 适用）。</p></div>
       </div>
 
       <div class="fig">
@@ -256,11 +258,22 @@
           <div class="node alt"><div class="h">设计草稿</div><div class="d">markdown，跟你确认</div></div>
           <div class="arrow">→</div>
           <div class="node"><div class="h">审阅方向</div><div class="d">审阅级交互 HTML<br>给策划 / 美术评审</div></div>
+          <div class="arrow">+</div>
           <div class="node"><div class="h">落地方向</div><div class="d">资源需求 md → xlsx<br>给美术 / 程序照着做</div></div>
         </div>
         <div class="cap">▲ 先 markdown 草稿确认方向，再分两个方向产出：审阅稿（叙事 / 评审）+ 落地稿（逐资产逐帧）。</div>
       </div>
-      <p>审阅级 HTML 是一份<strong>可交互的单文件评审稿</strong>：技能卡、阶段表、金 / 紫预警标注、评审备注、改动留痕、贴图贴视频、一键导出回传 —— 拿来给团队评审、迭代到定稿。</p>
+      <div class="fig">
+        <div style="font-weight:600;color:var(--accent);margin-bottom:6px;">📄 审阅级 HTML 长什么样</div>
+        <p style="margin:0 0 10px;color:var(--muted);">一份<strong>可交互的单文件评审稿</strong> —— 具体内容随设计对象而变，大致是：</p>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:0;">
+          <div class="card"><div class="ic">🧍</div><b>角色</b><p>核心机制 + 招式卡、动作帧、特效需求、连招 等</p></div>
+          <div class="card"><div class="ic">👹</div><b>Boss</b><p>阶段表、技能详情、AI &amp; 连招策略、金 / 紫预警标注 等</p></div>
+          <div class="card"><div class="ic">📈</div><b>效果与养成</b><p>技能附带效果、命座 / 养成物、属性投放、数值图示 + 算的过程 等</p></div>
+        </div>
+        <p style="margin:12px 0 0;font-size:13.5px;color:var(--muted);">三类都自带同一套<strong>协作交互</strong>：📝 评审备注 · 📜 改动留痕 · 🖼️ 贴图贴视频 · 📤 一键导出回传 · 两级目录 —— 给团队评审、迭代到定稿。</p>
+        <p style="margin:8px 0 0;font-size:13px;">看实例 → <a href="output/characters/cang-lan/苍岚-审阅稿.html">苍岚（角色）</a> · <a href="output/bosses/gu-ya/孤鸦-审阅稿.html">孤鸦（Boss）</a> · <a href="output/characters/cang-lan/苍岚-效果与养成-gacha演示.html">苍岚 · 效果与养成</a></p>
+      </div>
     </section>
 
     <!-- ⑤ 怎么用 -->
@@ -268,7 +281,37 @@
       <h2><span class="no">5</span>怎么用</h2>
 
       <h3>第一步：定义"你项目的战斗约定"（Phase 0）</h3>
-      <p>这是地基。用 <a href="conventions/TEMPLATE.md"><code>conventions/TEMPLATE.md</code></a> 把你项目的招式集 / 视觉预警 / 受击分类 / 帧率 / 命名 / 配队 / 养成定下来（可让 AI 帮你填）。想看填好的样子 → <a href="conventions/example-conventions.md"><code>example-conventions.md</code></a>。</p>
+      <p>这是地基。用 <a href="conventions/TEMPLATE.md"><code>conventions/TEMPLATE.md</code></a> 把你项目的招式集 / 视觉预警 / 受击分类 / 帧率 / 命名 / 配队 / 养成定下来（可让 AI 帮你填）。想看填好的样子 → 买断制 <a href="conventions/example-conventions.md"><code>《孤刃行》</code></a> / gacha <a href="conventions/example-conventions-gacha.md"><code>《星澜纪》</code></a>。</p>
+
+      <div class="fig">
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0;">
+          <div class="card"><span class="ic">🎬</span><b>基调与视角</b><p>2D / 3D？帧率？距离单位？</p></div>
+          <div class="card"><span class="ic">⚔️</span><b>招式集</b><p>每角色必备哪几类招</p></div>
+          <div class="card"><span class="ic">🏷️</span><b>分类轴</b><p>职业 / 定位 / 稀有度</p></div>
+          <div class="card"><span class="ic">🚦</span><b>视觉预警</b><p>什么颜色 = 必闪 / 可弹反</p></div>
+          <div class="card"><span class="ic">💥</span><b>受击 / CC</b><p>浮空 / 击飞 / 倒地 / 破韧</p></div>
+          <div class="card"><span class="ic">🔤</span><b>命名规范</b><p>动作 / 特效资产命名</p></div>
+          <div class="card"><span class="ic">👥</span><b>配队模型</b><p>单人还是组队？怎么联动</p></div>
+          <div class="card"><span class="ic">📈</span><b>养成模型</b><p>买断技能树 or 抽卡命座</p></div>
+          <div class="card"><span class="ic">🔢</span><b>数值框架</b><p>伤害公式 / 击破 / buff 叠加</p></div>
+          <div class="card"><span class="ic">🌀</span><b>状态 / 元素轴</b><p>元素反应 / 异常（可选）</p></div>
+        </div>
+        <div class="cap">▲ conventions = 这 10 个维度的决定。方法论<strong>不预设任何一套</strong> —— 全由你项目自己填。</div>
+      </div>
+
+      <p style="margin-top:14px;">同一个维度，<strong>不同项目填得完全不一样</strong> —— 这正是"项目无关"的意思。仓里自带两个填好的范例：</p>
+      <div class="two-layer">
+        <div class="layer keep">
+          <div class="lh">🗡️ 《孤刃行》· 买断制单机</div>
+          <p>视角 2.5D / 60fps · 单角色主导 · <strong>技能树养成、无命座</strong> · 精简招式集 · 金紫双色预警</p>
+          <div class="ex">配套角色：苍岚（薙刀「势」蓄力节奏）→ <a href="output/characters/cang-lan/md/苍岚-战斗设计.md">苍岚-战斗设计.md</a></div>
+        </div>
+        <div class="layer proj">
+          <div class="lh">🌌 《星澜纪》· 抽卡 gacha 二游</div>
+          <p>视角 3D / 60fps · 三人队切人联动 · <strong>命座 C0–C6 + 养成物套装 + PVP</strong> · 五行元素 · 红黄预警</p>
+          <div class="ex">配套演示：苍岚 gacha 移植（命座 / 养成物效果 + §十 数值验证）→ <a href="output/characters/cang-lan/md/苍岚-效果与养成-gacha演示.md">苍岚-效果与养成-gacha演示.md</a></div>
+        </div>
+      </div>
 
       <h3>第二步：跟 AI 说"设计 XXX 角色 / Boss"，走 6 Phase 流程</h3>
       <div class="fig">
@@ -324,14 +367,17 @@
 ├─ <b style="color:#7fb2ff">上手指南.html</b>          ← 本页（图文上手指南）
 ├─ README.md / USAGE.md / LICENSE
 ├─ SKILL.md             方法论入口（6 Phase + 引用索引）
-├─ conventions/         ★ 定义你项目的战斗约定（TEMPLATE + 范例）
-├─ references/          知识库（21 份：方法论 + 知识 + 工程基线 + 工具链）
+├─ CHANGELOG.md / .html  更新记录（每次更了啥）
+├─ conventions/         ★ 定义你项目的战斗约定（TEMPLATE + 买断 / gacha 双范例）
+├─ references/          知识库（23 份：方法论 + 知识 + 工程基线 + 工具链）
 ├─ templates/           空白模板：审阅级 HTML + 落地资源需求
 ├─ scripts/             xlsx inspect / 生成脚本（Windows-only）
-└─ output/              产出区（按单位分文件夹）
-   ├─ characters/cang-lan/   示例角色「苍岚」：md/ 源稿 + 审阅 HTML + 资源 xlsx
-   └─ bosses/gu-ya/          示例 Boss「孤鸦」：md/ 源稿 + 审阅 HTML + 资源 xlsx</pre>
+├─ output/              产出区（按单位分文件夹）
+│  ├─ characters/cang-lan/   示例角色「苍岚」：md/ 源稿 + 审阅 HTML + 资源 xlsx
+│  └─ bosses/gu-ya/          示例 Boss「孤鸦」：md/ 源稿 + 审阅 HTML + 资源 xlsx
+└─ knowledge-local/     ★ 本地知识区：自我更新（默认关闭）+ 项目指定知识；不进 git</pre>
       <div class="note">📁 <strong>每个单位一个文件夹</strong>：markdown 源稿放 <code>&lt;单位&gt;/md/</code>，渲染成品（HTML / xlsx）放单位根目录。你自己的产出也照此结构落 <code>output/</code> 下。</div>
+      <div class="note">🧪 <strong>knowledge-local/（试验性 · 默认关闭）</strong>：下游 agent 用中可把可复用洞察自动沉淀到 <code>self-update/</code>、把你指定的项目知识放进 <code>project-knowledge/</code> —— 全留本地、不进 git，用得越久越懂你的项目。详见 <code>knowledge-local/README.md</code>。</div>
     </section>
 
     <!-- ⑧ 示例 -->
@@ -396,7 +442,10 @@
 
     <footer style="text-align:center;color:var(--muted);font-size:13px;padding:10px 0 30px;">
       act-combat-design · 二次元 / ACT 战斗设计方法论 + 行业知识库 · <a href="LICENSE">MIT</a><br>
-      知识库引用的商业游戏均为研究 / 设计参考。
+      知识库引用的商业游戏均为研究 / 设计参考。<br>
+      github：<a href="https://github.com/koisama0411">koisama0411</a><br>
+      邮箱：<a href="mailto:koisama0411@gmail.com">koisama0411@gmail.com</a><br>
+      wechat：HeyKoi0411
     </footer>
 
   </main>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>act-combat-design · 更新记录</title>
+<style>
+  :root{
+    --bg:#eef2f8;--paper:#ffffff;--ink:#1a2332;--muted:#5a6578;
+    --accent:#1e40af;--line:#e2e8f0;--hl:#dbeafe;
+    --add:#1f7a4d;--add-bg:#e8f3ec;--chg:#1e40af;--chg-bg:#dbeafe;--fix:#b45309;--fix-bg:#fdeecd;
+    --serif:"Noto Serif SC","STSong","SimSun",serif;
+    --sans:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    --mono:Consolas,"Cascadia Code",monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.8;font-size:15px;}
+  main{max-width:1100px;margin:0 auto;padding:28px 32px 80px;}
+  a{color:var(--accent);}
+  header.hero{background:linear-gradient(135deg,#1e3a8a,#1e40af 60%,#3a7ca5);color:#fff;border-radius:16px;padding:30px 34px;margin:18px 0 24px;}
+  header.hero h1{font-family:var(--serif);margin:0 0 6px;font-size:26px;}
+  header.hero p{margin:0;opacity:.94;font-size:14px;}
+  .ver{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin:0 0 20px;box-shadow:0 2px 14px rgba(30,64,175,.06);}
+  .ver h2{font-family:var(--serif);font-size:20px;color:var(--accent);margin:0 0 4px;display:flex;align-items:center;gap:10px;}
+  .ver h2 .date{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:500;background:var(--hl);padding:2px 9px;border-radius:6px;}
+  .group{margin:14px 0 0;}
+  .tag{display:inline-block;font-size:12.5px;font-weight:700;padding:2px 11px;border-radius:6px;margin-bottom:2px;}
+  .tag.add{background:var(--add-bg);color:var(--add);}
+  .tag.chg{background:var(--chg-bg);color:var(--chg);}
+  .tag.fix{background:var(--fix-bg);color:var(--fix);}
+  ul{margin:8px 0 0;padding-left:22px;}
+  li{margin:5px 0;}
+  code{font-family:var(--mono);background:#eaf0f9;color:#16357a;padding:1px 6px;border-radius:4px;font-size:.9em;}
+  strong{color:var(--accent);}
+  .foot{color:var(--muted);font-size:12.5px;text-align:center;margin-top:24px;}
+  .tldr{margin:4px 0 6px;color:var(--muted);font-size:14px;}
+  .files{margin-top:16px;border-top:1px dashed var(--line);padding-top:12px;font-size:13px;color:var(--muted);}
+  .files .ftitle{font-weight:500;color:var(--ink);margin-bottom:6px;}
+  .files p{margin:5px 0;line-height:1.9;}
+  .fk{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:5px;margin-right:8px;}
+  .fk.add{background:var(--add-bg);color:var(--add);}
+  .fk.chg{background:var(--chg-bg);color:var(--chg);}
+  .fk.del{background:#eceae3;color:#6b6b66;}
+  .notice{background:var(--fix-bg);border:1px solid #f0d9a8;border-left:4px solid var(--fix);border-radius:8px;padding:10px 14px;margin:10px 0 4px;font-size:13.5px;color:#6b4d12;}
+  .notice p{margin:3px 0;}
+  .notice strong{color:#8a5a12;}
+  .foot a{color:var(--accent);}
+  .maint{margin-top:8px;line-height:1.95;}
+</style>
+</head>
+<body>
+<main>
+
+  <header class="hero">
+    <h1>更新记录 · Changelog</h1>
+    <p>act-combat-design 每次功能 / 内容更新都记在这里，方便使用者一眼知道更了啥。</p>
+  </header>
+
+  <section class="ver">
+    <h2>v1.1 <span class="date">2026-06-18</span></h2>
+    <p class="tldr">本次主要：新增<strong>自我更新机制</strong>（🧪 试验性）+ <strong>数值建模验证</strong>方法论 + <strong>gacha 示例项目</strong>，并让设计稿默认产出审阅 HTML。</p>
+    <div class="notice">
+      <p><strong>⚠️ 行为变更</strong>：设计稿产出 —— md 草稿确认后<strong>默认随之产出审阅级 HTML</strong>（原先需单独要）。</p>
+      <p><strong>对使用者</strong>：pull 后<strong>无需操作</strong> —— 自我更新默认关闭；设计稿产出默认多出 HTML 孪生；无破坏性变更。</p>
+    </div>
+
+    <div class="group">
+      <span class="tag add">新增 Added</span>
+      <ul>
+        <li><strong>自我更新机制（🧪 试验性）</strong> —— 新增 <code>knowledge-local/</code>：下游 agent 用中<strong>自动捕获</strong>洞察（<code>self-update/</code>）+ 用户<strong>指定</strong>的项目知识（<code>project-knowledge/</code>）。全留本地、<strong>不进 git</strong>、<strong>默认关闭</strong>（首次会问，因为耗 token）。带「写入前归属判定」triage。</li>
+        <li><strong>数值建模验证方法论</strong> —— <code>numbers-and-progression.md</code> § 十：脚本化建模 → 独立 agent 对抗性交叉验证 → 设计稿内嵌可视化（每图「怎么算 / 为什么 / 结果」三问注解）。</li>
+        <li><strong>命座 / 养成梯度健康自检阈值</strong> —— § 五：满命总梯度 +80~120% 等 8 项经验基线，含养成物 / 套装阈值。</li>
+        <li><strong>效果与养成设计范式</strong> —— 新增 reference <code>effect-progression-design.md</code>：7 章结构 + 3 类图 + 数值注解四要素；以苍岚 gacha 演示稿为范例（references 22 → 23 份）。</li>
+        <li><strong>gacha 示例项目《星澜纪》</strong> —— <code>example-conventions-gacha.md</code>（3D 三人队 + 命座 + 养成物 + PVP）+ 配套苍岚 gacha 移植效果稿（含审阅 HTML + 内嵌命座曲线）。</li>
+        <li><strong>上手指南 conventions 概览图</strong> —— 第 ⑤ 节加「10 维度一图看全 + 买断 / gacha 双范例对比」。</li>
+        <li><strong>本更新记录</strong> —— <code>CHANGELOG.md</code> + 本页。</li>
+      </ul>
+    </div>
+
+    <div class="group">
+      <span class="tag chg">变更 Changed</span>
+      <ul>
+        <li><strong>设计稿产出默认配审阅 HTML</strong> —— Phase 6：md 草稿确认 OK 后，<strong>默认自动产出审阅级 HTML 孪生</strong>（不用再单独要）。</li>
+        <li><strong>加法增伤区稀释</strong> —— § 四增补「自拐被面板增伤稀释」边际算法 <code>S ÷ (1+P)</code>。</li>
+        <li><strong>§ 五阈值取用说明</strong> —— 明确「场景梯度 / PVP / 养成物」按定位 / 品类取用，单体 / 单机 / 无 PVP 角色对应项判 N/A。</li>
+      </ul>
+    </div>
+
+    <div class="group">
+      <span class="tag fix">修复 Fixed</span>
+      <ul>
+        <li>上手指南「目录结构」树补上 <code>knowledge-local/</code>。</li>
+        <li>references 份数纠正：文档原称「21 份」实为 22（漏数 <code>dual-arena-boss.md</code>），现按实际标注（初始 22 → 现 23）。</li>
+        <li>审阅 HTML 里 B 站嵌入由协议相对 <code>//player.bilibili.com</code> 改为 <code>https://</code>，file:// 本地打开也能放（与 YouTube 对齐）。</li>
+      </ul>
+    </div>
+
+    <div class="files">
+      <div class="ftitle">📁 本次涉及文件</div>
+      <p><span class="fk add">新增 9</span><code>knowledge-local/</code>（README + 2 占位）· <code>conventions/example-conventions-gacha.md</code> · <code>references/effect-progression-design.md</code> · <code>cang-lan/苍岚-效果与养成-gacha演示.md</code> + <code>.html</code> · <code>CHANGELOG.md</code> + <code>CHANGELOG.html</code></p>
+      <p><span class="fk chg">修改 7</span><code>SKILL.md</code> · <code>README.md</code> · <code>USAGE.md</code> · <code>conventions/TEMPLATE.md</code> · <code>references/numbers-and-progression.md</code> · <code>上手指南.html</code> · <code>.gitignore</code></p>
+      <p><span class="fk del">删除 0</span>无</p>
+    </div>
+  </section>
+
+  <section class="ver">
+    <h2>v1.0 <span class="date">初始版本 · Initial</span></h2>
+    <ul>
+      <li><strong>项目无关的 ACT 战斗设计方法论 + 行业知识库</strong>：6 Phase 流程（角色 / Boss）、<code>conventions/TEMPLATE.md</code> 项目约定模板、22 份 references 知识库（角色原型 / Boss 范式 / 42 元规则 / 70+ 跨游戏借鉴 / 打击感 · 数值 · Boss AI 工程基线 / 审阅 HTML + 资源 xlsx 产出工具链）。</li>
+      <li><strong>示例</strong>：买断制示例项目《孤刃行》+ 示例角色「苍岚」+ 示例 Boss「孤鸦」（含审阅 HTML + 资源 xlsx）。</li>
+      <li><strong>多 agent 可用</strong>：纯 markdown，Claude Code / GPT / Claude.ai / Cursor 均可加载（见 <code>USAGE.md</code>）。</li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    act-combat-design · 二次元 / ACT 战斗设计方法论 + 行业知识库 · <a href="LICENSE">MIT</a>
+    <div class="maint">
+      <div>github：<a href="https://github.com/koisama0411">koisama0411</a></div>
+      <div>邮箱：<a href="mailto:koisama0411@gmail.com">koisama0411@gmail.com</a></div>
+      <div>wechat：HeyKoi0411</div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

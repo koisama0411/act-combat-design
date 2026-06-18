@@ -81,6 +81,10 @@ list the assumptions you made, and mark the output as a draft that still needs h
 before production.
 Always: keep discarded ideas in a "垃圾箱/trash" section; start from the nearest archetype as
 a baseline rather than from scratch.
+OPTIONAL self-update (EXPERIMENTAL, lightly tested): this skill can accumulate learnings into
+knowledge-local/ (stays local, never committed). It is OFF by default — ask the user before enabling
+it (it costs tokens), then capture in real time during the session and route per the triage in
+knowledge-local/README.md.
 ```
 
 ---

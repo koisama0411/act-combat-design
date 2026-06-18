@@ -27,3 +27,11 @@ desktop.ini
 *.swp
 .idea/
 .vscode/
+
+# ── knowledge-local/ 本地知识区 ─────────────────────────────────
+# 下游用户 agent 在本地积累的知识（自我更新 + 项目指定知识）默认不纳入版本控制；
+# 只保留目录骨架 + README + .gitkeep，捕获内容留各自本地。
+knowledge-local/self-update/*
+!knowledge-local/self-update/.gitkeep
+knowledge-local/project-knowledge/*
+!knowledge-local/project-knowledge/.gitkeep

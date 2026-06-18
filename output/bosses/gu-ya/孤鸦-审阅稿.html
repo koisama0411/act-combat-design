@@ -3507,7 +3507,7 @@ P3 独眼觉醒 (HP 35–0%) <span class="comment">// 零新动作:调色 + 提�
       // B 站 BVxxxx
       const bili = t.match(/bilibili\.com\/video\/(BV[\w]+)/);
       if (bili) {
-        insertHtmlAtCaret(mediaWrapHtml('<iframe src="//player.bilibili.com/player.html?bvid=' + bili[1] + '&autoplay=0" frameborder="0" allowfullscreen></iframe>'));
+        insertHtmlAtCaret(mediaWrapHtml('<iframe src="https://player.bilibili.com/player.html?bvid=' + bili[1] + '&autoplay=0" frameborder="0" allowfullscreen></iframe>'));
         cell.dispatchEvent(new Event('input', { bubbles: true }));
         return true;
       }
