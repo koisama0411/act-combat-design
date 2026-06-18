@@ -84,6 +84,8 @@ skill 可以在你使用过程中**自己积累知识**，沉淀到本地 [`know
 - `self-update/` —— agent 用中**自动捕获**可复用洞察 / 避坑 / 数值结论（**默认关闭**，首次会问你要不要开，因为耗 token）。
 - `project-knowledge/` —— 你**指定**要 agent 知道的项目资料（自家公式、角色名册、命名规范…），手动放或让 agent 放。
 
+**开启 / 关闭**：默认关闭；跟 agent 说「**开启自我更新**」即开（首次遇到可沉淀的点它也会主动问你），说「**关闭自我更新**」即关 —— 开关状态记在 `self-update/_status.md`（本地、不进 git）。
+
 Phase 0 会回读这两处当扩展知识 —— 用得越久越懂你的项目。机制 + 归属判定详见 [`knowledge-local/README.md`](knowledge-local/README.md)。
 
 ## 🆕 最新更新 · Latest（2026-06-18）
