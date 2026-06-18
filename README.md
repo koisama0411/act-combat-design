@@ -104,5 +104,5 @@ The commercial games referenced throughout are cited for research / commentary p
 ## 🧑‍💻 维护 · Maintainer
 
 - github：[koisama0411](https://github.com/koisama0411)
-- 邮箱：[koisama0411@gmail.com](mailto:koisama0411@gmail.com)
+- email：[koisama0411@gmail.com](mailto:koisama0411@gmail.com)
 - wechat：HeyKoi0411
