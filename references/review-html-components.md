@@ -32,6 +32,8 @@
 **保留 `<pre>` 的场景**:无 —— 全部改卡片化。
 连招树状分支用 `.combo-chain` 的 chain-step。
 
+**内容选型 ·「是什么」vs「为什么」**:机制概览 / 核心记忆点这类「N 条并列、每条小标题 + 一句话」的**「是什么」**用 `.stars` 星卡(`.star-card` 的 num + name + desc);设计意图 / 因果解释 / 权衡论述这类连贯推理的**「为什么」**保留散文 / `.philosophy`,**不可拆成并列卡片**(拆了因果链就断)。判据看这段回答「是什么」(并列清单 → 卡)还是「为什么」(因果论述 → 散文);概览归概览、论述归论述、分层共存(范本:烬羽 贰·机制概览卡 + 肆·因果 `.philosophy`)。
+
 ### 一(a) 审阅卡片描述「表现 / 玩法」双标签
 
 审阅向卡片(机制 `.star-card` / 招式 `.skill-card`)描述默认一行浅灰小字,密度低又易被忽略。升级成两行带胶囊标签:「表现」(长啥样/演出) + 「玩法」(怎么打/反制),关键词 `<strong>` 标红。
@@ -98,6 +100,61 @@
 - ❌ 只写距离权重,不写响应规则 → AI 看起来「机械」 / 玩家无法预判 boss 反应
 - ❌ 响应规则不写设计意图 → 数值组改概率时把设计原意改没了
 - ❌ 把响应规则塞进距离权重表的注释 → 优先级关系丢失,看起来响应只是距离的特例
+
+### 一(c) 图表 lightbox(正文 SVG 点击放大)
+
+数值建模章的曲线图 / 梯度图直接画进正文 SVG,在文档流里尺寸受限、细节看不清。给**正文图表**加一层点击放大的 lightbox:点图弹出米黄底大图,支持**滚轮缩放 + 拖动平移 + 复位 + Esc 关闭**。
+
+**关键设计:**
+- **选择器只命中图表** —— 用 `svg[role="img"]`(语义化图表 SVG),**不命中**装饰性 / 图标类 SVG;给数值建模图表 SVG 统一加 `role="img"` 即自动接入。
+- **代码完全独立** —— 一个 `<style>` + 一个 IIFE `<script>`,挂在 `</body>` 之前;**不碰协作交互层**(不读写 sessionStorage / IndexedDB,不参与导出),复制 / 删除都不影响审阅协作闭环。
+- **弹层用 `cloneNode(true)`** 克隆原图,缩放 / 平移作用在克隆体的 `transform` 上,不动正文里的原 SVG。
+- **图按界面 fit 完整显示**:`width:94vw` 撑满宽 + `max-height:88vh` 封顶高 + `height:auto` 等比 —— 宽图撑满宽、高图触顶时自动等比缩到完整居中(两侧留边),都**完整可见、不被裁**;滚轮可再放大看细节、拖动平移。(早期用固定 `width:min(1180px,…)` 会让大屏只占六成、且高图超屏被裁,已废弃。)
+- ⚠️ **`!important` + `max-width:none` 不能省** —— 图表 svg 常自带 inline `style="max-width:…"`(补图时为控正文内显示宽度加的),inline 优先级压过外部 CSS;不强制覆盖,放大态会被 inline 的 max-width 卡死(只占该宽、不 fit、看着像"没生效")。只要有一张图带了 inline 宽度限制就会被卡,故 fit CSS 一律用 `width:94vw!important;max-width:none!important` 兜底。
+- 关闭三入口:点弹层空白处 / Esc / 复位按钮(复位只归零缩放平移,不关弹层)。
+
+**完整代码(原样复制,挂 `</body>` 前):**
+
+```html
+<style>
+/* 图表点击放大 lightbox(独立功能,不影响协作交互层)· 支持滚轮缩放 + 拖动平移 */
+svg[role="img"]{cursor:zoom-in;transition:opacity .15s;}
+svg[role="img"]:hover{opacity:.85;}
+.fig-lb{position:fixed;inset:0;background:rgba(20,28,42,.82);z-index:99999;display:none;align-items:center;justify-content:center;padding:28px;cursor:zoom-out;}
+.fig-lb.open{display:flex;}
+.fig-lb-inner{background:var(--paper);border-radius:10px;padding:22px 24px;max-width:96vw;max-height:92vh;overflow:hidden;cursor:grab;box-shadow:0 10px 50px rgba(0,0,0,.45);}
+.fig-lb-inner svg{width:94vw!important;max-width:none!important;height:auto;max-height:88vh!important;transition:transform .06s ease-out;}
+.fig-lb-hint{position:fixed;top:16px;right:22px;color:#fff;font-size:13px;opacity:.9;background:rgba(0,0,0,.3);padding:4px 13px;border-radius:14px;}
+.fig-lb-reset{position:fixed;top:16px;left:22px;color:#fff;font-size:12px;opacity:.9;background:rgba(0,0,0,.3);padding:4px 13px;border-radius:14px;cursor:pointer;}
+.fig-lb-reset:hover{opacity:1;background:rgba(0,0,0,.5);}
+</style>
+<script>
+(function(){
+  var lb=document.createElement('div');lb.className='fig-lb';
+  lb.innerHTML='<div class="fig-lb-reset">↺ 复位</div><div class="fig-lb-hint">滚轮缩放 · 拖动平移 · 点空白 / Esc 关闭</div><div class="fig-lb-inner"></div>';
+  document.body.appendChild(lb);
+  var inner=lb.querySelector('.fig-lb-inner');
+  var scale=1,tx=0,ty=0,drag=false,lx=0,ly=0,cur=null;
+  function applyT(){if(cur)cur.style.transform='translate('+tx+'px,'+ty+'px) scale('+scale+')';}
+  function reset(){scale=1;tx=0;ty=0;applyT();}
+  function openLB(svg){inner.innerHTML='';cur=svg.cloneNode(true);cur.style.transformOrigin='center center';inner.appendChild(cur);reset();lb.classList.add('open');}
+  function closeLB(){lb.classList.remove('open');inner.innerHTML='';cur=null;}
+  document.querySelectorAll('svg[role="img"]').forEach(function(svg){
+    svg.style.cursor='zoom-in';
+    svg.addEventListener('click',function(e){e.stopPropagation();openLB(svg);});
+  });
+  lb.addEventListener('click',function(e){if(!inner.contains(e.target)&&!e.target.classList.contains('fig-lb-reset'))closeLB();});
+  lb.querySelector('.fig-lb-reset').addEventListener('click',function(e){e.stopPropagation();reset();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('open'))closeLB();});
+  inner.addEventListener('wheel',function(e){if(!cur)return;e.preventDefault();scale*=(e.deltaY<0?1.15:1/1.15);scale=Math.max(0.4,Math.min(6,scale));applyT();},{passive:false});
+  inner.addEventListener('mousedown',function(e){if(!cur)return;drag=true;lx=e.clientX;ly=e.clientY;inner.style.cursor='grabbing';e.preventDefault();});
+  window.addEventListener('mousemove',function(e){if(!drag)return;tx+=e.clientX-lx;ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;applyT();});
+  window.addEventListener('mouseup',function(){if(drag){drag=false;inner.style.cursor='grab';}});
+})();
+</script>
+```
+
+> 样本:本仓 `output/characters/jin-yu/烬羽-战斗设计及养成效果.html` 的数值建模 5 图就靠这套 lightbox 点击放大(搜 `fig-lb`)。
 
 ---
 

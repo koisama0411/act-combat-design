@@ -1,7 +1,68 @@
 <!DOCTYPE html>
+<!--
+  ============================================================================
+  角色 · 审阅级战斗设计完整稿 · 空白模板 (blank-character-design-doc)
+  ----------------------------------------------------------------------------
+  这是「玩家角色」的完整稿(9 章)空白模板 —— 填空即产出你的角色战斗设计稿。
+  交互层(CSS + JS)逐字节保留自一份真实打磨过的审阅稿,只清空了业务正文、
+  抹掉了一切 IP / 项目私有信息。你要做的就是「往骨架里填内容」,不要重写交互/CSS。
+
+  与本仓另一份模板 blank-design-doc.html(7 章 · Boss / 通用导向)的区别:
+    本模板专为「玩家角色完整稿」组织 —— 多了 数值建模 / 养成命座 / 配队协力 / 设计自检 章。
+    Boss / 怪物用 blank-design-doc.html;玩家角色用本模板。
+
+  ── 9 章结构(本模板的灵魂,务必保留)────────────────────────────────────
+    壹 · 设计定位与哲学      🟢 通用必有 —— 基本信息表 + 设计哲学 + 核心记忆点 + 主题 + 类似玩法
+    贰 · 核心机制            🟢 通用必有 —— 这角色的核心玩法机制(机制按角色填)
+    叁 · 招式详解            🟢 通用必有 —— 按你项目招式集逐招(普攻/特殊技/闪避/大招…)
+    肆 · 资源系统(深入)     🟡 按角色 —— 有特殊资源/状态系统的角色拎一章深入;没有则整章删除
+    伍 · 养成 / 命座         🟢 通用必有 —— 养成形式按项目(命座 / 技能树 / 天赋…)
+    陆 · 配队协力            🟡 按项目 —— 三人队/有协同机制才有;单机/买断制整章删除
+    柒 · 数值建模            🟢 通用必有(🔴 硬标准)—— 5 张图骨架 + 三段注解 + 平衡自检表,不许缩水
+    捌 · 资源清单            🟢 通用必有 —— 6 类协作表(动作/特效/音效/UI-HUD/场景演出/Timeline-Prefab)
+    玖 · 设计自检            🟢 通用必有 —— 5 维质量自评 + 元规则命中 + 垃圾箱(废弃方案留档)
+
+    🟡 标注的章(肆 / 陆)是「按角色 / 按项目」可选项 —— 用不到就整章删除(记得同步 SECTIONS 数组)。
+    🔴「柒 · 数值建模」是硬标准:图表必须配齐(命座养成曲线 / 逐级边际 / 增伤区稀释 /
+       场景伤害梯度 / 机制专属曲线),每图配「怎么算 · 为什么 · 影响」三段注解 + 平衡自检表。
+       只写数值表不配图 = 不合格。
+
+  ── 真实审阅稿保留下来的交互层(开箱即用,勿改)─────────────────────────
+    · 「📤 导出修改版」—— 把所有协作改动(评审备注/划除/新增/编辑)打包进单个 HTML
+       文件下载,发回给设计师/团队;收件人打开即自动加载为新基线(__embed_state__ 机制)
+    · 协作数据存 sessionStorage(关标签页清空 / F5 保留),大文件(视频)自动降级 IndexedDB
+    · 资源清单单元格 contenteditable + 富媒体:Ctrl+V 粘贴截图(base64 内嵌)/ 拖拽文件 /
+       粘贴 .mp4 直链转 <video> / 粘贴 B站·YouTube 链接自动转 iframe / 媒体 ⛶放大弹窗(可拖拽 resize) / ✕删除
+    · 资源行:✅ 划除(再点恢复)/ ✏️ 编辑 / ➕ 新增行 / 动态行数统计(随增删实时变) / 复用区沙青降权视觉
+    · 改动历史:自动记录(谁·何时·改了哪)+ 翻页 + 点击跳转高亮 + 回到基线自动撤销痕迹
+    · 浮动两级目录(扫 section 的 h3 作子项,chevron 展开,accordion 跟随滚动)+ 置顶按钮
+    · 数值建模图表 lightbox:任意 <svg role="img"> 点击放大,滚轮缩放 + 拖动平移 + Esc 关闭
+    · ♻️ 重置本地(美术拿到新版 HTML 时清空旧痕迹)
+
+  ── 怎么填(只改这几处)──────────────────────────────────────────────
+    1. <script> 顶部 const LS_PREFIX = 'char-';  → 多角色稿并存时改成角色专属前缀
+       (避免同域多文档共用浏览器存储时串数据;IDB_NAME 同步改更稳妥)
+    2. <title> + 封面 .cover 里的标题/定位/meta 网格
+    3. 各 <section> 正文:把【方括号占位】+「示例,删掉换你的」骨架换成真实内容
+    4. 「柒 · 数值建模」5 张 SVG 图:把占位坐标 / 折线 / 注解换成你角色的真实建模(勿删图)
+    5. 「捌 · 资源清单」按需补类/补行;footer 署名
+    6. 删掉用不到的 🟡 可选章(肆 / 陆),并同步「章节导航」SECTIONS 数组(<script> 末尾 initTocs 里)
+
+  ── 配套 references(在本仓 references/ 下,深入定制看它们)──────────────
+      design-doc-structure.md      设计文档结构约定 + 「角色 · 审阅级 HTML 完整稿范式」(两规格 + 数值建模硬标准)
+      review-html-doc.md           范式总览 + 用法
+      review-html-components.md    组件实现 + JS 致命陷阱(导出正则/IDB 时序等)
+      numbers-and-progression.md   数值与养成公式(填「柒 · 数值建模」靠它)
+      effect-progression-design.md 效果与养成设计范式(分稿里的养成/效果稿靠它)
+      moveset-design.md            招式集设计法(填「叁 · 招式详解」靠它)
+      team-comp-principles.md      配队设计方法论(填「陆 · 配队协力」靠它)
+      design-aesthetics.md         5 维质量标尺(§ 一)(填「玖 · 设计自检」靠它)
+      meta-rules.md                元规则清单(填「玖 · 设计自检」靠它)
+  ============================================================================
+-->
 <html lang="zh-CN"><head>
 <meta charset="UTF-8">
-<title>苍岚 · 效果与养成设计（gacha 演示稿）</title>
+<title>&lt;角色名&gt; · 战斗设计</title>
 <style>
   :root {
     /* === 主题色(可整组替换换肤;换肤示例见 review-html-components.md)=== */
@@ -563,6 +624,35 @@
     margin: 4px 0 18px;
     line-height: 1.7;
   }
+
+  /* ===== 数值建模图表注解框(柒 · 数值建模)===== */
+  .anno-box {
+    background: #fffdf8;
+    border: 1px solid #e6d9b8;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    padding: 12px 16px;
+    margin: 10px 0 4px;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+  .anno-box .anno-title {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 13.5px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .anno-box p { margin: 4px 0; }
+  .anno-box .anno-k {
+    display: inline-block;
+    color: var(--gold);
+    font-weight: 700;
+    margin-right: 8px;
+    min-width: 56px;
+  }
+
 
   /* ===== 复用资源(零美术成本)视觉降权 — 冷沙青调，跟暖纸调形成冷暖对比但不刺眼 ===== */
   h4.reuse-h4 { color: #4a6e6e; }
@@ -2393,6 +2483,11 @@
     margin: 0 1px;
   }
 </style>
+<!-- ===========================================================================
+     内嵌协作数据载体(空白模板默认为空)。
+     「📤 导出修改版」会把当前所有协作改动序列化后回填到这个 script,
+     收件人打开导出文件时由 initEmbeddedData() 读取重建。模板这里保持空对象即可。
+     =========================================================================== -->
 <script id="__embed_state__">window.__EMBED_STATE__ = {};window.__EMBED_IDB__ = {};window.__EMBED_META__ = {};</script>
 </head>
 <body>
@@ -2429,31 +2524,52 @@
 
 <!-- Cover -->
 <div class="cover">
-  <div class="tag">效果与养成 · 演示稿 DEMO</div>
-  <h1>苍岚 · 效果与养成设计（gacha 移植）</h1>
-  <div class="sub">CangLan — 演示「技能附带效果 + 命座解锁效果 + 养成物效果 + 属性投放 + 数值建模验证」如何落到一个具体角色</div>
+  <div class="tag">角色战斗设计 · 完整稿</div>
+  <h1>&lt;角色名&gt; · 战斗设计</h1>
+  <div class="sub">&lt;英文/拼音命名&gt; — &lt;一句话定位：是谁 · 核心记忆点是什么&gt;</div>
   <div class="meta">
-    <div><span class="k">配套方法论</span><span class="v">act-combat-design</span></div>
-    <div><span class="k">示例项目</span><span class="v">gacha《星澜纪》（移植语境）</span></div>
-    <div><span class="k">角色原版</span><span class="v">买断制《孤刃行》· 薙刀「势」蓄力</span></div>
-    <div><span class="k">本稿范围</span><span class="v">效果 / 养成 / 属性投放 / 数值验证</span></div>
-    <div><span class="k">基础机制</span><span class="v">势 / 一闪 / 凝势（沿用原版）</span></div>
-    <div><span class="k">数值结论</span><span class="v">满命 +95% · 健康区内 · PVP 临界待复核</span></div>
+    <div><span class="k">原作蓝本</span><span class="v">&lt;来源 IP / 原创&gt;</span></div>
+    <div><span class="k">分类轴</span><span class="v">&lt;按项目 conventions：如 职业×定位×稀有度&gt;</span></div>
+    <div><span class="k">使用武器</span><span class="v">&lt;近战 / 远程 / 形态切换&gt;</span></div>
+    <div><span class="k">定位</span><span class="v">&lt;输出 / 击破 / 增益 / 副C…按项目&gt;</span></div>
+    <div><span class="k">上手难度</span><span class="v">&lt;★☆☆☆☆ ~ ★★★★★&gt;</span></div>
+    <div><span class="k">资源策略</span><span class="v">&lt;复用为主 / 全新增；详见「捌 · 资源清单」&gt;</span></div>
   </div>
+</div>
+
+<!-- 空白模板使用说明（产出时删掉本块） -->
+<div style="background: linear-gradient(135deg, #fef6e7, #fffdf8); border: 1px dashed var(--gold); border-radius: 8px; padding: 14px 20px; margin: 0 0 28px; font-size: 13.5px; line-height: 1.8; color: var(--ink);">
+  📄 <strong>这是「玩家角色完整稿」空白模板</strong> —— 把每章【方括号占位】/「&lt;尖括号占位&gt;」换成你角色的真实内容,即产出一份审阅级角色设计稿。<br>
+  🟡 章标题带「按角色 / 按项目 · 可选」标注的章(<strong>肆 · 资源系统</strong> / <strong>陆 · 配队协力</strong>)按需<strong>保留或整章删除</strong> —— 删了记得同步页尾 <code>SECTIONS</code> 数组。<br>
+  🔴 <strong>柒 · 数值建模</strong> 是必填硬章:5 张图必须配齐 + 每图三段注解 + 平衡自检表,不许只写表不配图。<br>
+  <span style="color: var(--muted);">填完后删除本说明块即可。交互层(协作 / 导出 / 资源表 / 目录 / 图表放大)开箱即用,勿改。</span>
 </div>
 
 <!-- 协作流程说明（结构固定，照填即可，一般无需改文案） -->
 <div class="collab-help">
   <div class="ch-title">📋 文档协作使用说明</div>
-  <p>本稿是<strong>给人评审用的</strong>设计稿，可在浏览器内直接<strong>写评审备注</strong>（每章末尾的「📝 评审备注」区）。<br>
-  ⚠️ <strong>修改只临时缓存在当前标签页</strong>：F5 刷新会保留，但<strong>关闭标签页 / 浏览器即丢失</strong> — <strong style="color: var(--accent);">必须点左侧「📤 导出修改版」才能永久保存</strong>。</p>
+  <p>本文档可在浏览器内直接编辑 / 划除 / 备注 / 新增。<br>
+  ⚠️ <strong>修改只临时缓存在当前标签页</strong>:F5 刷新会保留，但<strong>关闭标签页 / 浏览器即丢失</strong> — <strong style="color: var(--accent);">必须点「📤 导出修改版」才能永久保存</strong>。</p>
   <ol>
-    <li>在每章末尾的 <strong>📝 评审备注</strong> 区写意见（支持文本 / 链接 / Ctrl+V 粘贴截图 / 拖拽视频 / B站·YouTube 链接）</li>
-    <li>改完点左侧 <strong>📤 导出修改版</strong> → 下载一份带你全部备注的 HTML（文件名带日期 + 你的名字）</li>
-    <li>发回给设计师；收件人打开后文档<strong>自动加载你的备注</strong>作为新基线，<strong>📜 改动历史</strong>留痕（谁 · 何时 · 改了哪）</li>
+    <li>改完点左侧 <strong>📤 导出修改版</strong> → 下载一份带你全部修改的 HTML 文件（文件名带日期 + 你的名字）</li>
+    <li>把这份文件发回给设计师 / 团队</li>
+    <li>收件人打开后，文档自动加载你的修改作为新基线</li>
   </ol>
   <div class="role-note">
-    💡 本稿聚焦<strong>效果 / 养成 / 属性 / 数值</strong>四层的评审 —— 基础动作 / 资源清单等生产明细在<strong>角色主设计稿</strong>里，本稿不重复。整体意见写每章末右侧 <strong>📝 评审备注</strong> 区即可。
+    <strong>资源清单的两个协作列</strong>（都支持文本/链接/截图/视频，反复粘贴可在一格放多个）：<br>
+    · <span style="background: #e6e9f0; color: var(--p2-accent); padding: 1px 6px; border-radius: 3px; font-weight: 600;">📚 参考</span> — <strong>策划</strong>填：给美术/特效的参考材料（原作截图、参考视频、风格示例）<br>
+    · <span style="background: #dbeafe; color: var(--gold); padding: 1px 6px; border-radius: 3px; font-weight: 600;">📎 产出/协作</span> — <strong>美术 / 特效 / 音效 / UI</strong>填：你的产出链接 / 状态 / 截图 / 视频<br>
+    两列都<strong>点进去直接填，自动缓存</strong>，无需点确认按钮。<strong>⚠️ 不要碰其他列</strong>（动作名 / 用途 等是设计师字段）。整体意见写每章末右侧 <strong>📝 评审备注</strong> 区。<br>
+    <strong>💡 协作列 / 评审备注支持的内容</strong>:
+    <ul style="margin: 4px 0 4px 18px; padding: 0; font-size: 12.5px; line-height: 1.7;">
+      <li><strong>纯文本 / 链接</strong> — 直接打字或粘贴 URL</li>
+      <li><strong>截图 / 动图 GIF</strong> — Ctrl+V 粘贴 / 拖拽进来，浏览器自动 base64 内嵌</li>
+      <li><strong>本地视频 (mp4/webm/mov)</strong> — 粘贴或拖拽 <strong style="color: var(--accent);">≤ 200 MB</strong> 的视频，自动内嵌播放器（&gt;50MB 会二次确认；超 5MB 自动走 IndexedDB 大文件存储）</li>
+      <li><strong>一格可贴多个</strong> — 同一格反复粘贴 / 拖入，媒体会依次排列；每个媒体 hover 有 <strong>⛶ 放大</strong> + <strong>✕ 删除</strong></li>
+      <li><strong>视频直链</strong> — 粘贴 <code style="background:#e2e8f0;padding:1px 4px;border-radius:2px;">.mp4</code> / <code style="background:#e2e8f0;padding:1px 4px;border-radius:2px;">.webm</code> URL 自动转 <code>&lt;video&gt;</code> 渲染</li>
+      <li><strong>B站 / YouTube 链接</strong> — 粘贴自动嵌入播放器 iframe</li>
+    </ul>
+    <strong>⚠️ 大文件优先贴链接</strong>（网盘 / B站 / 内部图床），浏览器存储约 5 MB 上限，大量 base64 易爆配额导致保存失败。
   </div>
 </div>
 
@@ -2508,170 +2624,332 @@
   <ol id="topTocList"></ol>
 </div>
 
-<section id="philosophy">
-  <h2>壹 · 设计说明</h2>
+<!-- ============================================================
+     壹 · 设计定位与哲学   🟢 通用必有
+     ============================================================ -->
+<section id="positioning">
+  <h2>壹 · 设计定位与哲学</h2>
+
+  <h3>基本信息</h3>
+  <table>
+    <tbody>
+      <tr><td class="phase" style="width:140px">角色名称</td><td>&lt;中文名 / 英文·拼音命名&gt;</td></tr>
+      <tr><td class="phase">分类轴</td><td>&lt;按项目 conventions 定义的分类轴：如 职业(刚/技/力) × 定位(输出/击破/增益/副C) × 稀有度。不同项目分类轴不同,以你项目约定为准&gt;</td></tr>
+      <tr><td class="phase">使用武器</td><td>&lt;武器 / 战斗形态：近战 / 远程 / 双形态切换…&gt;</td></tr>
+      <tr><td class="phase">定位</td><td>&lt;队伍中的角色定位,按项目定位体系填&gt;</td></tr>
+      <tr><td class="phase">上手难度</td><td>&lt;★☆☆☆☆ ~ ★★★★★ + 一句话说明门槛在哪&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <h3>设计哲学</h3>
   <div class="philosophy">
-    <strong>本稿演示「技能附带效果 + 命座解锁效果 + 养成物效果 + 属性投放 + 数值建模验证」如何落到一个具体角色。</strong><br><br>
-    🧪 <em>跨语境说明</em>：示例角色苍岚的 canonical 项目是<strong>买断制无命座</strong>的《孤刃行》。本稿把她<strong>移植到 gacha 示例项目《星澜纪》</strong>下，专门演示 gacha 的命座 / 养成物 / 属性投放设计 + 数值验证；与买断制原版（苍岚-战斗设计.md）是两个语境，不要混读。<br><br>
-    <em>角色基础机制</em>：势 / 一闪 / 凝势 沿用原版（基础动作 / 招式明细见角色主设计稿），本稿只展开「效果 + 养成 + 数值」三层。
+    <strong>&lt;一句话核心立意 — 这个角色的设计灵魂是什么&gt;</strong><br><br>
+    &lt;2-4 句把人设 / 原作味道 / 核心记忆点压缩进来：玩家操作这个角色时学的是什么手法、爽点在哪、跟队伍里其它角色的差异化在哪。示例占位,删掉换你的。&gt;<br><br>
+    <em>核心机制 A</em>：&lt;它是什么 + 玩家怎么用&gt;。<br>
+    <em>核心机制 B</em>：&lt;它是什么 + 玩家怎么用&gt;。
   </div>
-  <aside class="note-aside" data-key="note-philosophy">
-    <div class="note-label">📝 评审备注 · 壹<span class="clear-btn" data-clear="note-philosophy">清空</span></div>
-    <div class="note-content" contenteditable="true"></div>
-  </aside>
-</section>
 
-<section id="plot">
-  <h2>贰 · 技能附带效果</h2>
-  <p style="font-size: 14px; color: var(--muted);">任何项目通用 —— 每招挂什么 buff / debuff / 标记 / 状态。</p>
+  <h3>核心记忆点</h3>
+  <div class="stars">
+    <!-- 一张卡 = 一条记忆点(招牌设计点),1-3 条。复制本卡片即可加。示例,删掉换你的。 -->
+    <div class="star-card">
+      <div class="num">★ 记忆点 1</div>
+      <div class="name">&lt;一句话钩子 — 玩家最容易记住的招牌点&gt;</div>
+      <div class="desc"><p>&lt;为什么这条让人印象深刻 / 玩起来什么感觉&gt;</p></div>
+    </div>
+    <div class="star-card">
+      <div class="num">★ 记忆点 2</div>
+      <div class="name">&lt;一句话钩子&gt;</div>
+      <div class="desc"><p>&lt;说明&gt;</p></div>
+    </div>
+  </div>
 
-  <table>
-    <thead><tr><th>招式</th><th>附带效果</th><th>类型</th></tr></thead>
-    <tbody>
-      <tr><td>普攻 4 段</td><td>末段击退 + 自身回 1「势」</td><td>控制 + 资源生成</td></tr>
-      <tr><td>完美闪避</td><td>自身「残影」（可接反击）+ 回 1 势</td><td>自 buff + 资源</td></tr>
-      <tr><td>闪避反击</td><td>对敌浮空</td><td>控制</td></tr>
-      <tr><td>凝势（核心特殊技）</td><td>自身「止水」减伤 20% + 势 stack（每层 −移速）</td><td>stacking buff（带权衡）</td></tr>
-      <tr><td>斩势 1–3 层</td><td>对敌削韧</td><td>削韧 debuff</td></tr>
-      <tr><td>破势·一闪（4 层）</td><td>大削韧 + 穿透 + 对破韧 / 倒地目标处决标记</td><td>条件处决</td></tr>
-      <tr><td>弹反成功</td><td>自身回 1 势 + 对敌硬直</td><td>资源 + 控制</td></tr>
-      <tr><td>终结技·奔雷</td><td>自身霸体 + AOE 雷光</td><td>自 buff + 群伤</td></tr>
-    </tbody>
-  </table>
-  <aside class="note-aside" data-key="note-plot">
-    <div class="note-label">📝 评审备注 · 贰<span class="clear-btn" data-clear="note-plot">清空</span></div>
-    <div class="note-content" contenteditable="true"></div>
-  </aside>
-</section>
+  <h3>主题风格</h3>
+  <p>&lt;一句话视觉 / 感觉定调,如「硬朗刚劲的会武术的保镖」「飘逸的远程持续输出法师」&gt;</p>
 
-<section id="overview">
-  <h2>叁 · 命座 C0–C6 解锁效果</h2>
-  <p style="font-size: 14px; color: var(--muted);">按命座 / 星魂 5 段付费哲学：C0 必保完整 · C2 质变拐点 · C6 机制变质。</p>
-
-  <table>
-    <thead><tr><th>命座</th><th>效果</th><th>段位定位</th></tr></thead>
-    <tbody>
-      <tr><td>C0</td><td>势 / 一闪核心循环完整</td><td>必保完整</td></tr>
-      <tr><td>C1</td><td>凝势回势 +15%</td><td>数值小补</td></tr>
-      <tr><td><strong>C2</strong></td><td>处决条件放宽：「易伤窗内」目标也可处决</td><td><strong>质变拐点（解锁新触发）</strong></td></tr>
-      <tr><td>C3</td><td>一闪 / 斩势 +2 级</td><td>数值</td></tr>
-      <tr><td>C4</td><td>完美闪避 / 弹反回 2 势（原 1）</td><td>循环提速（效果改）</td></tr>
-      <tr><td>C5</td><td>终结技 +2 级</td><td>数值</td></tr>
-      <tr><td><strong>C6</strong></td><td>满势一闪后入「奔雷态」3s：普攻附雷光范围斩 + 凝势瞬满</td><td><strong>鲸鱼勋章（机制变质）</strong></td></tr>
-    </tbody>
-  </table>
-  <aside class="note-aside" data-key="note-overview">
-    <div class="note-label">📝 评审备注 · 叁<span class="clear-btn" data-clear="note-overview">清空</span></div>
-    <div class="note-content" contenteditable="true"></div>
-  </aside>
-</section>
-
-<section id="detail">
-  <h2>肆 · 养成物套装效果</h2>
-  <p style="font-size: 14px; color: var(--muted);">gacha 养成物（圣痕类）2 / 4 件套；4 件套是流派核心。</p>
-
-  <table>
-    <thead><tr><th>套装</th><th>2 件套</th><th>4 件套</th></tr></thead>
-    <tbody>
-      <tr><td>「止水」</td><td>凝势减伤 +10%</td><td>势达 4 层时，下记一闪 +40% 伤害 + 50% 削韧（流派核心）</td></tr>
-      <tr><td>「奔雷」</td><td>终结技伤害 +15%</td><td>终结技后 6s 内暴击伤害 +30%</td></tr>
-    </tbody>
-  </table>
-  <aside class="note-aside" data-key="note-detail">
-    <div class="note-label">📝 评审备注 · 肆<span class="clear-btn" data-clear="note-detail">清空</span></div>
-    <div class="note-content" contenteditable="true"></div>
-  </aside>
-</section>
-
-<section id="bind">
-  <h2>伍 · 属性投放 · 资源「势」· 操作循环</h2>
-  <p style="font-size: 14px; color: var(--muted);">怎么堆词条、势怎么转、循环怎么打 —— 落地 / 养成向。</p>
-
-  <h3>属性投放（输出 · 单体）</h3>
-  <table>
-    <thead><tr><th>词条</th><th>优先级</th><th>说明</th></tr></thead>
-    <tbody>
-      <tr><td>暴击率 / 暴击伤害</td><td>★★★（最高）</td><td>双爆，目标比例 CR : CD ≈ 1 : 2（如 65% / 130%）</td></tr>
-      <tr><td>攻击力 %</td><td>★★★</td><td>主词条主力，乘区直乘</td></tr>
-      <tr><td>充能效率</td><td>★★</td><td>够循环点出终结技即可，过量浪费</td></tr>
-      <tr><td>击破 / 减韧</td><td>★（次要）</td><td>苍岚靠一闪削韧已够，不主堆击破赛道</td></tr>
-      <tr><td>增伤 %</td><td>—（不主堆）</td><td>她<strong>无自带增伤</strong>，走暴击赛道；硬堆增伤会踩「加法增伤区稀释」天花板（见「陆」边际）</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:13.5px;color:var(--muted);">→ 一句话：<strong>暴击赛道 + 攻击力</strong>，不碰增伤（避免稀释），充能够用即可。</p>
-  <p style="font-size:12.5px;color:var(--muted);"><strong>为什么 CR : CD = 1 : 2</strong>：暴击乘区 ≈ 1 + 暴击率 × 暴击伤害；双爆词条总量固定时，<strong>CR : CD = 1 : 2 令 CR × CD 期望最大</strong>。<strong>算例</strong>（同词条预算）：65% / 130% → 1 + 0.65 × 1.30 = <strong>1.845</strong>；90% / 80% → 1 + 0.90 × 0.80 = 1.72 —— 前者更高，故按 1 : 2 堆。</p>
-
-  <h3>资源「势」经济（0–4 层）</h3>
-  <table>
-    <thead><tr><th>动作</th><th>势变化</th></tr></thead>
-    <tbody>
-      <tr><td>普攻 4 段一套</td><td>+1</td></tr>
-      <tr><td>完美闪避 / 弹反成功</td><td>+1（C4 后 +2）</td></tr>
-      <tr><td>斩势（1–3 层）</td><td>即时消耗，威力随层数</td></tr>
-      <tr><td>破势·一闪（4 层）</td><td>消耗 4，处决</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:13.5px;color:var(--muted);">势<strong>只在释放 / 切人时清空</strong>（不随时间衰减）。<strong>张力</strong>：凝势每层 −移速，蓄越满越脆 → 「再蓄一层博伤害 vs 现在放保安全」。</p>
-
-  <h3>操作循环</h3>
+  <h3>类似玩法参考</h3>
   <ul>
-    <li><strong>短轴</strong>：普攻 4 段（回 1 势）→ 凝势补到 2–3 层 → 看破绽放斩势</li>
-    <li><strong>长轴</strong>：弹反 / 完美闪避攒势 + 普攻铺垫 → Boss 大破绽 → 凝满 4 层 → <strong>破势·一闪处决</strong> → 终结技「奔雷」收尾</li>
-    <li><strong>心法</strong>：用防御操作（闪 / 弹）反哺进攻资源；在 Boss 破绽窗精准塞一记满势一闪</li>
+    <li>&lt;1-2 个游戏角色参考,标清楚「参考它的哪一点」—— 仅作研究/评论性引用&gt;</li>
   </ul>
 
-  <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:16px 0;">
-    <svg viewBox="0 0 720 210" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="苍岚操作循环流程图：短轴 普攻4段回1势 到 凝势补2到3 到 斩势；长轴 攒势 到 凝满4势 到 破势一闪处决 到 终结技奔雷">
-      <text x="6" y="60" font-size="13" fill="#5a6578">短轴</text>
-      <rect x="60" y="34" width="150" height="48" rx="8" fill="#e8eef5" stroke="#94a3b8"/>
-      <text x="135" y="54" text-anchor="middle" font-size="12.5" fill="#1e40af">普攻 4 段</text>
-      <text x="135" y="71" text-anchor="middle" font-size="11" fill="#5a6578">+1 势</text>
-      <text x="228" y="64" text-anchor="middle" font-size="18" fill="#3b82f6">&#8594;</text>
-      <rect x="246" y="34" width="150" height="48" rx="8" fill="#e8eef5" stroke="#94a3b8"/>
-      <text x="321" y="62" text-anchor="middle" font-size="12.5" fill="#1e40af">凝势补到 2&#8211;3</text>
-      <text x="414" y="64" text-anchor="middle" font-size="18" fill="#3b82f6">&#8594;</text>
-      <rect x="432" y="34" width="130" height="48" rx="8" fill="#fdeecd" stroke="#b45309"/>
-      <text x="497" y="62" text-anchor="middle" font-size="12.5" fill="#b45309">斩势</text>
-      <text x="6" y="160" font-size="13" fill="#5a6578">长轴</text>
-      <rect x="60" y="134" width="126" height="48" rx="8" fill="#e8eef5" stroke="#94a3b8"/>
-      <text x="123" y="154" text-anchor="middle" font-size="12" fill="#1e40af">攒势</text>
-      <text x="123" y="171" text-anchor="middle" font-size="10.5" fill="#5a6578">闪 / 弹 / 普攻</text>
-      <text x="200" y="164" text-anchor="middle" font-size="17" fill="#3b82f6">&#8594;</text>
-      <rect x="214" y="134" width="118" height="48" rx="8" fill="#e8eef5" stroke="#94a3b8"/>
-      <text x="273" y="162" text-anchor="middle" font-size="12" fill="#1e40af">凝满 4 势</text>
-      <text x="346" y="164" text-anchor="middle" font-size="17" fill="#3b82f6">&#8594;</text>
-      <rect x="360" y="134" width="128" height="48" rx="8" fill="#fdeecd" stroke="#b45309"/>
-      <text x="424" y="154" text-anchor="middle" font-size="12" fill="#b45309">破势·一闪</text>
-      <text x="424" y="171" text-anchor="middle" font-size="10.5" fill="#b45309">处决</text>
-      <text x="502" y="164" text-anchor="middle" font-size="17" fill="#3b82f6">&#8594;</text>
-      <rect x="516" y="134" width="138" height="48" rx="8" fill="#dbeafe" stroke="#1e40af"/>
-      <text x="585" y="162" text-anchor="middle" font-size="12" fill="#1e40af">终结技·奔雷</text>
-    </svg>
-    <div style="color:#5a6578;font-size:13px;margin-top:8px;line-height:1.7;">&#9650; 短轴日常铺垫；长轴在 Boss 破绽窗凑满 4 势打出<strong>破势·一闪处决</strong>，终结技收尾。<span style="color:#b45309;">金框 = 核心爆发点</span>。</div>
-  </div>
-  <aside class="note-aside" data-key="note-bind">
-    <div class="note-label">📝 评审备注 · 伍<span class="clear-btn" data-clear="note-bind">清空</span></div>
+  <aside class="note-aside" data-key="note-positioning">
+    <div class="note-label">📝 评审备注 · 壹<span class="clear-btn" data-clear="note-positioning">清空</span></div>
     <div class="note-content" contenteditable="true"></div>
   </aside>
 </section>
 
-<section id="assets">
-  <h2>陆 · 数值建模验证 + 边际效应</h2>
-  <p style="font-size: 14px; color: var(--muted);">用《星澜纪》乘区式（技能 × 增伤 × 暴击，守方乘区归一化为 1）跑 C0→C6，并看几处边际。<strong>本章数值为相对指数 / 倍率</strong>（已归一化），绝对伤害需代入项目真实面板复算。</p>
+<!-- ============================================================
+     贰 · 核心机制   🟢 通用必有
+     这角色的核心玩法机制(具体机制按角色填)
+     ============================================================ -->
+<section id="mechanics">
+  <h2>贰 · 核心机制</h2>
+  <p style="font-size: 14px; color: var(--muted);">把这角色「独一份」的玩法机制讲清楚 —— 它是什么、怎么转、玩家围绕它的核心循环是什么。具体逐招表现放下一章「叁 · 招式详解」。</p>
 
-  <h3>命座养成梯度</h3>
+  <h3>机制概览</h3>
+  <div class="stars">
+    <!-- 一张机制卡 = 一个核心机制。复制本卡片即可加机制。示例,删掉换你的。 -->
+    <div class="star-card">
+      <div class="num">★ 机制 1</div>
+      <div class="name">&lt;机制名 — 一句话钩子&gt;</div>
+      <div class="desc">
+        <p><span class="dl">是什么</span>&lt;这个机制的规则：怎么积累 / 怎么消耗 / 怎么转化&gt;</p>
+        <p><span class="dl">玩法</span>&lt;玩家围绕它的操作循环,反制 / 收益在哪&gt;</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>核心循环（短轴 / 长轴）</h3>
+  <ul>
+    <li><strong>短轴</strong>：&lt;玩家最常重复的几步操作循环,如 普攻起手 → 蓄力 → 释放&gt;</li>
+    <li><strong>长轴</strong>：&lt;一个完整战斗周期内的资源 / 形态推进节奏&gt;</li>
+  </ul>
+
+  <h3>操作循环示意图</h3>
+  <p style="font-size: 14px; color: var(--muted);">把上面的核心循环画成一张图：核心招怎么循环（普攻 → 特殊技 → 引爆 → 资源回收），穿插招 / 节点怎么接入。<strong>按角色画</strong>，下面是空骨架(<code>role="img"</code> + <code>aria-label</code> 会自动接到图表点击放大 lightbox)。</p>
+  <figure>
+  <svg viewBox="0 0 880 420" width="100%" style="max-width:840px;display:block;margin:0 auto;" font-family="var(--font-serif), serif" role="img" aria-label="操作循环示意图骨架：核心招怎么循环（普攻 / 特殊技 / 引爆 / 资源），穿插招与节点怎么接入，把占位三区换成本角色真实操作循环">
+    <defs><marker id="op-fa" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#b85838"/></marker></defs>
+    <style>
+      .op-core{fill:#b85838;fill-opacity:0.07;stroke:#b85838;stroke-width:1.8;}
+      .op-box{fill:none;stroke:#94a3b8;stroke-width:1.4;stroke-dasharray:5 4;}
+      .op-t{fill:var(--ink);} .op-s{fill:var(--muted);} .op-lf{fill:#b85838;}
+    </style>
+    <text x="440" y="28" text-anchor="middle" class="op-t" font-size="16" font-weight="600">操作循环示意图（骨架 · 按角色填）</text>
+    <text x="24" y="78" class="op-lf" font-size="11" font-weight="600">① 核心循环</text>
+    <text x="24" y="262" class="op-lf" font-size="11" font-weight="600">② 穿插招 / 节点</text>
+    <rect class="op-core" x="100" y="92" width="180" height="62" rx="10"/>
+    <text x="190" y="120" text-anchor="middle" class="op-t" font-size="12.5" font-weight="600">① &lt;核心招&gt;</text>
+    <text x="190" y="139" text-anchor="middle" class="op-s" font-size="9">&lt;铺资源 / 起手&gt;</text>
+    <rect class="op-core" x="350" y="92" width="180" height="62" rx="10"/>
+    <text x="440" y="120" text-anchor="middle" class="op-t" font-size="12.5" font-weight="600">② &lt;转化 / 引爆&gt;</text>
+    <text x="440" y="139" text-anchor="middle" class="op-s" font-size="9">&lt;触发条件&gt;</text>
+    <rect class="op-core" x="600" y="92" width="180" height="62" rx="10"/>
+    <text x="690" y="120" text-anchor="middle" class="op-t" font-size="12.5" font-weight="600">③ &lt;强化窗 / 收益&gt;</text>
+    <text x="690" y="139" text-anchor="middle" class="op-s" font-size="9">&lt;反哺核心招&gt;</text>
+    <line x1="280" y1="123" x2="350" y2="123" stroke="#b85838" stroke-width="2.3" fill="none" marker-end="url(#op-fa)"/>
+    <text x="315" y="114" text-anchor="middle" class="op-lf" font-size="9">&lt;条件&gt;</text>
+    <line x1="530" y1="123" x2="600" y2="123" stroke="#b85838" stroke-width="2.3" fill="none" marker-end="url(#op-fa)"/>
+    <text x="565" y="114" text-anchor="middle" class="op-lf" font-size="9">&lt;开窗&gt;</text>
+    <path d="M700,90 Q445,46 190,90" stroke="#b85838" stroke-width="2.2" fill="none" marker-end="url(#op-fa)"/>
+    <text x="445" y="52" text-anchor="middle" class="op-lf" font-size="10.5" font-weight="600">&lt;窗内强化 → 提速核心招&gt;</text>
+    <rect class="op-box" x="100" y="276" width="220" height="60" rx="10"/>
+    <text x="210" y="300" text-anchor="middle" class="op-t" font-size="12" font-weight="600">&lt;穿插招 A&gt;</text>
+    <text x="210" y="318" text-anchor="middle" class="op-s" font-size="8.8">&lt;规避 / 补铺 / 回能 ⇒ 接核心招&gt;</text>
+    <rect class="op-box" x="350" y="276" width="220" height="60" rx="10"/>
+    <text x="460" y="300" text-anchor="middle" class="op-t" font-size="12" font-weight="600">&lt;节点 · 大招 / 终结&gt;</text>
+    <text x="460" y="318" text-anchor="middle" class="op-s" font-size="8.8">&lt;能量满 → 全场收割 + 重置&gt;</text>
+    <rect class="op-box" x="600" y="276" width="220" height="60" rx="10"/>
+    <text x="710" y="300" text-anchor="middle" class="op-t" font-size="12" font-weight="600">&lt;节点 · 配队 / 联动&gt;</text>
+    <text x="710" y="318" text-anchor="middle" class="op-s" font-size="8.8">&lt;切人接管 / 弹反 / 空攻&gt;</text>
+    <text x="440" y="372" text-anchor="middle" class="op-s" font-size="9.5">主循环：&lt;一句话讲清核心招怎么滚&gt;；穿插招 / 节点提供规避 / 防御 / 补铺 / 回能 / 配队</text>
+    <text x="440" y="392" text-anchor="middle" class="op-s" font-size="9.5">底注被动：&lt;角色被动一句话&gt;</text>
+  </svg>
+  <figcaption>图 · 操作循环示意图（骨架，按角色替换：核心招怎么循环 + 穿插招 / 节点怎么接入）</figcaption>
+  </figure>
+
+  <aside class="note-aside" data-key="note-mechanics">
+    <div class="note-label">📝 评审备注 · 贰<span class="clear-btn" data-clear="note-mechanics">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<!-- ============================================================
+     叁 · 招式详解   🟢 通用必有
+     按你项目招式集逐招(普攻 / 特殊技 / 闪避 / 大招… 由项目 conventions 定义)
+     ============================================================ -->
+<section id="moveset">
+  <h2>叁 · 招式详解</h2>
+  <p style="font-size: 14px; color: var(--muted);">按你项目<strong>招式集</strong>(由 conventions 定义,如 普攻N连 / 特殊技 / 闪避攻击 / 弹反对撞 / 空中攻击 / 大招 / 协力技…)<strong>逐招</strong>展开。一张卡 = 一招,招牌招式加 <code>.star</code> 高亮 + 关联机制标签。</p>
+
+  <div class="skill-grid">
+    <!-- 普通招式卡 -->
+    <div class="skill-card">
+      <div class="skill-head">
+        <span class="skill-id">&lt;招式槽位 ID&gt;</span>
+        <span class="skill-name">&lt;招式名,如 普攻 N 连&gt;</span>
+        <span class="skill-tag tag-reuse">复用</span>
+      </div>
+      <div class="skill-desc">
+        <p><span class="dl">表现</span>&lt;这一招长啥样：动作 / 节奏 / 打击感&gt;</p>
+        <p><span class="dl">玩法</span>&lt;怎么用 / 接什么 / 范围与判定&gt;</p>
+      </div>
+    </div>
+    <!-- 招牌/核心招式卡(加 .star + ★ + tag-new + skill-mech 关联机制) -->
+    <div class="skill-card star">
+      <div class="skill-head">
+        <span class="skill-star">★</span>
+        <span class="skill-id">&lt;招式槽位 ID&gt;</span>
+        <span class="skill-name">&lt;招牌招式名&gt;</span>
+        <span class="skill-tag tag-new">新增</span>
+        <span class="skill-mech">机制 1</span>
+      </div>
+      <div class="skill-desc">
+        <p><span class="dl">表现</span>&lt;招牌演出 + 预警信号&gt;</p>
+        <p><span class="dl">玩法</span>&lt;核心用法 / 收益 / 衔接&gt;</p>
+      </div>
+      <div class="skill-sub">
+        <div class="sub-line"><span class="sub-label">数值要点</span>&lt;倍率 / CD / 帧数等落地参数,可选&gt;</div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="note-aside" data-key="note-moveset">
+    <div class="note-label">📝 评审备注 · 叁<span class="clear-btn" data-clear="note-moveset">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<!-- ============================================================
+     肆 · 核心机制 / 资源系统(深入)   🟡 按角色 · 可选
+     <有特殊资源 / 状态系统的角色在此拎一章深入；没有则整章删除>
+     删整章时记得同步页尾 SECTIONS 数组(去掉 resource-system 一行)。
+     ============================================================ -->
+<section id="resource-system">
+  <h2>肆 · 资源系统（深入） <span style="color: #b85838; font-size: 14px;">🟡 按角色 · 可选 —— &lt;有特殊资源 / 状态系统的角色在此拎一章深入；没有则整章删除&gt;</span></h2>
+  <p style="font-size: 14px; color: var(--muted);">只有当角色有<strong>独特的资源条 / 状态层 / 形态系统</strong>(如能量槽、势层、印记、双形态切换)、贰章一句话讲不透时,才单拎本章深入。普通角色删除整章。</p>
+
+  <h3>资源 / 状态规则</h3>
+  <ul>
+    <li><strong>积累</strong>：&lt;怎么涨：命中 / 时间 / 特定招式&gt;</li>
+    <li><strong>消耗 / 转化</strong>：&lt;怎么花：触发什么强化 / 释放&gt;</li>
+    <li><strong>上限 / 衰减</strong>：&lt;封顶值 / 是否随时间衰减 / 战斗结束是否清空&gt;</li>
+    <li><strong>视觉反馈</strong>：&lt;HUD 怎么显示每个状态(idle / 积累中 / 满 / 释放后)&gt;</li>
+  </ul>
+
+  <h3>资源档位 → 收益</h3>
   <table>
-    <thead><tr><th>命座</th><th>C0</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th><th>C6</th></tr></thead>
+    <thead><tr><th>档位 / 层数</th><th>效果</th><th>边际特性</th></tr></thead>
     <tbody>
-      <tr><td>累计指数</td><td>100</td><td>105</td><td>118</td><td>125</td><td>134</td><td>142</td><td>195</td></tr>
-      <tr><td>逐级增量</td><td>—</td><td>+5%</td><td><strong>+12%</strong></td><td>+6%</td><td>+7%</td><td>+6%</td><td><strong>+37%</strong></td></tr>
+      <tr><td class="phase">1 层</td><td>&lt;效果&gt;</td><td>&lt;线性 / 递增 / 质变&gt;</td></tr>
+      <tr><td class="phase">满层 ⭐</td><td><strong>&lt;质变收益&gt;</strong></td><td><strong>&lt;跳变 / 处决等&gt;</strong></td></tr>
     </tbody>
   </table>
 
+  <h3>资源流转示意图</h3>
+  <p style="font-size: 14px; color: var(--muted);">把各条资源的<strong>进 / 出</strong>画成一张图：每个资源一个储库，上方箭头标「进（来源）」、下方箭头标「出（消耗）」，互锁关系用箭头连。<strong>按角色画</strong>，下面是空骨架(<code>role="img"</code> + <code>aria-label</code> 会自动接到图表点击放大 lightbox)。</p>
+  <figure>
+  <svg viewBox="0 0 760 440" width="100%" style="max-width:720px;display:block;margin:0 auto;" font-family="var(--font-serif), serif" role="img" aria-label="资源流转示意图骨架：各资源储库的进与出，上方箭头标来源、下方箭头标消耗，互锁关系用箭头连，把占位储库换成本角色真实资源">
+    <defs>
+      <marker id="rs-a1" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b85838"/></marker>
+      <marker id="rs-a2" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8"/></marker>
+    </defs>
+    <style>.rs-t{fill:var(--ink);} .rs-s{fill:var(--muted);}</style>
+    <text x="380" y="28" text-anchor="middle" class="rs-t" font-size="16" font-weight="600">资源流转示意图（骨架 · 按角色填）</text>
+    <rect x="60" y="190" width="180" height="92" rx="11" fill="#b85838" fill-opacity="0.08" stroke="#b85838" stroke-width="2.6"/>
+    <text x="150" y="228" text-anchor="middle" class="rs-t" font-size="14" font-weight="700">&lt;资源 A&gt;</text>
+    <text x="150" y="247" text-anchor="middle" class="rs-s" font-size="9">&lt;己方 / 一句话&gt;</text>
+    <rect x="290" y="190" width="180" height="92" rx="11" fill="#94a3b8" fill-opacity="0.10" stroke="#94a3b8" stroke-width="2.6"/>
+    <text x="380" y="228" text-anchor="middle" class="rs-t" font-size="14" font-weight="700">&lt;资源 B&gt;</text>
+    <text x="380" y="247" text-anchor="middle" class="rs-s" font-size="9">&lt;敌方 / DoT 等&gt;</text>
+    <rect x="520" y="190" width="180" height="92" rx="11" fill="#94a3b8" fill-opacity="0.10" stroke="#94a3b8" stroke-width="2.6"/>
+    <text x="610" y="228" text-anchor="middle" class="rs-t" font-size="14" font-weight="700">&lt;资源 C&gt;</text>
+    <text x="610" y="247" text-anchor="middle" class="rs-s" font-size="9">&lt;大招 / 配队等&gt;</text>
+    <text x="150" y="148" text-anchor="middle" class="rs-s" font-size="9.5">＋&lt;进：来源&gt;</text>
+    <line x1="150" y1="156" x2="150" y2="188" stroke="#b85838" stroke-width="1.7" marker-end="url(#rs-a1)"/>
+    <text x="380" y="148" text-anchor="middle" class="rs-s" font-size="9.5">＋&lt;进：来源&gt;</text>
+    <line x1="380" y1="156" x2="380" y2="188" stroke="#94a3b8" stroke-width="1.7" marker-end="url(#rs-a2)"/>
+    <text x="610" y="148" text-anchor="middle" class="rs-s" font-size="9.5">＋&lt;进：来源&gt;</text>
+    <line x1="610" y1="156" x2="610" y2="188" stroke="#94a3b8" stroke-width="1.7" marker-end="url(#rs-a2)"/>
+    <line x1="150" y1="282" x2="150" y2="314" stroke="#b85838" stroke-width="2.1" marker-end="url(#rs-a1)"/>
+    <text x="150" y="331" text-anchor="middle" class="rs-s" font-size="9.5">－&lt;出：消耗&gt;</text>
+    <line x1="380" y1="282" x2="380" y2="314" stroke="#94a3b8" stroke-width="2.1" marker-end="url(#rs-a2)"/>
+    <text x="380" y="331" text-anchor="middle" class="rs-s" font-size="9.5">－&lt;出：消耗&gt;</text>
+    <line x1="610" y1="282" x2="610" y2="314" stroke="#94a3b8" stroke-width="2.1" marker-end="url(#rs-a2)"/>
+    <text x="610" y="331" text-anchor="middle" class="rs-s" font-size="9.5">－&lt;出：消耗&gt;</text>
+    <text x="380" y="372" text-anchor="middle" class="rs-s" font-size="9.5">互锁：&lt;一句话讲清各资源怎么互相喂 / 互相夹&gt;</text>
+    <line x1="250" y1="408" x2="278" y2="408" stroke="#b85838" stroke-width="3"/><text x="284" y="411" class="rs-s" font-size="9.5">己方资源</text>
+    <line x1="380" y1="408" x2="408" y2="408" stroke="#94a3b8" stroke-width="3"/><text x="414" y="411" class="rs-s" font-size="9.5">敌方 / 其它</text>
+    <text x="500" y="411" class="rs-s" font-size="9">｜ 上=进　下=出</text>
+  </svg>
+  <figcaption>图 · 资源流转示意图（骨架，按角色替换：各资源进 / 出 + 互锁关系）</figcaption>
+  </figure>
+
+  <aside class="note-aside" data-key="note-resource-system">
+    <div class="note-label">📝 评审备注 · 肆<span class="clear-btn" data-clear="note-resource-system">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<!-- ============================================================
+     伍 · 养成 / 命座   🟢 通用必有
+     养成形式按项目(命座 / 技能树 / 天赋…由 conventions 定义)
+     ============================================================ -->
+<section id="progression">
+  <h2>伍 · 养成 / 命座</h2>
+  <p style="font-size: 14px; color: var(--muted);">养成形式<strong>按你项目</strong>(命座 / 星魂 / 技能树 / 天赋 / 突破…由 conventions 定义)。本章列每级养成解锁什么、强化方向是「自身 / 全队 / 机制扩展」中的哪类。<strong>数值健康度(梯度是否在健康区)放下一章「柒 · 数值建模」验证。</strong></p>
+
+  <h3>养成梯度（按项目养成形式逐级填）</h3>
+  <table>
+    <thead><tr><th>层级</th><th>解锁内容</th><th>强化方向</th></tr></thead>
+    <tbody>
+      <tr><td class="phase">&lt;Lv1 / C1 / …&gt;</td><td>&lt;解锁了什么&gt;</td><td>&lt;自身 / 全队 / 机制扩展&gt;</td></tr>
+      <tr><td class="phase">&lt;质变层 ⭐&gt;</td><td><strong>&lt;质变解锁(付费拐点 / 玩法升级)&gt;</strong></td><td>&lt;方向&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <h3>进阶提升方向</h3>
+  <ul>
+    <li>1. &lt;进阶方向一&gt;</li>
+    <li>2. &lt;进阶方向二&gt;</li>
+    <li>3. &lt;进阶方向三&gt;</li>
+  </ul>
+
+  <aside class="note-aside" data-key="note-progression">
+    <div class="note-label">📝 评审备注 · 伍<span class="clear-btn" data-clear="note-progression">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<!-- ============================================================
+     陆 · 配队协力   🟡 按项目 · 可选
+     <三人队 / 有协同机制的项目才有；单机 / 买断制项目整章删除；按项目 conventions>
+     删整章时记得同步页尾 SECTIONS 数组(去掉 team 一行)。
+     ============================================================ -->
+<section id="team">
+  <h2>陆 · 配队协力 <span style="color: #b85838; font-size: 14px;">🟡 按项目 · 可选 —— &lt;三人队 / 有协同机制的项目才有；单机 / 买断制项目整章删除&gt;</span></h2>
+  <p style="font-size: 14px; color: var(--muted);">只有当你项目有<strong>组队 / 协同机制</strong>(如三人队、协力技、换人连携、上场增益)时才填本章,按项目 conventions 的配队体系展开。单机 / 买断制 / 无组队的项目删除整章。</p>
+
+  <h3>推荐配队</h3>
+  <table>
+    <thead><tr><th>配队组合</th><th>协同逻辑</th><th>收益</th></tr></thead>
+    <tbody>
+      <tr><td>&lt;角色 A + 角色 B + …&gt;</td><td>&lt;为什么这套搭：谁开增益 / 谁吃增益 / 节奏怎么咬合&gt;</td><td>&lt;1+1&gt;2 在哪&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <h3>协力 / 协同机制</h3>
+  <ul>
+    <li>&lt;这角色给队伍带来什么(开增益 / 拉条 / 破韧 / 换人窗口…),以及自己吃队友什么&gt;</li>
+  </ul>
+
+  <aside class="note-aside" data-key="note-team">
+    <div class="note-label">📝 评审备注 · 陆<span class="clear-btn" data-clear="note-team">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<!-- ============================================================
+     柒 · 数值建模   🟢 通用必有 · 🔴 硬标准章
+     ------------------------------------------------------------
+     🔴 本章必填,图表必须配齐,不许缩水:
+       5 张 SVG 图 —— ① 命座养成曲线 ② 逐级边际 ③ 增伤区稀释 ④ 场景伤害梯度 ⑤ 机制专属曲线
+       每图配一个「📐 怎么算 · 为什么 · 影响」注解框 + 末尾平衡自检表。
+     下面 5 张是「空 SVG 骨架」(坐标轴 + 占位折线 + 注解占位),把占位数据换成你角色的真实建模。
+     ⚠️ 勿删图、勿改成纯表格 —— 只写数值表不配图 = 不合格。
+     建模口径:乘区式(技能 × 增伤 × 暴击),守方乘区归一化为 1;数值为相对指数/倍率,
+              绝对伤害需代入项目真实面板复算。详见 references/numbers-and-progression.md。
+     ============================================================ -->
+<section id="numbers">
+  <h2>柒 · 数值建模 <span style="color: #c0392b; font-size: 14px;">🔴 必填硬章 · 图表必须配齐</span></h2>
+  <p style="font-size: 14px; color: var(--muted);">用你项目的<strong>乘区式</strong>(技能 × 增伤 × 暴击,守方乘区归一化为 1)跑养成全程并看几处边际。<strong>本章数值为相对指数 / 倍率</strong>(已归一化),绝对伤害需代入项目真实面板复算。<strong style="color:#c0392b;">5 张图缺一不可,每图必须配「怎么算 · 为什么 · 影响」三段注解 + 平衡自检表。</strong></p>
+
+  <!-- ① 命座养成曲线 -->
+  <h3>① 命座 / 养成曲线</h3>
   <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:18px 0;">
-    <svg viewBox="0 0 720 360" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="苍岚命座 C0 到 C6 累计强度指数曲线，从 100 升到 195，C2 与 C6 为质变跳点，C6 落在加号 80 到 120 百分比健康区间">
+    <svg viewBox="0 0 720 360" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="命座 / 养成累计强度指数曲线骨架：横轴养成层级，纵轴累计强度指数（基准=100），把占位折线换成你角色的真实建模">
       <rect x="80" y="50" width="600" height="80" fill="#e8f3ec"/>
-      <text x="676" y="46" text-anchor="end" font-size="11" fill="#1f7a4d">C6 健康区间 +80~120%</text>
+      <text x="676" y="46" text-anchor="end" font-size="11" fill="#1f7a4d">满级健康区间 +80~120%（按项目阈值替换）</text>
       <line x1="80" y1="40" x2="80" y2="300" stroke="#94a3b8" stroke-width="1"/>
       <line x1="80" y1="300" x2="690" y2="300" stroke="#94a3b8" stroke-width="1"/>
       <g font-size="11" fill="#94a3b8">
@@ -2680,137 +2958,317 @@
         <line x1="80" y1="130" x2="680" y2="130" stroke="#e2e8f0"/><text x="72" y="134" text-anchor="end">180</text>
         <line x1="80" y1="50" x2="680" y2="50" stroke="#e2e8f0"/><text x="72" y="54" text-anchor="end">220</text>
       </g>
-      <polyline points="80,290 180,280 280,254 380,240 480,222 580,206 680,100" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+      <polyline points="80,290 180,278 280,256 380,242 480,224 580,208 680,120" fill="none" stroke="#1e40af" stroke-width="2.5" stroke-dasharray="6 5"/>
       <g font-size="12" fill="#1a2332" text-anchor="middle">
-        <circle cx="80" cy="290" r="4" fill="#1e40af"/><text x="80" y="282">100</text>
-        <circle cx="180" cy="280" r="4" fill="#1e40af"/><text x="180" y="272">105</text>
-        <circle cx="280" cy="254" r="5.5" fill="#b45309"/><text x="280" y="244" fill="#b45309">118</text>
-        <circle cx="380" cy="240" r="4" fill="#1e40af"/><text x="380" y="232">125</text>
-        <circle cx="480" cy="222" r="4" fill="#1e40af"/><text x="480" y="214">134</text>
-        <circle cx="580" cy="206" r="4" fill="#1e40af"/><text x="580" y="198">142</text>
-        <circle cx="680" cy="100" r="5.5" fill="#b45309"/><text x="672" y="92" fill="#b45309" text-anchor="end">195</text>
+        <circle cx="80" cy="290" r="4" fill="#1e40af"/>
+        <circle cx="180" cy="278" r="4" fill="#1e40af"/>
+        <circle cx="280" cy="256" r="5.5" fill="#b45309"/><text x="280" y="246" fill="#b45309">质变</text>
+        <circle cx="380" cy="242" r="4" fill="#1e40af"/>
+        <circle cx="480" cy="224" r="4" fill="#1e40af"/>
+        <circle cx="580" cy="208" r="4" fill="#1e40af"/>
+        <circle cx="680" cy="120" r="5.5" fill="#b45309"/><text x="672" y="112" fill="#b45309" text-anchor="end">质变</text>
       </g>
       <g font-size="12" fill="#5a6578" text-anchor="middle">
-        <text x="80" y="318">C0</text><text x="180" y="318">C1</text><text x="280" y="318">C2</text>
-        <text x="380" y="318">C3</text><text x="480" y="318">C4</text><text x="580" y="318">C5</text><text x="680" y="318">C6</text>
+        <text x="80" y="318">L0</text><text x="180" y="318">L1</text><text x="280" y="318">L2</text>
+        <text x="380" y="318">L3</text><text x="480" y="318">L4</text><text x="580" y="318">L5</text><text x="680" y="318">L6</text>
       </g>
-      <text x="20" y="30" font-size="12" fill="#5a6578">累计强度指数（C0=100）</text>
+      <text x="20" y="30" font-size="12" fill="#5a6578">累计强度指数（L0=100）· 占位骨架</text>
     </svg>
-    <div style="color:#5a6578;font-size:13px;margin-top:8px;line-height:1.75;">
-      ▲ 命座养成曲线（金点 = 质变跳点 C2 / C6）。<br>
-      <strong>怎么算</strong>：每命座效果折算成对「循环 DPS」的增益 %，在 C0 = 100 基准上累乘成累计指数（乘区式 技能 × 增伤 × 暴击，守方乘区归一化为 1）。<br>
-      <strong>为什么这么算</strong>：C2 / C6 做质变跳点（付费拐点 + 鲸鱼勋章），其余平滑补，符合 5 段付费哲学。<br>
-      <strong>算的过程</strong>：C1 回势 +15% → 循环约 +5% → <strong>105</strong>；C2 处决放宽 → 均摊约 +12% → <strong>118</strong>；C3 技能 +2 级 → +6% → <strong>125</strong>；C4 回势 ×2 → +7% → <strong>134</strong>；C5 技能 +2 级 → +6% → <strong>142</strong>；C6 奔雷态 → +37% → <strong>195</strong>。<br>
-      <strong>结果</strong>：195 ÷ 100 = <strong>满命 +95%</strong>，落 +80~120% 健康区。
+    <div class="anno-box">
+      <div class="anno-title">📐 命座 / 养成曲线 · 怎么算 · 为什么 · 影响</div>
+      <p><span class="anno-k">怎么算</span>&lt;每级养成效果折算成对「循环 DPS」的增益 %,在 L0=100 基准上累乘成累计指数(乘区式,守方乘区归一化为 1)&gt;</p>
+      <p><span class="anno-k">为什么</span>&lt;为什么把质变点放在这些层(付费拐点 / 玩法升级),其余平滑补&gt;</p>
+      <p><span class="anno-k">影响</span>&lt;满级总梯度 = 末值 ÷ 100 = +X%,是否落在健康区间&gt;</p>
     </div>
   </div>
 
-  <h3>边际效应</h3>
-  <table>
-    <thead><tr><th>维度</th><th>边际表现（示例）</th><th>设计意图</th></tr></thead>
-    <tbody>
-      <tr><td>势层 → 斩势威力</td><td>1 / 2 / 3 层 ≈ 1.0× / 1.4× / 1.9×；<strong>4 层一闪 ≈ 3.5× + 处决</strong>（边际跳升）</td><td>4 层质变 → 鼓励「蓄满」博弈</td></tr>
-      <tr><td>凝势 → 移速</td><td>每层 −移速 ≈ 15% / 30% / 50% / 70%，<strong>边际递增的机动惩罚</strong></td><td>平衡「蓄满」风险：越肥越脆</td></tr>
-      <tr><td>增伤词条</td><td>加法 bucket，自拐边际 ≈ S ÷ (1+面板)；苍岚无自拐 → <strong>不踩稀释</strong></td><td>走暴击赛道规避增伤天花板</td></tr>
-      <tr><td>命座</td><td>C0→C6 +95%，C2 / C6 质变跳点（见上图）</td><td>付费哲学：平滑补 + 拐点放量</td></tr>
-    </tbody>
-  </table>
-
-  <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:16px 0;">
-    <svg viewBox="0 0 720 300" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="势层双轴图：斩势一闪伤害倍率随势层升高，1势1.0倍到4势3.5倍质变跳升；剩余移速随凝势层数下降，85%到30%；体现蓄越满越强也越脆的张力">
-      <line x1="80" y1="40" x2="80" y2="260" stroke="#94a3b8"/>
-      <line x1="80" y1="260" x2="660" y2="260" stroke="#94a3b8"/>
-      <line x1="660" y1="40" x2="660" y2="260" stroke="#94a3b8"/>
+  <!-- ② 逐级边际 -->
+  <h3>② 逐级边际</h3>
+  <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:18px 0;">
+    <svg viewBox="0 0 720 300" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="逐级边际增量柱状图骨架：每级养成带来的边际增益百分比，看是否有质变跳点、是否平滑，把占位柱高换成真实建模">
+      <line x1="80" y1="30" x2="80" y2="250" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="80" y1="250" x2="690" y2="250" stroke="#94a3b8" stroke-width="1"/>
       <g font-size="11" fill="#94a3b8">
-        <text x="72" y="264" text-anchor="end">0</text>
-        <text x="72" y="154" text-anchor="end">2.0</text>
-        <text x="72" y="44" text-anchor="end">4.0&#215;</text>
-        <text x="668" y="264" text-anchor="start">0</text>
-        <text x="668" y="154" text-anchor="start">50</text>
-        <text x="668" y="44" text-anchor="start">100%</text>
+        <line x1="80" y1="190" x2="680" y2="190" stroke="#e2e8f0"/><text x="72" y="194" text-anchor="end">+10%</text>
+        <line x1="80" y1="130" x2="680" y2="130" stroke="#e2e8f0"/><text x="72" y="134" text-anchor="end">+25%</text>
+        <line x1="80" y1="70" x2="680" y2="70" stroke="#e2e8f0"/><text x="72" y="74" text-anchor="end">+40%</text>
       </g>
-      <rect x="125" y="205" width="50" height="55" fill="#378ADD"/>
-      <rect x="265" y="183" width="50" height="77" fill="#378ADD"/>
-      <rect x="405" y="155" width="50" height="105" fill="#378ADD"/>
-      <rect x="545" y="68" width="50" height="192" fill="#b45309"/>
-      <g font-size="12" text-anchor="middle">
-        <text x="150" y="198" fill="#1e40af">1.0&#215;</text>
-        <text x="290" y="176" fill="#1e40af">1.4&#215;</text>
-        <text x="430" y="148" fill="#1e40af">1.9&#215;</text>
-        <text x="570" y="61" fill="#b45309" font-weight="500">3.5&#215;</text>
-      </g>
-      <polyline points="150,73 290,106 430,150 570,194" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-dasharray="5 3"/>
-      <circle cx="150" cy="73" r="4" fill="#1D9E75"/>
-      <circle cx="290" cy="106" r="4" fill="#1D9E75"/>
-      <circle cx="430" cy="150" r="4" fill="#1D9E75"/>
-      <circle cx="570" cy="194" r="4" fill="#1D9E75"/>
-      <g font-size="11" fill="#0f6e56" text-anchor="middle">
-        <text x="150" y="66">85%</text>
-        <text x="290" y="99">70%</text>
-        <text x="430" y="143">50%</text>
-        <text x="570" y="210">30%</text>
+      <g fill="#3b82f6" opacity="0.85">
+        <rect x="130" y="220" width="50" height="30"/>
+        <rect x="230" y="140" width="50" height="110" fill="#b45309"/>
+        <rect x="330" y="212" width="50" height="38"/>
+        <rect x="430" y="205" width="50" height="45"/>
+        <rect x="530" y="212" width="50" height="38"/>
+        <rect x="630" y="80" width="50" height="170" fill="#b45309"/>
       </g>
       <g font-size="12" fill="#5a6578" text-anchor="middle">
-        <text x="150" y="278">1 势</text>
-        <text x="290" y="278">2 势</text>
-        <text x="430" y="278">3 势</text>
-        <text x="570" y="278">4 势</text>
+        <text x="155" y="268">L1</text><text x="255" y="268">L2</text><text x="355" y="268">L3</text>
+        <text x="455" y="268">L4</text><text x="555" y="268">L5</text><text x="655" y="268">L6</text>
       </g>
-      <text x="20" y="30" font-size="11" fill="#5a6578">斩势 / 一闪 倍率（1 势斩势 = 1.0）</text>
-      <text x="700" y="30" font-size="11" fill="#5a6578" text-anchor="end">剩余移速 %</text>
+      <text x="20" y="22" font-size="12" fill="#5a6578">逐级边际增量 %（金柱 = 质变跳点）· 占位骨架</text>
     </svg>
-    <div style="color:#5a6578;font-size:13px;margin-top:8px;line-height:1.7;">&#9650; 势越高 &#8594; 斩势/一闪倍率越高（蓝柱；<span style="color:#b45309;">4 势一闪 3.5&#215; 质变，金柱</span>），但凝势剩余移速越低（绿虚线 85%&#8594;30%）。这就是<strong>「蓄越满、越强、也越脆」</strong>的核心张力。<br>
-      <strong>怎么算 · 过程</strong>：斩势倍率按势层近线性偏上 —— 1 势 1.0×（基准），每层约 +0.45×，至 3 势 1.9×；4 势改走破势·一闪，跳到 3.5× 且附处决（质变、非线性）。移速惩罚每层递增 −15 / −15 / −20 / −20% → 剩 85 / 70 / 50 / 30%。<br>
-      <strong>结果</strong>：4 势伤害 ≈ 1 势斩势的 3.5 倍（基准为 1 势斩势 = 1.0；换算成 vs 普攻段约 8×，对应 §五「爆发」）、却只剩 30% 移速 —— 收益与风险同时见顶，逼出「再蓄一层 vs 现在放」的决策。</div>
+    <div class="anno-box">
+      <div class="anno-title">📐 逐级边际 · 怎么算 · 为什么 · 影响</div>
+      <p><span class="anno-k">怎么算</span>&lt;每级相对上一级的边际增益 % = (本级累计指数 − 上级) ÷ 上级&gt;</p>
+      <p><span class="anno-k">为什么</span>&lt;质变跳点集中放在哪几级,其余级是否避免「平到玩家无感」或「陡到逼氪」&gt;</p>
+      <p><span class="anno-k">影响</span>&lt;边际曲线决定养成体验节奏:是否有明显的「下一级值得追」的拐点&gt;</p>
+    </div>
   </div>
 
-  <h3>§ 五健康自检</h3>
+  <!-- ③ 增伤区稀释 -->
+  <h3>③ 增伤区稀释</h3>
+  <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:18px 0;">
+    <svg viewBox="0 0 720 300" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="加法增伤区稀释边际曲线骨架：自堆增伤的实际边际随面板已有增伤升高而递减（S ÷ (1+面板)），把占位曲线换成真实建模，说明本角色是否踩稀释天花板">
+      <line x1="80" y1="30" x2="80" y2="250" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="80" y1="250" x2="690" y2="250" stroke="#94a3b8" stroke-width="1"/>
+      <g font-size="11" fill="#94a3b8">
+        <line x1="80" y1="190" x2="680" y2="190" stroke="#e2e8f0"/><text x="72" y="194" text-anchor="end">低</text>
+        <line x1="80" y1="110" x2="680" y2="110" stroke="#e2e8f0"/><text x="72" y="114" text-anchor="end">中</text>
+        <line x1="80" y1="50" x2="680" y2="50" stroke="#e2e8f0"/><text x="72" y="54" text-anchor="end">高</text>
+      </g>
+      <path d="M80,60 Q260,90 400,160 T680,225" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6 5"/>
+      <text x="430" y="150" font-size="11" fill="#c0392b">边际递减 S ÷ (1+面板)</text>
+      <g font-size="12" fill="#5a6578" text-anchor="middle">
+        <text x="80" y="270">面板增伤 低</text><text x="400" y="270">→</text><text x="650" y="270">面板增伤 高</text>
+      </g>
+      <text x="20" y="22" font-size="12" fill="#5a6578">单点增伤的实际边际 · 占位骨架</text>
+    </svg>
+    <div class="anno-box">
+      <div class="anno-title">📐 增伤区稀释 · 怎么算 · 为什么 · 影响</div>
+      <p><span class="anno-k">怎么算</span>&lt;加法 bucket:自堆增伤的边际 ≈ S ÷ (1 + 面板已有增伤);面板越高,新增的 S 越被稀释&gt;</p>
+      <p><span class="anno-k">为什么</span>&lt;说明本角色走哪条赛道(暴击 / 攻击力 / 增伤),是否刻意规避增伤天花板&gt;</p>
+      <p><span class="anno-k">影响</span>&lt;若角色自带高增伤,继续堆增伤收益递减 → 配装 / 养成应导向其它乘区&gt;</p>
+    </div>
+  </div>
+
+  <!-- ④ 场景伤害梯度 -->
+  <h3>④ 场景伤害梯度</h3>
+  <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:18px 0;">
+    <svg viewBox="0 0 720 300" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="场景伤害梯度对比柱状图骨架：本角色在 单体 / 群体 / 破韧 / 持续 等不同场景的相对强度，把占位柱高换成真实建模，体现角色擅长与短板场景">
+      <line x1="80" y1="30" x2="80" y2="250" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="80" y1="250" x2="690" y2="250" stroke="#94a3b8" stroke-width="1"/>
+      <g font-size="11" fill="#94a3b8">
+        <line x1="80" y1="190" x2="680" y2="190" stroke="#e2e8f0"/><text x="72" y="194" text-anchor="end">0.5×</text>
+        <line x1="80" y1="130" x2="680" y2="130" stroke="#e2e8f0"/><text x="72" y="134" text-anchor="end">1.0×</text>
+        <line x1="80" y1="70" x2="680" y2="70" stroke="#e2e8f0"/><text x="72" y="74" text-anchor="end">1.5×</text>
+      </g>
+      <g fill="#0891b2" opacity="0.85">
+        <rect x="130" y="80" width="80" height="170"/>
+        <rect x="280" y="170" width="80" height="80"/>
+        <rect x="430" y="120" width="80" height="130"/>
+        <rect x="580" y="150" width="80" height="100"/>
+      </g>
+      <g font-size="12" fill="#5a6578" text-anchor="middle">
+        <text x="170" y="268">单体</text><text x="320" y="268">群体</text><text x="470" y="268">破韧</text><text x="630" y="268">持续</text>
+      </g>
+      <text x="20" y="22" font-size="12" fill="#5a6578">各场景相对强度（基准 1.0×）· 占位骨架（场景按项目替换）</text>
+    </svg>
+    <div class="anno-box">
+      <div class="anno-title">📐 场景伤害梯度 · 怎么算 · 为什么 · 影响</div>
+      <p><span class="anno-k">怎么算</span>&lt;以「标准单体输出」为 1.0× 基准,折算角色在群体 / 破韧 / 持续等场景的相对强度&gt;</p>
+      <p><span class="anno-k">为什么</span>&lt;角色定位决定哪些场景该强、哪些该弱(单体C不该群伤也强,否则挤压群伤角色生态位)&gt;</p>
+      <p><span class="anno-k">影响</span>&lt;场景梯度是否符合定位:擅长场景突出、短板场景克制,差值是否在项目健康区(如群伤C单体 40~55%)&gt;</p>
+    </div>
+  </div>
+
+  <!-- ⑤ 机制专属曲线 -->
+  <h3>⑤ 机制专属曲线</h3>
+  <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:18px 0;">
+    <svg viewBox="0 0 720 300" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="机制专属双轴曲线骨架：本角色核心机制的收益与代价随机制档位变化（如蓄力威力上升、机动惩罚加重），把占位双线换成真实建模，体现机制内在张力">
+      <line x1="80" y1="30" x2="80" y2="250" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="80" y1="250" x2="690" y2="250" stroke="#94a3b8" stroke-width="1"/>
+      <g font-size="11" fill="#94a3b8">
+        <line x1="80" y1="190" x2="680" y2="190" stroke="#e2e8f0"/>
+        <line x1="80" y1="130" x2="680" y2="130" stroke="#e2e8f0"/>
+        <line x1="80" y1="70" x2="680" y2="70" stroke="#e2e8f0"/>
+      </g>
+      <polyline points="80,210 230,170 380,130 530,90 650,40" fill="none" stroke="#1e40af" stroke-width="2.5" stroke-dasharray="6 5"/>
+      <text x="540" y="78" font-size="11" fill="#1e40af">收益（如威力倍率）↑</text>
+      <polyline points="80,90 230,120 380,160 530,200 650,230" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6 5"/>
+      <text x="500" y="218" font-size="11" fill="#c0392b">代价（如剩余移速）↓</text>
+      <g font-size="12" fill="#5a6578" text-anchor="middle">
+        <text x="80" y="270">档位 1</text><text x="380" y="270">档位 N/2</text><text x="650" y="270">满档</text>
+      </g>
+      <text x="20" y="22" font-size="12" fill="#5a6578">机制收益 vs 代价（双轴）· 占位骨架</text>
+    </svg>
+    <div class="anno-box">
+      <div class="anno-title">📐 机制专属曲线 · 怎么算 · 为什么 · 影响</div>
+      <p><span class="anno-k">怎么算</span>&lt;本角色核心机制(蓄力 / 层数 / 形态)的收益曲线 + 对应的代价曲线随档位怎么变&gt;</p>
+      <p><span class="anno-k">为什么</span>&lt;为什么这样设收益与代价(如「蓄越满越强也越脆」的博弈张力)&gt;</p>
+      <p><span class="anno-k">影响</span>&lt;收益代价是否平衡:有没有「无脑满档」或「永远不值得用」的退化解&gt;</p>
+    </div>
+  </div>
+
+  <h3>平衡自检表</h3>
   <table>
-    <thead><tr><th>维度</th><th>基线</th><th>苍岚</th><th>判</th></tr></thead>
+    <thead><tr><th>检查项</th><th>健康阈值（按项目 / 定位取用）</th><th>本角色实测</th><th>结论</th></tr></thead>
     <tbody>
-      <tr><td>满命总梯度</td><td>+80~120%</td><td><strong>+95%</strong></td><td>✅</td></tr>
-      <tr><td>逐级</td><td>累计严格递增</td><td>100 &lt; 105 &lt; … &lt; 195</td><td>✅</td></tr>
-      <tr><td>C0 完整</td><td>必须</td><td>核心循环 C0 即完整</td><td>✅</td></tr>
-      <tr><td>爆发</td><td>5~15×</td><td>一闪 ≈ 8× 普攻段</td><td>✅</td></tr>
-      <tr><td>增伤区</td><td>×≤1.5</td><td>≈1.1（靠暴击）</td><td>✅</td></tr>
-      <tr><td>暴击</td><td>CR:CD 1:2 不溢出</td><td>遵守</td><td>✅</td></tr>
-      <tr><td>养成物套装</td><td>4pc ≈ 质变命座量级</td><td>「止水」4pc 条件 +40%</td><td>✅</td></tr>
-      <tr><td>PVP 满命 / 0 命</td><td>≤1.8×</td><td>原始梯度 1.95× 逼近上限；HP/防御不随命座涨，有效战力比 ≈1.6×</td><td>⚠️ 临界</td></tr>
-      <tr><td>场景梯度（群伤 C 单体）</td><td>40~55%</td><td>苍岚是单体角色</td><td>N/A</td></tr>
+      <tr><td>满级养成总梯度</td><td>&lt;如 +80~120%&gt;</td><td>&lt;实测值&gt;</td><td>&lt;✅ / ⚠️ / ❌&gt;</td></tr>
+      <tr><td>单点增伤边际</td><td>&lt;不踩稀释天花板&gt;</td><td>&lt;实测&gt;</td><td>&lt;✅ / ⚠️&gt;</td></tr>
+      <tr><td>场景梯度（擅长 vs 短板）</td><td>&lt;如 群伤C单体 40~55%&gt;</td><td>&lt;实测&gt;</td><td>&lt;✅ / N/A&gt;</td></tr>
+      <tr><td>PVP 满级 / 0 级比（如适用）</td><td>&lt;如 ≤1.8×&gt;</td><td>&lt;实测,需项目真实 PVP 公式跑&gt;</td><td>&lt;✅ / ⚠️ 临界&gt;</td></tr>
+      <tr><td>机制收益 vs 代价</td><td>&lt;无退化解&gt;</td><td>&lt;实测&gt;</td><td>&lt;✅ / ⚠️&gt;</td></tr>
     </tbody>
   </table>
-  <p style="font-size:12.5px;color:var(--muted);"><strong>PVP 比怎么算</strong>：原始伤害梯度 = 累计指数比 195 ÷ 100 = <strong>1.95×</strong>；但 PVP 战力还含 HP / 防御（不随命座涨），把伤害提升摊进总战力后<strong>有效比 ≈ 1.6×</strong>（示例估算）。1.95× 看着逼近 1.8× 上限、有效 1.6× 又在区内 —— 正因临界，<strong>必须用项目真实 PVP 公式跑，别用简化式拍板</strong>。</p>
+  <p style="font-size:12.5px;color:var(--muted);">📌 阈值仅为示例口径,<strong>按你项目 / 角色定位 / 品类(买断 vs gacha)取用</strong>;PVP 类临界点务必用<strong>项目真实公式</strong>复核,别用简化式拍板。详见 references/numbers-and-progression.md。</p>
 
-  <div class="philosophy" style="margin-top:14px;">🔎 <strong>本演示暴露的方法论价值</strong>：gacha + PVP 语境下，§ 五的 PVP 阈值主动拦下一个临界点（满命伤害梯度逼近 1.8× 上限），提示必须用项目<strong>真实 PVP 公式</strong>复核 —— 正是「用真实公式跑、别用简化式」的用例。</div>
-  <aside class="note-aside" data-key="note-assets">
-    <div class="note-label">📝 评审备注 · 陆<span class="clear-btn" data-clear="note-assets">清空</span></div>
+  <aside class="note-aside" data-key="note-numbers">
+    <div class="note-label">📝 评审备注 · 柒<span class="clear-btn" data-clear="note-numbers">清空</span></div>
     <div class="note-content" contenteditable="true"></div>
   </aside>
 </section>
 
-<section id="metarules">
-  <h2>柒 · 最终总结</h2>
-  <div class="philosophy">
-    <strong>一句话：静如止水，动如奔雷；蓄得越满，一闪越狠，但也越脆。</strong><br><br>
-    苍岚把「蓄力—释放」做成一套<strong>可主动管理的节奏资源（势）</strong>，效果 / 养成 / 数值三层闭环：<br><br>
-    · <strong>效果层</strong> —— 势 / 一闪 / 止水：普攻·闪避·弹反生成势，斩势·破势一闪消耗，凝势减伤但减速；<br>
-    · <strong>养成层</strong> —— 命座 C0–C6 沿付费哲学平滑补 + C2 / C6 质变跳点，养成物套装强化流派；<br>
-    · <strong>数值层</strong> —— 暴击赛道（不碰增伤、避免稀释）+ 势层 / 凝势的递增边际 + 命座 +95% 健康梯度，经 §十 建模验证落在健康区。<br><br>
-    唯一待办：<strong>PVP 满命 / 0 命比临界</strong>（1.95× 原始梯度逼近 1.8× 上限），需用项目真实 PVP 公式复核 —— 这正是方法论「用真实公式跑、别用简化式」的价值所在。
+<!-- ============================================================
+     捌 · 资源清单(协作核心区)   🟢 通用必有
+     6 大类:动作 / 特效 / 音效 / UI·HUD / 场景·演出 / Timeline·Prefab。
+     · 「📚 参考」「📎 产出/协作」两列 + 「操作」列由 JS 自动注入,HTML 里只写数据列即可。
+     · 每张表自动带「+ 新增资源」按钮 + 行划除 + 动态行数统计。
+     · h4 标题含「复用」二字 → JS 自动加沙青降权视觉。
+     ============================================================ -->
+<section id="assets">
+  <h2>捌 · 资源清单</h2>
+
+  <!-- 重要 banner:以美术需求文档为主(按需保留/删除) -->
+  <div style="background: linear-gradient(to right, #eaf2fb, #f0f6fc); border-left: 5px solid #c25030; border-radius: 6px; padding: 16px 20px; margin: 8px 0 24px; font-size: 14.5px;">
+    <div style="color: #8b2818; font-weight: 700; font-size: 15px; margin-bottom: 6px; letter-spacing: 0.5px;">⚠️ 重要说明 · 本节仅供审核参考</div>
+    <div style="color: #3a4a5e; line-height: 1.8;">
+      本资源清单 <strong>具体以各组独立需求文档为主</strong>,此处仅为<strong>审核本设计文档时的参考</strong>。<br>
+      详细动作 / 特效 / 音效 / UI / 场景需求请查阅各组对应的<strong>独立需求文档</strong>。
+    </div>
   </div>
-  <aside class="note-aside" data-key="note-metarules">
-    <div class="note-label">📝 评审备注 · 柒<span class="clear-btn" data-clear="note-metarules">清空</span></div>
+
+  <!-- 新增工作量汇总(JS 会按类自动统计「非复用」行数回填数字) -->
+  <h3>新增工作量汇总</h3>
+  <div class="res-summary">
+    <div class="res-sum-card"><div class="n">0</div><div class="lbl">动作 (Spine) 新增</div><div class="sub">&lt;一句话备注&gt;</div></div>
+    <div class="res-sum-card"><div class="n">0</div><div class="lbl">特效 (VFX) 新增</div><div class="sub">&lt;一句话备注&gt;</div></div>
+    <div class="res-sum-card"><div class="n">0</div><div class="lbl">音效 (可选)</div><div class="sub">&lt;一句话备注&gt;</div></div>
+    <div class="res-sum-card"><div class="n">0</div><div class="lbl">UI / HUD 新增</div><div class="sub">&lt;一句话备注&gt;</div></div>
+    <div class="res-sum-card"><div class="n">0</div><div class="lbl">场景 / 演出</div><div class="sub">&lt;一句话备注&gt;</div></div>
+    <div class="res-sum-card"><div class="n">0</div><div class="lbl">Timeline / Prefab</div><div class="sub">&lt;一句话备注&gt;</div></div>
+  </div>
+
+  <!-- ===== 一、动作资源 ===== -->
+  <h3>一、动作资源（详细 · 审核参考）</h3>
+
+  <h4>1.1 复用资源（h4 含「复用」→ 自动沙青降权）</h4>
+  <table class="res-table">
+    <thead><tr><th>#</th><th style="min-width:110px">动作</th><th style="min-width:160px">来源资产</th><th>复用说明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>&lt;动作名,如 普攻 N 段&gt;</td><td>&lt;来源资产名&gt;</td><td>&lt;从哪复用 / 怎么复用&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <h4>1.2 新增动作（机制专属需新做）</h4>
+  <table class="res-table">
+    <thead><tr><th>#</th><th style="min-width:110px">动作</th><th style="min-width:120px">资产命名</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>&lt;新增动作名&gt;</td><td>&lt;资产命名&gt;</td><td>&lt;这个动作干什么 / 为什么必须新做&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 二、特效资源 ===== -->
+  <h3>二、特效资源 <span style="color: #c25030; font-size: 14px;">⚠️ 仅参考 · 详见美术需求文档</span></h3>
+  <table class="res-table">
+    <thead><tr><th>#</th><th>特效</th><th>对应招式 / 机制</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>&lt;特效名&gt;</td><td>&lt;对应哪个招式 / 机制&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 三、音效资源 ===== -->
+  <h3>三、音效资源 <span style="color: #c25030; font-size: 14px;">⚠️ 仅参考 · 详见音效需求文档</span></h3>
+  <table class="res-table">
+    <thead><tr><th>#</th><th>音效</th><th>类型</th><th>备注</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>&lt;招式音效 / 机制反馈音 / 语音&gt;</td><td>SFX / Voice / BGM</td><td>&lt;必要 / 可选&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 四、UI / HUD ===== -->
+  <h3>四、UI / HUD <span style="color: #c25030; font-size: 14px;">⚠️ 仅参考 · 详见 UI 需求文档</span></h3>
+  <table class="res-table">
+    <thead><tr><th>#</th><th>UI</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>&lt;资源条 / 形态切换 UI / 命中标记…&gt;</td><td>&lt;显示什么 / 何时显示 / 各状态(idle/积累/满/释放后) / 复用还是新增&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 五、场景 / 演出 ===== -->
+  <h3>五、场景 / 演出 <span style="color: #c25030; font-size: 14px;">⚠️ 仅参考 · 详见关卡需求文档</span></h3>
+  <table class="res-table">
+    <thead><tr><th>#</th><th>场景 / 演出</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>&lt;登场演出 / 大招特写场景…&gt;</td><td>&lt;触发点 / 表现 / 复用还是新增。归关卡组,本设计仅写触发点&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 六、Timeline / Prefab ===== -->
+  <h3>六、Timeline / Prefab <span style="color: #c25030; font-size: 14px;">⚠️ 仅参考 · 详见程序 / 技术美术需求</span></h3>
+  <table class="res-table">
+    <thead><tr><th>#</th><th>Timeline / Prefab</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>&lt;大招 Timeline / 机制专属 Prefab…&gt;</td><td>&lt;要做什么 / 挂哪个招式 / 复用还是新增&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <aside class="note-aside" data-key="note-assets">
+    <div class="note-label">📝 评审备注 · 捌<span class="clear-btn" data-clear="note-assets">清空</span></div>
     <div class="note-content" contenteditable="true"></div>
   </aside>
 </section>
 
-<!-- Final Quote（点睛收尾，可选；无则删） -->
+<!-- ============================================================
+     玖 · 设计自检   🟢 通用必有
+     5 维质量自评(见 design-aesthetics.md § 一) + 元规则命中(见 meta-rules.md) + 垃圾箱(废弃方案留档)
+     ============================================================ -->
+<section id="selfcheck">
+  <h2>玖 · 设计自检</h2>
+
+  <h3>5 维质量自评</h3>
+  <p style="font-size: 13px; color: var(--muted);">按 references/design-aesthetics.md § 一 的 5 维质量标尺自评(每维 1-5 分 + 一句话依据)。</p>
+  <table>
+    <thead><tr><th>维度</th><th>自评（1-5）</th><th>依据 / 风险点</th></tr></thead>
+    <tbody>
+      <tr><td class="phase">辨识度</td><td>&lt;★&gt;</td><td>&lt;这角色一眼能跟谁区分开&gt;</td></tr>
+      <tr><td class="phase">操作深度</td><td>&lt;★&gt;</td><td>&lt;新手能上手 / 高手有发挥空间&gt;</td></tr>
+      <tr><td class="phase">爽点密度</td><td>&lt;★&gt;</td><td>&lt;正反馈节奏是否足够&gt;</td></tr>
+      <tr><td class="phase">数值健康</td><td>&lt;★&gt;</td><td>&lt;引用「柒 · 数值建模」自检结论&gt;</td></tr>
+      <tr><td class="phase">落地成本</td><td>&lt;★&gt;</td><td>&lt;新增资源量 / 程序复杂度是否可控&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <h3>元规则命中</h3>
+  <table>
+    <thead><tr><th>元规则</th><th>命中场景</th></tr></thead>
+    <tbody>
+      <!-- 一行 = 命中一条元规则(见 meta-rules.md)。示例,删掉换你的。 -->
+      <tr><td>&lt;规则编号 · 规则名&gt;</td><td>&lt;本设计怎么体现了这条规则&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <h3>垃圾箱（废弃方案留档）</h3>
+  <p style="font-size: 13px; color: var(--muted);">设计过程中砍掉的方案 / 取舍留痕,<strong>强烈建议保留</strong> —— 方便日后追溯「为什么没这么做」。</p>
+  <table>
+    <thead><tr><th>废弃方案</th><th>为什么砍 / 改成了什么</th></tr></thead>
+    <tbody>
+      <tr><td>&lt;一个被否决的设计点&gt;</td><td>&lt;砍掉的原因 / 最终方案&gt;</td></tr>
+    </tbody>
+  </table>
+
+  <aside class="note-aside" data-key="note-selfcheck">
+    <div class="note-label">📝 评审备注 · 玖<span class="clear-btn" data-clear="note-selfcheck">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<!-- Final Quote(点睛收尾,可选;无则删) -->
 <div class="final-quote">
-【一段诗意收尾 —— 把角色弧光 / 核心机制凝练成 2-4 行。示例，删掉换你的。】
+&lt;一段诗意收尾 —— 把角色弧光 / 核心机制凝练成 2-4 行。示例,删掉换你的。&gt;
 </div>
 
 <footer>
-  战斗设计 · 【对象名】 · 【日期 / 作者】
+  角色战斗设计 · &lt;角色名&gt; · &lt;日期 / 作者&gt;
 </footer>
 
 </main>
@@ -2820,24 +3278,29 @@
   window.__ORIGINAL_HTML__ = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
   // === Tab 切换 ===
+  // 本「角色完整稿」模板默认无 Tab(.tab-btn 为空,本处不绑定任何事件);
+  // 若你给某章加回形态/阶段 Tab(.tab-btn + .tab-panel),这套切换逻辑会自动生效。
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.getAttribute('data-tab');
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
-      document.getElementById('panel-' + target).classList.add('active');
-      window.scrollTo({ top: document.getElementById('overview').offsetTop - 20, behavior: 'smooth' });
+      const panel = document.getElementById('panel-' + target);
+      if (panel) panel.classList.add('active');
+      // 滚到 Tab 所在章节顶部(就近找包含本按钮的 section)
+      const sec = btn.closest('section');
+      if (sec) window.scrollTo({ top: sec.offsetTop - 20, behavior: 'smooth' });
     });
   });
 
-  // === 存储 key 前缀(避免跟同域其他文档冲突) — 多文档共存时改成你文档专属前缀 ===
-  const LS_PREFIX = 'cl-gacha-';
+  // === 存储 key 前缀(避免跟同域其他文档冲突) — 多角色稿并存时改成角色专属前缀(如 'char-canglan-') ===
+  const LS_PREFIX = 'char-';
   // 协作数据用 sessionStorage:关闭标签页自动清空 / F5 刷新保留 / 只有点"📤 导出修改版"才永久写入 HTML 文件
   const __LS = window.sessionStorage;
 
   // === IndexedDB 兜底存大文件(sessionStorage ~5MB 满时降级) ===
-  const IDB_NAME = 'combat-doc';
+  const IDB_NAME = 'char';
   const IDB_STORE = 'contrib';
   function __openIDB() {
     return new Promise((resolve, reject) => {
@@ -4572,13 +5035,15 @@
     // ⚠️ 改章节(增删 / 改名 / 调顺序)时同步这里：id 要跟 <section id> 对上，
     //    label = 浮动目录显示文案，topLabel = 顶部内联目录显示文案。
     const SECTIONS = [
-      { id: 'philosophy', label: '壹 · 设计说明', topLabel: '设计说明' },
-      { id: 'plot', label: '贰 · 技能附带效果', topLabel: '技能附带效果' },
-      { id: 'overview', label: '叁 · 命座解锁效果', topLabel: '命座解锁效果' },
-      { id: 'detail', label: '肆 · 养成物套装', topLabel: '养成物套装' },
-      { id: 'bind', label: '伍 · 属性 · 资源 · 循环', topLabel: '属性 · 资源 · 循环' },
-      { id: 'assets', label: '陆 · 数值建模验证', topLabel: '数值建模验证' },
-      { id: 'metarules', label: '柒 · 最终总结', topLabel: '最终总结' }
+      { id: 'positioning',     label: '壹 · 设计定位与哲学',     topLabel: '设计定位与哲学' },
+      { id: 'mechanics',       label: '贰 · 核心机制',           topLabel: '核心机制' },
+      { id: 'moveset',         label: '叁 · 招式详解',           topLabel: '招式详解' },
+      { id: 'resource-system', label: '肆 · 资源系统 🟡',        topLabel: '资源系统（可选）' },
+      { id: 'progression',     label: '伍 · 养成 / 命座',        topLabel: '养成 / 命座' },
+      { id: 'team',            label: '陆 · 配队协力 🟡',        topLabel: '配队协力（可选）' },
+      { id: 'numbers',         label: '柒 · 数值建模 🔴',        topLabel: '数值建模' },
+      { id: 'assets',          label: '捌 · 资源清单',           topLabel: '资源清单' },
+      { id: 'selfcheck',       label: '玖 · 设计自检',           topLabel: '设计自检' }
     ];
 
     function cleanH3(h3) {
@@ -4793,4 +5258,40 @@
       bindClick(topList);
     }
   })();
+</script>
+<style>
+/* 图表点击放大 lightbox(独立功能,不影响协作交互层)· 支持滚轮缩放 + 拖动平移 */
+svg[role="img"]{cursor:zoom-in;transition:opacity .15s;}
+svg[role="img"]:hover{opacity:.85;}
+.fig-lb{position:fixed;inset:0;background:rgba(20,28,42,.82);z-index:99999;display:none;align-items:center;justify-content:center;padding:28px;cursor:zoom-out;}
+.fig-lb.open{display:flex;}
+.fig-lb-inner{background:var(--paper);border-radius:10px;padding:22px 24px;max-width:96vw;max-height:92vh;overflow:hidden;cursor:grab;box-shadow:0 10px 50px rgba(0,0,0,.45);}
+.fig-lb-inner svg{width:94vw!important;max-width:none!important;height:auto;max-height:88vh!important;transition:transform .06s ease-out;}
+.fig-lb-hint{position:fixed;top:16px;right:22px;color:#fff;font-size:13px;opacity:.9;background:rgba(0,0,0,.3);padding:4px 13px;border-radius:14px;}
+.fig-lb-reset{position:fixed;top:16px;left:22px;color:#fff;font-size:12px;opacity:.9;background:rgba(0,0,0,.3);padding:4px 13px;border-radius:14px;cursor:pointer;}
+.fig-lb-reset:hover{opacity:1;background:rgba(0,0,0,.5);}
+</style>
+<script>
+(function(){
+  var lb=document.createElement('div');lb.className='fig-lb';
+  lb.innerHTML='<div class="fig-lb-reset">↺ 复位</div><div class="fig-lb-hint">滚轮缩放 · 拖动平移 · 点空白 / Esc 关闭</div><div class="fig-lb-inner"></div>';
+  document.body.appendChild(lb);
+  var inner=lb.querySelector('.fig-lb-inner');
+  var scale=1,tx=0,ty=0,drag=false,lx=0,ly=0,cur=null;
+  function applyT(){if(cur)cur.style.transform='translate('+tx+'px,'+ty+'px) scale('+scale+')';}
+  function reset(){scale=1;tx=0;ty=0;applyT();}
+  function openLB(svg){inner.innerHTML='';cur=svg.cloneNode(true);cur.style.transformOrigin='center center';inner.appendChild(cur);reset();lb.classList.add('open');}
+  function closeLB(){lb.classList.remove('open');inner.innerHTML='';cur=null;}
+  document.querySelectorAll('svg[role="img"]').forEach(function(svg){
+    svg.style.cursor='zoom-in';
+    svg.addEventListener('click',function(e){e.stopPropagation();openLB(svg);});
+  });
+  lb.addEventListener('click',function(e){if(!inner.contains(e.target)&&!e.target.classList.contains('fig-lb-reset'))closeLB();});
+  lb.querySelector('.fig-lb-reset').addEventListener('click',function(e){e.stopPropagation();reset();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('open'))closeLB();});
+  inner.addEventListener('wheel',function(e){if(!cur)return;e.preventDefault();scale*=(e.deltaY<0?1.15:1/1.15);scale=Math.max(0.4,Math.min(6,scale));applyT();},{passive:false});
+  inner.addEventListener('mousedown',function(e){if(!cur)return;drag=true;lx=e.clientX;ly=e.clientY;inner.style.cursor='grabbing';e.preventDefault();});
+  window.addEventListener('mousemove',function(e){if(!drag)return;tx+=e.clientX-lx;ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;applyT();});
+  window.addEventListener('mouseup',function(){if(drag){drag=false;inner.style.cursor='grab';}});
+})();
 </script></body></html>

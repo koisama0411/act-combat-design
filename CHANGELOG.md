@@ -7,6 +7,36 @@
 
 ---
 
+## v1.2 · 2026-06-23
+
+> **本次主要**：新增**完整角色稿模板** + **完整稿满配样板「烬羽」**，并把「角色设计稿」明确成**分稿 / 完整稿两种规格** + **文件命名规范** + **数值建模硬标准**；元规则 42 → 46 条、角色原型库去项目脱敏、只保留业界 F–Q 12 种。
+>
+> **对使用者**：pull 后**无需操作** —— 新增模板 / 样板 / 范式细化，既有「分稿」流程不变；想出一份到底的完整稿时多一套模板可用。无破坏性变更。
+
+### 新增 Added
+- **完整角色稿模板** —— [`templates/blank-character-design-doc.html`](templates/blank-character-design-doc.html)：通用 9 章（设计定位哲学 / 核心机制 / 招式详解 / 🟡 资源系统（深入，按角色）/ 养成命座 / 🟡 配队协力（按项目）/ 数值建模 / 资源清单 / 自检）+ **三类图骨架**（贰 操作循环示意图、肆 资源流转示意图、柒 数值建模 5 图）+ 完整协作交互层 + 图表 lightbox。
+- **完整稿满配样板「烬羽」** —— [`output/characters/jin-yu/`](output/characters/jin-yu/)（延迟引爆型火术者，挂《星澜纪》gacha）：9 章全 + 10 图（操作循环 / 资源流转 / 数值建模 5 图）。作「完整稿」满配样板，区别于苍岚的「分稿」样板。
+- **角色原型库 project-agnostic 化** —— [`character-archetypes.md`](references/character-archetypes.md)：移除项目脱敏的基础 5 种（A–E）+ R 延迟引爆，**只保留业界调研 F–Q 12 种**；各项目自家原型放本地 [知识区](knowledge-local/)。延迟引爆机制仍由完整稿样板「烬羽」演示。
+- **4 条新元规则（K 组）** —— [`meta-rules.md`](references/meta-rules.md)：操作核心方向先对齐 / 消极动作不触发爆发 / 资源返现易空转（走限时窗）/ 异格不换皮三轴分流（元规则 42 → 46 条）。
+
+### 变更 Changed
+- **角色完整稿范式细化** —— [`design-doc-structure.md`](references/design-doc-structure.md) 明确**两种规格**：分稿（战斗设计稿 + 养成稿分开）/ 完整稿（一份 9 章），并给**判断逻辑**（用户明示按明示、没明示就问）。
+- **文件命名规范** —— 同上：`角色名-战斗设计` / `角色名-养成与效果` / `角色名-战斗设计及养成效果` / `角色名-资源需求`；「审阅稿」是协作形态、不进文件名。
+- **数值建模硬标准** —— 同上：无论完整稿还是分稿养成稿，数值建模必配 **5 图 + 三段注解 + 平衡自检表**，只写表不配图 = 不合格。
+- **图表 lightbox 按界面 fit 完整显示** —— [`review-html-components.md`](references/review-html-components.md)：`width:94vw` + `max-height:88vh` + `height:auto`，宽图撑满、高图触顶自动等比缩到完整居中，都不被裁（废弃旧的固定 `width:min(1180px,…)`）。
+- **苍岚分稿按命名规范重命名** —— `苍岚-战斗设计.html` + `苍岚-养成与效果.html`（原「审阅稿 / 效果与养成-gacha 演示」）。
+
+### 修复 Fixed
+- 无破坏性修复；本次以内容 / 范式补全为主。
+
+### 📁 本次涉及文件
+- **新增（3）**：`templates/blank-character-design-doc.html` · `output/characters/jin-yu/烬羽-战斗设计及养成效果.html` + `md/烬羽-战斗设计及养成效果.md`
+- **修改（7）**：`SKILL.md` · `README.md` · `上手指南.html` · `CHANGELOG.md` + `CHANGELOG.html` · `references/design-doc-structure.md` · `references/review-html-components.md`（元规则 / 原型 计数随 `meta-rules.md` / `character-archetypes.md` 同步）
+- **重命名（2）**：`output/characters/cang-lan/` 下 `苍岚-战斗设计` + `苍岚-养成与效果`（html + md/）
+- **删除（0）**：无
+
+---
+
 ## v1.1 · 2026-06-18
 
 > **本次主要**：新增自我更新机制（🧪 试验性）+ 数值建模验证方法论 + gacha 示例项目，并让设计稿默认产出审阅 HTML。
@@ -19,7 +49,7 @@
 - **数值建模验证方法论** —— [`numbers-and-progression.md`](references/numbers-and-progression.md) § 十：脚本化建模 → 独立 agent 对抗性交叉验证 → 设计稿内嵌可视化论证（每图「怎么算 / 为什么 / 结果」三问注解）。
 - **命座 / 养成梯度健康自检阈值** —— § 五：满命总梯度 +80~120% 等 8 项经验基线，含养成物 / 套装阈值。
 - **效果与养成设计范式** —— 新增 reference `effect-progression-design.md`：7 章结构 + 3 类图 + 数值注解四要素（怎么算 / 为什么 / 过程 / 结果）；以苍岚 gacha 演示稿为范例（references 22 → 23 份）。
-- **gacha 示例项目《星澜纪》** —— [`conventions/example-conventions-gacha.md`](conventions/example-conventions-gacha.md)（3D 三人队 + 命座 + 养成物 + PVP）+ 配套 [苍岚 gacha 移植效果稿](output/characters/cang-lan/md/苍岚-效果与养成-gacha演示.md)（技能附带 / 命座 / 养成物效果 + § 十 数值验证演示）。
+- **gacha 示例项目《星澜纪》** —— [`conventions/example-conventions-gacha.md`](conventions/example-conventions-gacha.md)（3D 三人队 + 命座 + 养成物 + PVP）+ 配套 [苍岚 gacha 移植效果稿](output/characters/cang-lan/md/苍岚-养成与效果.md)（技能附带 / 命座 / 养成物效果 + § 十 数值验证演示）。
 - **上手指南 conventions 概览图** —— [`上手指南.html`](上手指南.html) 第 ⑤ 节加「10 维度一图看全 + 买断 / gacha 双范例对比」。
 - **本更新记录** —— `CHANGELOG.md` + 渲染版 `CHANGELOG.html`。
 
@@ -34,7 +64,7 @@
 - 审阅 HTML 里 B 站嵌入由协议相对 `//player.bilibili.com` 改为 `https://`，file:// 本地打开也能放（与 YouTube 对齐）。
 
 ### 📁 本次涉及文件
-- **新增（9）**：`knowledge-local/`（README + 2 占位）· `conventions/example-conventions-gacha.md` · `references/effect-progression-design.md` · `output/characters/cang-lan/md/苍岚-效果与养成-gacha演示.md` + 同名 `.html` · `CHANGELOG.md` + `CHANGELOG.html`
+- **新增（9）**：`knowledge-local/`（README + 2 占位）· `conventions/example-conventions-gacha.md` · `references/effect-progression-design.md` · `output/characters/cang-lan/md/苍岚-养成与效果.md` + 同名 `.html` · `CHANGELOG.md` + `CHANGELOG.html`
 - **修改（7）**：`SKILL.md` · `README.md` · `USAGE.md` · `conventions/TEMPLATE.md` · `references/numbers-and-progression.md` · `上手指南.html` · `.gitignore`
 - **删除（0）**：无
 

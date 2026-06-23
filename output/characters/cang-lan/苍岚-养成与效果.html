@@ -1,0 +1,4832 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<title>苍岚 · 效果与养成设计（gacha 演示稿）</title>
+<style>
+  :root {
+    /* === 主题色(可整组替换换肤;换肤示例见 review-html-components.md)=== */
+    --bg: #eef2f8;             /* 浅蓝灰背景 */
+    --paper: #fbfcfe;          /* 近白纸面 */
+    --ink: #1a2332;            /* 深蓝墨 */
+    --muted: #5a6578;          /* 中蓝灰 */
+    --accent: #1e40af;         /* 深蓝(强调) */
+    --accent-soft: #3b82f6;    /* 亮蓝(柔强调) */
+    --gold: #3a7ca5;           /* 钢青蓝(次级强调) */
+    --line: #cbd5e1;           /* 浅蓝灰线 */
+    --line-soft: #e2e8f0;
+    --hl: #dbeafe;             /* 浅蓝高亮 */
+    --star: #0891b2;           /* 青色星标 */
+    /* p1/p2 变量 = Tab 双场/双形态/双阶段的两套配色(见「肆」Tab 注释)*/
+    --p1-accent: #1e3a5f;
+    --p1-accent-soft: #3b5d8a;
+    --p1-bg: #e8eef5;
+    --p1-card: #d6e2ee;
+    --p2-accent: #1e40af;
+    --p2-accent-soft: #4a6db8;
+    --p2-bg: #e2eaf5;
+    --p2-card: #cfdcef;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 60px 56px 100px;
+    background: var(--paper);
+    box-shadow: 0 0 32px rgba(0,0,0,0.04);
+  }
+  /* Cover */
+  .cover {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+  .cover .tag {
+    color: var(--accent);
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .cover h1 {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif;
+    font-size: 42px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: var(--ink);
+    letter-spacing: 2px;
+  }
+  .cover .sub {
+    color: var(--muted);
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+  .cover .meta {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 32px;
+    font-size: 14px;
+  }
+  .cover .meta .k { color: var(--muted); margin-right: 8px; }
+  .cover .meta .v { color: var(--ink); }
+  /* Sections */
+  section { margin-bottom: 48px; }
+  h2 {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif;
+    font-size: 24px;
+    color: var(--accent);
+    border-left: 4px solid var(--accent);
+    padding-left: 14px;
+    margin: 0 0 20px;
+    letter-spacing: 2px;
+  }
+  h3 {
+    font-size: 17px;
+    margin: 28px 0 12px;
+    color: var(--ink);
+    letter-spacing: 1px;
+  }
+  h3::before {
+    content: "◆ ";
+    color: var(--gold);
+    font-size: 13px;
+    vertical-align: 2px;
+  }
+  h4 {
+    font-size: 15px;
+    margin: 20px 0 10px;
+    color: var(--accent-soft);
+    letter-spacing: 1px;
+  }
+  p { margin: 0 0 12px; }
+  ul { padding-left: 22px; margin: 0 0 14px; }
+  ul li { margin-bottom: 6px; }
+  strong { color: var(--accent); font-weight: 600; }
+  em { font-style: normal; background: var(--hl); padding: 0 4px; border-radius: 2px; }
+  /* Pull quote */
+  .philosophy {
+    background: linear-gradient(to right, #e8eff7, #fbfcfe);
+    border-left: 4px solid var(--gold);
+    padding: 22px 28px;
+    margin: 0 0 14px;
+    font-size: 15.5px;
+    line-height: 1.85;
+  }
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    margin: 8px 0 16px;
+  }
+  th, td {
+    text-align: left;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    border-right: 1px solid var(--line-soft); /* 列间淡分割线 */
+    vertical-align: middle;
+  }
+  th:last-child, td:last-child {
+    border-right: none; /* 最右列不画线 */
+  }
+  th {
+    background: #e2e8f0;
+    color: var(--accent);
+    font-weight: 600;
+    border-bottom: 2px solid var(--line);
+    letter-spacing: 1px;
+  }
+  tr:hover td { background: #f3f7fc; }
+  td.phase { font-weight: 600; color: var(--accent-soft); white-space: nowrap; }
+  td.hp { font-family: Consolas, monospace; color: var(--muted); white-space: nowrap; }
+  /* Star cards */
+  .stars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 8px 0 16px;
+  }
+  .star-card {
+    background: #f3f7fc;
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--star);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+  .star-card .num {
+    color: var(--star);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+  .star-card .name {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 4px 0 6px;
+    color: var(--ink);
+    letter-spacing: 0.5px;
+  }
+  .star-card .desc {
+    font-size: 14px;
+    color: #2b3444;
+    line-height: 1.75;
+  }
+  .star-card .desc p { margin: 5px 0 0; }
+  .star-card .desc p:first-child { margin-top: 0; }
+  /* Code blocks */
+  pre {
+    background: #1a2740;
+    color: #d6e2f2;
+    padding: 20px 22px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: Consolas, "Cascadia Code", "Source Code Pro", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 0 0 16px;
+  }
+  pre .label { color: var(--star); font-weight: bold; }
+  pre .star { color: #22d3ee; }
+  pre .arrow { color: #888; }
+  pre .comment { color: #888; font-style: italic; }
+
+  /* === TAB switcher === */
+  /* 切换提示条 — 让人一眼看出下面是可点击切换的双标签 */
+  .tab-hint {
+    margin: 24px 0 0;
+    padding: 9px 16px;
+    background: linear-gradient(to right, #e2eaf3, #fbfcfe);
+    border: 1px dashed var(--gold);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+  }
+  .tab-hint strong { color: var(--accent); }
+  .tab-hint .th-icon { margin-right: 5px; }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin: 0;
+    border-bottom: 2px solid var(--line);
+  }
+  .tab-btn {
+    flex: 1;
+    position: relative;
+    padding: 13px 24px 15px;
+    background: #dce4f0;
+    border: none;
+    border-top: 3px solid transparent;
+    cursor: pointer;
+    font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+    font-size: 17px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    transition: background 0.18s, color 0.18s, transform 0.18s, box-shadow 0.18s;
+    border-right: 1px solid var(--line);
+  }
+  .tab-btn:last-child { border-right: none; }
+  /* 每个标签顶部的状态提示：未选中 = 点击切换 / 选中 = 当前查看 */
+  .tab-btn::before {
+    content: "▸ 点击切换到这一场";
+    display: block;
+    font-family: -apple-system, "PingFang SC", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--accent-soft);
+    margin-bottom: 5px;
+  }
+  .tab-btn:hover {
+    background: #e2eaf3;
+    color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 -4px 12px rgba(30, 64, 175, 0.08);
+  }
+  .tab-btn:hover::before { color: var(--accent); }
+  .tab-btn.active {
+    background: var(--paper);
+    color: var(--ink);
+    border-top-color: var(--accent);
+    font-weight: 600;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+  }
+  .tab-btn.active::before {
+    content: "● 当前查看";
+    color: var(--gold);
+  }
+  .tab-btn.active[data-tab="p1"] { border-top-color: var(--p1-accent); }
+  .tab-btn.active[data-tab="p2"] { border-top-color: var(--p2-accent); }
+  .tab-btn.active[data-tab="p1"]::before { color: var(--p1-accent); }
+  .tab-btn.active[data-tab="p2"]::before { color: var(--p2-accent); }
+  .tab-btn .sub {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+    font-family: -apple-system, "PingFang SC", sans-serif;
+  }
+  .tab-panel { display: none; padding: 28px 0 0; }
+  .tab-panel.active { display: block; }
+
+  /* P1 调色 — 第一个 Tab(形态A / 阶段1 / 第一场) */
+  .tab-panel.p1 h2 { color: var(--p1-accent); border-left-color: var(--p1-accent); }
+  .tab-panel.p1 h3 { color: var(--p1-accent); }
+  .tab-panel.p1 h3::before { color: var(--p1-accent-soft); }
+  .tab-panel.p1 h4 { color: var(--p1-accent-soft); }
+  .tab-panel.p1 .philosophy { border-left-color: var(--p1-accent-soft); background: linear-gradient(to right, var(--p1-bg), var(--paper)); }
+  .tab-panel.p1 .philosophy em { background: var(--p1-card); color: var(--p1-accent); }
+  .tab-panel.p1 th { background: var(--p1-card); color: var(--p1-accent); }
+  .tab-panel.p1 td.phase { color: var(--p1-accent-soft); }
+  .tab-panel.p1 strong { color: var(--p1-accent); }
+  .tab-panel.p1 em { background: var(--p1-card); color: var(--p1-accent); }
+  .tab-panel.p1 .star-card {
+    background: var(--p1-bg);
+    border-color: var(--p1-card);
+    border-left-color: var(--p1-accent-soft);
+  }
+  .tab-panel.p1 .star-card .num { color: var(--p1-accent-soft); }
+  .tab-panel.p1 .star-card .name { color: var(--p1-accent); }
+  .tab-panel.p1 pre { border-left: 4px solid var(--p1-accent-soft); }
+
+  /* P2 调色 — 第二个 Tab(形态B / 阶段2 / 第二场) */
+  .tab-panel.p2 h2 { color: var(--p2-accent); border-left-color: var(--p2-accent); }
+  .tab-panel.p2 h3 { color: var(--p2-accent); }
+  .tab-panel.p2 h3::before { color: var(--p2-accent-soft); }
+  .tab-panel.p2 h4 { color: var(--p2-accent-soft); }
+  .tab-panel.p2 .philosophy { border-left-color: var(--p2-accent-soft); background: linear-gradient(to right, var(--p2-bg), var(--paper)); }
+  .tab-panel.p2 .philosophy em { background: var(--p2-card); color: var(--p2-accent); }
+  .tab-panel.p2 th { background: var(--p2-card); color: var(--p2-accent); }
+  .tab-panel.p2 td.phase { color: var(--p2-accent-soft); }
+  .tab-panel.p2 strong { color: var(--p2-accent); }
+  .tab-panel.p2 em { background: var(--p2-card); color: var(--p2-accent); }
+  .tab-panel.p2 .star-card {
+    background: var(--p2-bg);
+    border-color: var(--p2-card);
+    border-left-color: var(--p2-accent-soft);
+  }
+  .tab-panel.p2 .star-card .num { color: var(--p2-accent-soft); }
+  .tab-panel.p2 .star-card .name { color: var(--p2-accent); }
+  .tab-panel.p2 pre { border-left: 4px solid var(--p2-accent-soft); }
+
+  /* Plot timeline */
+  .timeline {
+    position: relative;
+    padding: 14px 0 8px 32px;
+    margin: 8px 0 16px;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 14px;
+    bottom: 14px;
+    width: 2px;
+    background: var(--line);
+  }
+  .timeline .node {
+    position: relative;
+    margin-bottom: 18px;
+    padding-left: 4px;
+  }
+  .timeline .node::before {
+    content: "";
+    position: absolute;
+    left: -29px;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--paper);
+  }
+  .timeline .node.kill::before { background: var(--accent); width: 12px; height: 12px; left: -30px; top: 7px; }
+  .timeline .node .id {
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+  .timeline .node .title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 2px 0 6px;
+  }
+  .timeline .node .body {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .timeline .node .body em { background: var(--hl); }
+
+  /* Dialogue blocks */
+  .dialogue {
+    background: #1a2740;
+    color: #d4e3f5;
+    padding: 18px 22px;
+    border-radius: 4px;
+    margin: 10px 0 14px;
+    font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+    font-size: 14px;
+    line-height: 1.9;
+    border-left: 3px solid var(--star);
+  }
+  .dialogue .who {
+    color: var(--star);
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  .dialogue em {
+    background: transparent;
+    color: #22d3ee;
+    font-weight: 600;
+    padding: 0;
+    border-bottom: 1px dashed #0891b2;
+    border-radius: 0;
+  }
+
+  /* Mechanic chip */
+  .chip {
+    display: inline-block;
+    background: var(--hl);
+    color: var(--accent);
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-family: Consolas, monospace;
+    margin: 0 2px;
+  }
+  .tab-panel.p1 .chip { background: var(--p1-card); color: var(--p1-accent); }
+  .tab-panel.p2 .chip { background: var(--p2-card); color: var(--p2-accent); }
+
+  /* Diff table — 两场对比 */
+  .diff th:first-child { width: 130px; }
+  .diff td.p1-col { background: #e2eaf3; color: var(--p1-accent); }
+  .diff td.p2-col { background: #eef0f6; color: var(--p2-accent); }
+
+  /* Final quote */
+  .final-quote {
+    margin: 48px 0 0;
+    padding: 28px 32px;
+    background: linear-gradient(135deg, #1a2740, #26344f);
+    color: #d4e3f5;
+    border-radius: 4px;
+    font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif;
+    font-size: 17px;
+    line-height: 1.9;
+    text-align: center;
+    letter-spacing: 1px;
+    position: relative;
+  }
+  .final-quote::before {
+    content: "「";
+    position: absolute;
+    top: 12px;
+    left: 18px;
+    font-size: 32px;
+    color: var(--star);
+    opacity: 0.7;
+  }
+  .final-quote::after {
+    content: "」";
+    position: absolute;
+    bottom: -4px;
+    right: 22px;
+    font-size: 32px;
+    color: var(--star);
+    opacity: 0.7;
+  }
+  footer {
+    margin-top: 50px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  /* TOC */
+  .toc {
+    background: #f3f7fc;
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    padding: 16px 22px;
+    margin-bottom: 36px;
+    font-size: 13.5px;
+  }
+  .toc .toc-title {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 32px; }
+  .toc ol li { margin-bottom: 3px; }
+  .toc a { color: var(--ink); text-decoration: none; }
+  .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+  /* Asset clip */
+  .asset-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 28px;
+    margin: 8px 0 14px;
+  }
+  .asset-list h4 { margin-top: 6px; }
+  .asset-list .col-shared { grid-column: 1 / -1; }
+
+  /* Resource summary cards */
+  .res-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin: 8px 0 22px;
+  }
+  .res-sum-card {
+    background: linear-gradient(135deg, #e2eaf3, #f3f7fc);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 14px 10px 12px;
+    text-align: center;
+  }
+  .res-sum-card .n {
+    font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1.1;
+    display: inline-block;
+    padding: 2px 12px;
+    background: var(--hl);
+    border: 1px solid #a5cdf5;
+    border-radius: 6px;
+    box-shadow: 0 1px 0 rgba(30, 64, 175, 0.15);
+    transition: color 0.4s ease, transform 0.3s ease, background 0.3s ease;
+  }
+  .res-sum-card .n.pulse {
+    color: white;
+    background: var(--gold);
+    border-color: var(--accent);
+    transform: scale(1.15);
+  }
+  .res-sum-card .lbl {
+    font-size: 13.5px;
+    color: var(--ink);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+  .res-sum-card .sub {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Resource tables — 紧凑型 */
+  .res-table {
+    font-size: 13.5px;
+    margin: 4px 0 14px;
+  }
+  .res-table th, .res-table td {
+    padding: 8px 10px;
+  }
+  .res-table th {
+    background: #dbeafe;
+    color: var(--accent);
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+  .res-table td:first-child {
+    width: 36px;
+    color: var(--muted);
+    font-family: Consolas, monospace;
+    text-align: center;
+  }
+  .res-note {
+    font-size: 12.5px;
+    color: var(--muted);
+    background: #f3f7fc;
+    border-left: 2px solid var(--gold);
+    padding: 8px 12px;
+    margin: 4px 0 18px;
+    line-height: 1.7;
+  }
+
+  /* ===== 复用资源(零美术成本)视觉降权 — 冷沙青调，跟暖纸调形成冷暖对比但不刺眼 ===== */
+  h4.reuse-h4 { color: #4a6e6e; }
+  .reuse-badge {
+    display: inline-block;
+    background: #dbe5e5;
+    color: #4a6e6e;
+    padding: 2px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 10px;
+    vertical-align: 2px;
+    letter-spacing: 0.5px;
+    border: 1px solid #9bb3b3;
+  }
+  .res-table.reuse-table {
+    background: rgba(95, 130, 130, 0.05);
+    box-shadow: inset 4px 0 0 #9bb3b3;
+    opacity: 0.94;
+  }
+  .res-table.reuse-table thead th {
+    background: #dbe5e5;
+    color: #4a6e6e;
+  }
+  .res-table.reuse-table tbody td {
+    color: #6e7575;
+  }
+  .res-table.reuse-table tbody td.contrib-cell,
+  .res-table.reuse-table tbody td.ref-cell {
+    opacity: 0.5;
+  }
+  .res-table.reuse-table tbody td.contrib-cell[data-empty="true"]::before {
+    content: "— 复用 · 无需新产出";
+    color: #9aa8a8;
+    font-style: italic;
+  }
+  .res-table.reuse-table tbody td.ref-cell[data-empty="true"]::before {
+    content: "📚 选填 · 留底参考";
+    color: #9aa8a8;
+    font-style: italic;
+  }
+  .res-table.reuse-table tbody td.contrib-cell:hover,
+  .res-table.reuse-table tbody td.ref-cell:hover { opacity: 1; }
+  .reuse-list {
+    background: rgba(95, 130, 130, 0.06);
+    border-left: 3px solid #9bb3b3;
+    padding: 10px 16px 10px 32px;
+    margin: 6px 0 16px;
+    color: #6e7575;
+    font-size: 13.5px;
+    line-height: 1.75;
+    border-radius: 0 3px 3px 0;
+  }
+  .reuse-list li { margin: 2px 0; }
+
+  /* ===== Skill 卡片化呈现 ===== */
+  .skill-grid {
+    display: grid;
+    gap: 10px;
+    margin: 8px 0 16px;
+  }
+  .skill-card {
+    background: #f3f7fc;
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    padding: 12px 14px;
+    transition: all 0.15s;
+  }
+  .skill-card:hover {
+    border-color: var(--line);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .skill-card.star {
+    background: linear-gradient(to right, #e2eaf3, #f3f7fc);
+    border-left: 4px solid var(--star);
+    box-shadow: 0 1px 3px rgba(58, 124, 165, 0.1);
+  }
+  .skill-card.star:hover {
+    border-left-color: var(--accent);
+    box-shadow: 0 3px 10px rgba(58, 124, 165, 0.15);
+  }
+  .skill-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .skill-card .skill-star {
+    color: var(--star);
+    font-size: 15px;
+    line-height: 1;
+  }
+  .skill-id {
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+    background: #e2e8f0;
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+  .skill-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.5px;
+  }
+  .skill-card.star .skill-name { color: var(--accent); }
+  .skill-tag {
+    font-size: 11px;
+    padding: 1px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  .skill-tag.tag-reuse { background: #e8ebd9; color: #6e7240; }
+  .skill-tag.tag-new { background: #dbeafe; color: var(--accent); }
+  .skill-mech {
+    font-size: 11.5px;
+    color: var(--gold);
+    background: var(--hl);
+    padding: 1px 8px;
+    border-radius: 3px;
+    font-weight: 500;
+    border: 1px solid #a5cdf5;
+  }
+  .skill-desc {
+    font-size: 14px;
+    color: #2b3444;
+    line-height: 1.75;
+    margin-left: 2px;
+  }
+  .skill-desc p { margin: 5px 0 0; }
+  .skill-desc p:first-child { margin-top: 0; }
+  /* 描述行标签：表现 / 玩法 — 让审阅卡片要点更醒目、好扫读 */
+  .dl {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--hl);
+    border-radius: 3px;
+    padding: 1px 7px;
+    margin-right: 7px;
+    letter-spacing: 1px;
+    vertical-align: 1px;
+    white-space: nowrap;
+  }
+  .skill-sub {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.025);
+    border-radius: 3px;
+    font-size: 12.5px;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+  .skill-sub .sub-label {
+    display: inline-block;
+    color: var(--gold);
+    font-weight: 600;
+    margin-right: 6px;
+    min-width: 70px;
+  }
+  .skill-sub .sub-line { margin-bottom: 3px; }
+  .skill-followup {
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: #dbeafe;
+    border-left: 3px solid var(--gold);
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+
+  /* Tab panel 调色覆盖 */
+  .tab-panel.p1 .skill-id { background: var(--p1-card); color: var(--p1-accent); }
+  .tab-panel.p1 .skill-card.star { background: linear-gradient(to right, var(--p1-bg), #f3f7fc); }
+  .tab-panel.p1 .skill-card.star .skill-name { color: var(--p1-accent); }
+  .tab-panel.p2 .skill-id { background: var(--p2-card); color: var(--p2-accent); }
+  .tab-panel.p2 .skill-card.star { background: linear-gradient(to right, var(--p2-bg), #f3f7fc); }
+  .tab-panel.p2 .skill-card.star .skill-name { color: var(--p2-accent); }
+
+  /* ===== AI 策略 · 距离权重条 ===== */
+  .ai-distance {
+    display: grid;
+    gap: 10px;
+    margin: 8px 0 16px;
+  }
+  .dist-row {
+    background: #f3f7fc;
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    padding: 10px 14px;
+  }
+  .dist-label {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .tab-panel.p1 .dist-label { color: var(--p1-accent); }
+  .tab-panel.p2 .dist-label { color: var(--p2-accent); }
+  .dist-bars {
+    display: flex;
+    height: 22px;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .dist-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px;
+    font-family: Consolas, monospace;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: filter 0.15s;
+  }
+  .dist-seg:hover { filter: brightness(1.1); }
+  .dist-seg.s1 { background: #c0392b; }
+  .dist-seg.s2 { background: #3b82f6; }
+  .dist-seg.s3 { background: #3a7ca5; }
+  .dist-seg.s4 { background: #0891b2; }
+  .dist-seg.s5 { background: #6e7240; }
+  .dist-seg .skn { font-weight: 600; margin-right: 3px; }
+
+  /* ===== AI 策略 · HP 阶段时间轴 ===== */
+  .hp-axis {
+    margin: 12px 0 18px;
+  }
+  .hp-axis-bar {
+    display: flex;
+    height: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+    margin-bottom: 4px;
+    border: 1px solid var(--line);
+  }
+  .hp-stage {
+    flex: 1;
+    transition: filter 0.15s;
+  }
+  .hp-stage.test { background: #cdd8e6; }       /* 试探期 */
+  .hp-stage.trick { background: #3b82f6; }      /* 阶段 2 */
+  .hp-stage.press { background: #c0392b; }      /* 高压期 */
+  .hp-stage.kill { background: #1e40af; }       /* 剧情杀 */
+  .hp-stage.calm { background: #cdd8e6; }       /* 第二场常规 */
+  .hp-stage.awake { background: #2c3e6b; }      /* 觉醒期 */
+  .hp-stage.fury { background: #4a6098; }       /* 狂暴 */
+  .hp-stage.final { background: #3b82f6; }      /* 终招 */
+  .hp-marks {
+    display: flex;
+    font-family: Consolas, monospace;
+    font-size: 11px;
+    color: var(--muted);
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 0 2px;
+  }
+  .hp-stages-list {
+    display: grid;
+    gap: 8px;
+  }
+  .hp-stage-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 14px;
+    align-items: start;
+    padding: 8px 12px;
+    background: #f3f7fc;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+    font-size: 13px;
+  }
+  .hp-stage-item .stage-tag {
+    font-weight: 600;
+    color: var(--accent);
+    font-family: Consolas, monospace;
+    font-size: 12px;
+  }
+  .tab-panel.p1 .hp-stage-item .stage-tag { color: var(--p1-accent); }
+  .tab-panel.p2 .hp-stage-item .stage-tag { color: var(--p2-accent); }
+  .hp-stage-item .stage-body { color: var(--ink); line-height: 1.65; }
+  .hp-stage-item.kill { border-left-color: var(--accent); background: #dbeafe; }
+
+  /* ===== 流程图(剧情杀过场等) ===== */
+  .flow-chart {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0 6px;
+  }
+  .flow-step {
+    background: #f3f7fc;
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--gold);
+    border-radius: 3px;
+    padding: 10px 14px;
+    font-size: 13px;
+    line-height: 1.65;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .flow-step .step-num {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: white;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: Consolas, monospace;
+  }
+  .flow-step.kill {
+    background: #dbeafe;
+    border-left-color: var(--accent);
+  }
+  .flow-step.kill .step-num { background: var(--accent); }
+  .flow-step.end {
+    background: #d6e2ee;
+    border-left-color: var(--muted);
+  }
+  .flow-step.end .step-num { background: var(--muted); }
+  .flow-step .step-body strong { color: var(--accent); }
+  .flow-step.kill .step-body strong { color: var(--accent); }
+  .flow-arrow {
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    font-size: 16px;
+    color: var(--gold);
+    font-weight: bold;
+    margin: 0 0 0 12px;
+    position: relative;
+  }
+  .flow-arrow::before {
+    content: "▼";
+    color: var(--gold);
+  }
+  .flow-step.kill + .flow-arrow::before { color: var(--accent); }
+
+  /* ===== 连招卡片 ===== */
+  .combo-section { margin: 14px 0 22px; }
+  .combo-section-title {
+    font-size: 14.5px;
+    color: var(--accent);
+    margin: 0 0 10px;
+    font-weight: 600;
+    padding: 6px 12px;
+    background: linear-gradient(to right, #e2eaf3, transparent 60%);
+    border-left: 3px solid var(--accent);
+    letter-spacing: 0.5px;
+  }
+  .tab-panel.p1 .combo-section-title {
+    color: var(--p1-accent);
+    background: linear-gradient(to right, var(--p1-bg), transparent 60%);
+    border-left-color: var(--p1-accent);
+  }
+  .tab-panel.p2 .combo-section-title {
+    color: var(--p2-accent);
+    background: linear-gradient(to right, var(--p2-bg), transparent 60%);
+    border-left-color: var(--p2-accent);
+  }
+  .combo-cards {
+    display: grid;
+    gap: 10px;
+  }
+  .combo-card {
+    background: #f3f7fc;
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    padding: 11px 14px;
+  }
+  .combo-card.highlight {
+    background: linear-gradient(to right, #e2eaf3, #f3f7fc);
+    border-left: 3px solid var(--star);
+  }
+  .combo-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .combo-trigger .trigger-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .trigger-condition {
+    font-size: 11.5px;
+    color: var(--muted);
+    background: #e2e8f0;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-style: italic;
+  }
+  .combo-branches {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 6px 0 2px 12px;
+    border-left: 2px dashed var(--line);
+    margin-left: 4px;
+  }
+  .combo-branch {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .branch-prob {
+    display: inline-block;
+    min-width: 44px;
+    font-family: Consolas, monospace;
+    color: var(--gold);
+    font-weight: 600;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .branch-arrow {
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .branch-target { color: var(--ink); }
+  .branch-target strong { color: var(--accent); }
+  .branch-note {
+    display: block;
+    margin-top: 2px;
+    margin-left: 56px;
+    font-size: 11.5px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  /* 多步链式连招(stepped) */
+  .combo-chain {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 0 2px 12px;
+    border-left: 2px solid var(--line);
+    margin-left: 4px;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .combo-chain .chain-step {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .combo-chain .chain-step .arr {
+    color: var(--gold);
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  /* ===== 协作工具栏(随左侧坞排布) ===== */
+  .collab-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  /* ===== 置顶按钮(随左侧坞排布，滚动条不在页顶时显示) ===== */
+  .back-to-top {
+    background: rgba(26, 39, 64, 0.92);
+    color: #d4e3f5;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: background 0.2s, transform 0.2s, opacity 0.25s, box-shadow 0.2s;
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .back-to-top:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(30, 64, 175, 0.25);
+  }
+  .collab-btn {
+    background: rgba(26, 39, 64, 0.94);
+    color: #d4e3f5;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    font-family: inherit;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .collab-btn:hover { background: var(--accent); transform: translateY(-1px); }
+  .collab-btn.danger { background: rgba(110, 48, 56, 0.92); }
+  .collab-btn.danger:hover { background: #c0392b; }
+
+  /* 协作说明卡 */
+  .collab-help {
+    background: linear-gradient(135deg, #e2eaf3, #f3f7fc);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 16px 22px;
+    margin: 24px 0 36px;
+    font-size: 13.5px;
+    line-height: 1.75;
+  }
+  .collab-help .ch-title {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+  .collab-help ol {
+    margin: 6px 0 8px;
+    padding-left: 22px;
+  }
+  .collab-help ol li { margin-bottom: 4px; }
+  .collab-help .role-note {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.55);
+    border-left: 3px solid var(--gold);
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .collab-help .role-note strong { color: var(--accent); }
+
+  /* 动态统计数字 — 标识"会随划除/编辑实时变化的数字" */
+  .dyn-count {
+    display: inline-block;
+    color: var(--accent);
+    background: var(--hl);
+    font-weight: 700;
+    font-size: 1.08em;
+    padding: 0 7px;
+    border-radius: 3px;
+    border: 1px solid #a5cdf5;
+    margin: 0 2px;
+    line-height: 1.4;
+    box-shadow: 0 1px 0 rgba(30, 64, 175, 0.15);
+  }
+
+  /* ===== 资源行 + 复选框 + 新增 ===== */
+  .res-table tbody tr {
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s;
+  }
+  .res-table tbody tr:hover { background: #e2eaf3 !important; }
+  .res-table tbody tr:hover .row-cb { border-color: var(--accent-soft); background: #dbeafe; }
+  .res-table tbody tr.is-deleted {
+    opacity: 0.5;
+    background: #c7ddff !important;
+  }
+  .res-table tbody tr.is-deleted td {
+    text-decoration: line-through;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 1.5px;
+  }
+  .res-table tbody tr.is-deleted:hover { opacity: 0.78; background: #a5cdff !important; }
+  /* 操作列(最后一列) */
+  .res-table th.cb-th, .res-table td.cb-cell {
+    width: 124px;
+    min-width: 124px;
+    text-align: center;
+    padding: 6px 6px !important;
+  }
+  .res-table td.cb-cell { white-space: nowrap; }
+
+  /* 协作列(美术/特效/音效填产出) — 倒数第二列，始终可编辑 */
+  /* 资产名称列(策划填，动作列后)— 视觉同普通数据列，不加特殊底色；只用等宽字体(资产名是代码风格) */
+  .res-table td.asset-cell {
+    font-family: Consolas, "Source Code Pro", monospace;
+    font-size: 12.5px;
+    word-break: break-all;
+    min-width: 110px;
+  }
+
+  /* 参考列(蓝调) + 协作列(金调) 共享尺寸/交互 */
+  .res-table th.ref-th, .res-table td.ref-cell,
+  .res-table th.contrib-th, .res-table td.contrib-cell {
+    width: 200px;
+    min-width: 160px;
+    max-width: 220px;
+    vertical-align: middle;
+  }
+  .res-table td.ref-cell { background: rgba(44, 62, 107, 0.05); }      /* 淡蓝底 */
+  .res-table td.contrib-cell { background: rgba(30, 64, 175, 0.05); } /* 淡金底 */
+  .res-table th.ref-th {
+    background: #e6e9f0;
+    color: var(--p2-accent);
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+  }
+  .res-table th.contrib-th {
+    background: #dbeafe;
+    color: var(--gold);
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+  }
+  .res-table td.ref-cell, .res-table td.contrib-cell {
+    cursor: text;
+    font-size: 12.5px;
+    line-height: 1.6;
+    padding: 8px 10px !important;
+    outline: none;
+    transition: background 0.12s;
+    word-break: break-word;
+  }
+  .res-table td.ref-cell:hover { background: rgba(44, 62, 107, 0.1); }
+  .res-table td.contrib-cell:hover { background: rgba(30, 64, 175, 0.1); }
+  .res-table td.ref-cell:focus {
+    background: #f0f2f8;
+    box-shadow: inset 0 0 0 1px var(--p2-accent);
+  }
+  .res-table td.contrib-cell:focus {
+    background: #eef5fc;
+    box-shadow: inset 0 0 0 1px var(--gold);
+  }
+  .res-table td.ref-cell[data-empty="true"]::before,
+  .res-table td.contrib-cell[data-empty="true"]::before {
+    content: attr(data-placeholder);
+    color: #9aa6b8;
+    font-style: italic;
+    font-size: 11.5px;
+    pointer-events: none;
+  }
+  .res-table td.ref-cell[data-empty="true"]::before { color: #a8b0c0; }
+  .res-table td.ref-cell img,
+  .res-table td.contrib-cell img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 4px 0;
+    border-radius: 3px;
+    border: 1px solid var(--line-soft);
+  }
+  .res-table td.ref-cell a,
+  .res-table td.contrib-cell a {
+    color: var(--accent);
+    text-decoration: underline;
+    word-break: break-all;
+  }
+  /* 已删除行的参考/协作列也保持可读，不参与划线 */
+  .res-table tbody tr.is-deleted td.ref-cell,
+  .res-table tbody tr.is-deleted td.contrib-cell { text-decoration: none !important; }
+  /* 参考/协作列内嵌媒体 */
+  .res-table td.ref-cell video,
+  .res-table td.contrib-cell video,
+  .note-content video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 4px 0;
+    border-radius: 3px;
+    border: 1px solid var(--line-soft);
+    background: black;
+  }
+  .res-table td.ref-cell iframe,
+  .res-table td.contrib-cell iframe,
+  .note-content iframe {
+    width: 100%;
+    height: 180px;
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    margin: 4px 0;
+    background: #000;
+  }
+  /* 拖拽悬停高亮 */
+  .res-table td.ref-cell.drag-over,
+  .res-table td.contrib-cell.drag-over,
+  .note-content.drag-over {
+    background: #dbeafe !important;
+    box-shadow: inset 0 0 0 2px var(--gold);
+  }
+
+  /* 媒体包装(支持 hover 显示 ✕ 删除按钮) */
+  .media-wrap {
+    display: inline-block;
+    position: relative;
+    margin: 4px 2px;
+    max-width: 100%;
+    vertical-align: top;
+    -webkit-user-drag: none;
+    user-drag: none;
+  }
+  .media-wrap *,
+  .media-wrap > img,
+  .media-wrap > video,
+  .media-wrap > iframe {
+    -webkit-user-drag: none;
+    user-drag: none;
+  }
+  .media-wrap > img,
+  .media-wrap > video,
+  .media-wrap > iframe {
+    display: block;
+    max-width: 100%;
+    margin: 0 !important;
+  }
+  .media-del {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border-radius: 50%;
+    background: rgba(30, 64, 175, 0.9);
+    color: white;
+    border: 2px solid white;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, transform 0.15s, background 0.15s;
+    user-select: none;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .media-wrap:hover .media-del { opacity: 1; }
+  .media-del:hover {
+    background: var(--accent);
+    transform: scale(1.12);
+  }
+
+  /* 放大按钮(✕ 左边) */
+  .media-zoom {
+    position: absolute;
+    top: 4px;
+    right: 34px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border-radius: 50%;
+    background: rgba(26, 39, 64, 0.9);
+    color: white;
+    border: 2px solid white;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, transform 0.15s, background 0.15s;
+    user-select: none;
+    z-index: 10;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .media-wrap:hover .media-zoom { opacity: 1; }
+  .media-zoom:hover {
+    background: var(--gold);
+    transform: scale(1.12);
+  }
+
+  /* 媒体放大浮窗 */
+  .media-popup {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    margin-left: -360px;
+    width: 720px;
+    height: 480px;
+    min-width: 320px;
+    min-height: 240px;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: 0 14px 48px rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    resize: both;
+    overflow: hidden;
+  }
+  .media-popup.show { display: flex; }
+  .media-popup .popup-header {
+    background: linear-gradient(180deg, #26344f, #1a2740);
+    color: #d4e3f5;
+    padding: 9px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    user-select: none;
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .media-popup .popup-title { letter-spacing: 1px; }
+  .media-popup .popup-close {
+    color: #d4e3f5;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 8px;
+    line-height: 1;
+    border-radius: 3px;
+    transition: all 0.15s;
+  }
+  .media-popup .popup-close:hover {
+    color: white;
+    background: var(--accent);
+  }
+  .media-popup .popup-body {
+    flex: 1;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+  }
+  .media-popup .popup-body > video,
+  .media-popup .popup-body > iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #000;
+  }
+  .media-popup .popup-body > img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .media-popup .popup-resize-hint {
+    position: absolute;
+    bottom: 3px;
+    right: 18px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    pointer-events: none;
+    font-family: Consolas, monospace;
+    z-index: 5;
+  }
+  /* 背景遮罩(可选，跟着 popup 显示) */
+  .media-popup-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 999;
+    display: none;
+  }
+  .media-popup-backdrop.show { display: block; }
+  /* 操作列按钮统一样式 */
+  .row-action-btn {
+    display: inline-block;
+    margin: 0 1px;
+    padding: 3px 8px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    border-radius: 3px;
+    cursor: pointer;
+    vertical-align: middle;
+    user-select: none;
+    font-weight: 600;
+    transition: background 0.15s, color 0.15s;
+  }
+  .row-edit-btn { background: #dce5f0; color: #1e40af; }
+  .row-edit-btn:hover { background: var(--gold); color: white; }
+  .row-confirm-btn { background: var(--gold); color: white; }
+  .row-confirm-btn:hover { background: var(--accent); }
+  .row-remove-btn { background: #bdd5ff; color: var(--accent); }
+  .row-remove-btn:hover { background: var(--accent); color: white; }
+  .row-cut-btn { background: #f3dcdc; color: #c0392b; }
+  .row-cut-btn:hover { background: var(--accent); color: white; }
+  .row-cut-btn.restore { background: #d9e2cc; color: #5e7a3a; }
+  .row-cut-btn.restore:hover { background: #5e7a3a; color: white; }
+  /* 撤销 toast */
+  .undo-toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: rgba(26, 39, 64, 0.96);
+    color: #d4e3f5;
+    padding: 12px 22px;
+    border-radius: 4px;
+    font-size: 13.5px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+  }
+  .undo-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+  .undo-toast .undo-link {
+    color: #22d3ee;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 14px;
+    text-decoration: underline;
+  }
+  .undo-toast .undo-link:hover { color: white; }
+  .undo-toast .kbd {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: Consolas, monospace;
+    color: #a8b5c7;
+    margin-left: 6px;
+  }
+  /* 编辑态：操作列 + 数据列视觉 */
+  .res-table tbody tr.is-editing {
+    background: #e8f0fb !important;
+    box-shadow: inset 3px 0 0 var(--gold);
+  }
+  .res-table tbody tr.is-editing .row-cb-wrap { display: none; } /* 编辑态隐藏复选框 */
+  .res-table tbody tr.is-editing td[contenteditable="true"] {
+    outline: 1px dashed var(--gold);
+    outline-offset: -3px;
+    background: #cce4ff; /* 明显的浅黄底色 — 标识"当前可编辑" */
+  }
+  .res-table tbody tr.is-editing td[contenteditable="true"]:hover { background: #a5d0ff; }
+  .res-table tbody tr.is-editing td[contenteditable="true"]:focus {
+    background: #f0f5fc;
+    box-shadow: inset 0 0 0 2px var(--gold);
+  }
+  .res-table tbody tr.is-editing td[data-empty="true"]::before {
+    content: attr(data-placeholder);
+    color: #a8b5c7;
+    font-style: italic;
+  }
+  .res-table th.cb-th {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: var(--muted) !important;
+  }
+  .row-cb {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #b9c3d2;
+    border-radius: 3px;
+    background: white;
+    vertical-align: middle;
+    transition: all 0.15s;
+    font-size: 12px;
+    line-height: 1;
+    color: transparent;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .res-table tbody tr.is-deleted .row-cb {
+    border-color: var(--accent);
+    background: #dbeafe;
+    color: var(--accent);
+    font-weight: bold;
+  }
+  .res-table tbody tr.is-deleted .row-cb::before { content: "✕"; }
+  /* 复选框点击包裹 */
+  .row-cb-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 3px;
+  }
+  .row-cb-wrap:hover .row-cb {
+    border-color: var(--accent);
+    background: #e0eeff;
+  }
+  .res-table tbody tr:hover .row-cb { border-color: var(--accent-soft); background: #dbeafe; }
+
+  /* 新增资源按钮 */
+  .add-row-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    background: transparent;
+    border: 1.5px dashed var(--gold);
+    border-radius: 4px;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    margin: -10px 0 20px;
+    transition: all 0.15s;
+    font-family: inherit;
+    letter-spacing: 1px;
+  }
+  .add-row-btn:hover {
+    background: #e2eaf3;
+    color: var(--accent);
+    border-color: var(--accent-soft);
+    border-style: solid;
+  }
+  .add-row-btn::before {
+    content: "＋ ";
+    font-weight: bold;
+  }
+
+  /* 新增行样式 */
+  .res-table tbody tr.is-new {
+    background: #e8f0fb !important;
+    box-shadow: inset 3px 0 0 var(--gold);
+  }
+  .res-table tbody tr.is-new td[contenteditable="true"] {
+    outline: none;
+  }
+  .res-table tbody tr.is-new td[contenteditable="true"]:hover {
+    background: #e8f0fb;
+  }
+  .res-table tbody tr.is-new td[contenteditable="true"]:focus {
+    background: #f0f5fc;
+    box-shadow: inset 0 0 0 1px var(--gold);
+  }
+  .res-table tbody tr.is-new td[data-empty="true"]::before {
+    content: attr(data-placeholder);
+    color: #a8b5c7;
+    font-style: italic;
+  }
+  /* 草稿态行 — "确定"按钮 */
+  .row-ok-btn {
+    display: inline-block;
+    margin-left: 2px;
+    padding: 3px 9px;
+    background: var(--gold);
+    color: white;
+    font-size: 11px;
+    letter-spacing: 1px;
+    border-radius: 3px;
+    cursor: pointer;
+    vertical-align: middle;
+    user-select: none;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .row-ok-btn:hover { background: var(--accent); }
+  /* 草稿态：复选框先隐藏，只显示"确定"按钮(避免在未确认状态下出现"删除"语义混淆) */
+  .res-table tbody tr.is-new .row-cb-wrap { display: none; }
+  /* 已删除状态下，操作列保持清晰可见(不被划线遮蔽) */
+  .res-table tbody tr.is-deleted td.cb-cell { text-decoration: none !important; }
+
+  /* ===== 右侧评审备注区 ===== */
+  section { position: relative; }
+  .tab-panel { position: relative; }
+  .note-aside {
+    position: absolute;
+    right: -340px;
+    top: 0;
+    width: 280px;
+    background: #fafcfe;
+    border: 1px dashed var(--gold);
+    border-radius: 4px;
+    padding: 14px 16px;
+    font-size: 12.5px;
+    z-index: 5;
+  }
+  .note-aside .note-label {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .note-aside .note-label .clear-btn {
+    margin-left: auto;
+    color: var(--muted);
+    cursor: pointer;
+    font-weight: normal;
+    font-size: 10.5px;
+    text-transform: none;
+    letter-spacing: 0;
+    padding: 0 4px;
+  }
+  .note-aside .note-label .clear-btn:hover { color: var(--accent); }
+  .note-aside .note-content {
+    min-height: 220px;
+    color: var(--ink);
+    line-height: 1.7;
+    outline: none;
+    padding: 4px 2px;
+    word-break: break-word;
+  }
+  .note-aside .note-content:empty::before {
+    content: "点击此处输入备注…";
+    color: #a8b5c7;
+    font-style: italic;
+  }
+  .note-aside .note-content:focus {
+    background: #eef5fc;
+  }
+
+  /* ===== 浮动目录(贴在 main 左外侧 20px) ===== */
+  /* 左侧浮动操作坞：章节导航 + 协作工具栏(垂直居中稍偏下) */
+  .left-dock {
+    position: fixed;
+    /* main max-width 1280 + padding 56*2 = 1392,半宽 696;再向左 20px gap */
+    right: calc(50% + 716px);
+    top: 56%;
+    transform: translateY(-50%);
+    width: 210px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 200;
+  }
+  .float-toc {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 16px 14px 14px;
+    font-size: 13.5px;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    max-height: 60vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+  }
+  .float-toc.visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .float-toc .toc-label {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 11px;
+    font-size: 12.5px;
+    letter-spacing: 2px;
+    border-bottom: 1px solid var(--line-soft);
+    padding-bottom: 9px;
+  }
+  .float-toc ol { list-style: none; padding: 0; margin: 0; }
+  .float-toc li { margin-bottom: 3px; }
+  .float-toc a {
+    color: var(--muted);
+    text-decoration: none;
+    display: block;
+    padding: 7px 11px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    border-radius: 0 3px 3px 0;
+  }
+  .float-toc a:hover { color: var(--ink); background: #e2eaf3; }
+  .float-toc a.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: #e2eaf3;
+    font-weight: 600;
+  }
+  /* ===== 两级树：浮动目录 + 顶部目录 共用 ===== */
+  .float-toc .toc-main-row,
+  .toc .toc-main-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  /* chevron 加大 + 加按钮感：rest 描金，hover/expanded 红 accent + 圆角底 */
+  .float-toc .toc-chevron,
+  .toc .toc-chevron {
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    color: var(--gold);
+    font-size: 13px;
+    font-weight: bold;
+    width: 24px;
+    height: 22px;
+    padding: 0;
+    flex-shrink: 0;
+    font-family: inherit;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: color 0.15s, background 0.15s, border-color 0.15s, transform 0.2s;
+  }
+  .float-toc .toc-chevron:hover,
+  .toc .toc-chevron:hover {
+    color: var(--accent);
+    background: #e2eaf3;
+    border-color: var(--line);
+  }
+  .float-toc .toc-main.expanded > .toc-main-row > .toc-chevron,
+  .toc .toc-main.expanded > .toc-main-row > .toc-chevron {
+    transform: rotate(90deg);
+    color: var(--accent);
+    background: #e2eaf3;
+    border-color: var(--line);
+  }
+  .float-toc .toc-chevron-spacer,
+  .toc .toc-chevron-spacer {
+    width: 24px;
+    flex-shrink: 0;
+  }
+  /* 浮动目录(左侧坞) */
+  .float-toc .toc-main-row > a {
+    flex: 1;
+    padding: 5px 8px;
+  }
+  .float-toc .toc-sub {
+    list-style: none;
+    margin: 1px 0 4px 22px;
+    padding: 0;
+    border-left: 1px dashed var(--line);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .float-toc .toc-main.expanded > .toc-sub {
+    max-height: 1000px;
+  }
+  .float-toc .toc-sub li { margin: 0; }
+  .float-toc .toc-sub a {
+    display: block;
+    font-size: 11.5px;
+    padding: 4px 8px 4px 10px;
+    color: var(--muted);
+    border-left: 2px solid transparent;
+    margin-left: -1px;
+    border-radius: 0;
+    line-height: 1.5;
+  }
+  .float-toc .toc-sub a:hover {
+    color: var(--ink);
+    background: #e2eaf3;
+  }
+  .float-toc .toc-sub a.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: #e2eaf3;
+    font-weight: 600;
+  }
+  /* 顶部目录(内联)— 复用 .toc-main / .toc-chevron / .toc-sub 命名 */
+  .toc .toc-main {
+    break-inside: avoid;
+  }
+  .toc .toc-main-row > a {
+    flex: 1;
+    display: block;
+    padding: 1px 0;
+  }
+  .toc .toc-sub {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 6px 8px;
+    columns: auto;            /* 撤销外层 .toc ol 的 2-column 继承 */
+    column-gap: 0;
+    border-left: 1px dashed var(--line-soft);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .toc .toc-main.expanded > .toc-sub {
+    max-height: 1000px;
+  }
+  .toc .toc-sub li { margin-bottom: 1px; }
+  .toc .toc-sub a {
+    display: block;
+    font-size: 12px;
+    padding: 3px 10px;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    margin-left: -1px;
+  }
+  .toc .toc-sub a:hover {
+    color: var(--accent);
+    background: #e2eaf3;
+    text-decoration: none;
+    border-left-color: var(--line);
+  }
+  /* ===== P1/P2 分组标签 + 子项按场次着色 ===== */
+  .float-toc .toc-group-label,
+  .toc .toc-group-label {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 8px 8px 4px 10px;
+    margin: 6px 0 2px;
+    letter-spacing: 2px;
+    cursor: default;
+    border-top: 1px solid var(--line);
+    list-style: none;
+    color: var(--muted);
+    text-align: left;
+  }
+  .float-toc .toc-group-label[data-panel="panel-p1"],
+  .toc .toc-group-label[data-panel="panel-p1"] {
+    color: var(--p1-accent);
+    border-top-color: var(--p1-accent-soft);
+  }
+  .float-toc .toc-group-label[data-panel="panel-p2"],
+  .toc .toc-group-label[data-panel="panel-p2"] {
+    color: var(--p2-accent);
+    border-top-color: var(--p2-accent-soft);
+  }
+  .float-toc .toc-sub > .toc-group-label:first-child,
+  .toc .toc-sub > .toc-group-label:first-child {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 4px;
+  }
+  /* P1 / P2 子项 hover + active 着色 */
+  .float-toc .toc-sub li[data-panel="panel-p1"] > a:hover,
+  .toc .toc-sub li[data-panel="panel-p1"] > a:hover {
+    color: var(--p1-accent);
+  }
+  .float-toc .toc-sub li[data-panel="panel-p1"] > a.active,
+  .toc .toc-sub li[data-panel="panel-p1"] > a.active {
+    color: var(--p1-accent);
+    border-left-color: var(--p1-accent);
+    background: var(--p1-bg);
+  }
+  .float-toc .toc-sub li[data-panel="panel-p2"] > a:hover,
+  .toc .toc-sub li[data-panel="panel-p2"] > a:hover {
+    color: var(--p2-accent);
+  }
+  .float-toc .toc-sub li[data-panel="panel-p2"] > a.active,
+  .toc .toc-sub li[data-panel="panel-p2"] > a.active {
+    color: var(--p2-accent);
+    border-left-color: var(--p2-accent);
+    background: var(--p2-bg);
+  }
+
+  /* 平滑滚动 */
+  html { scroll-behavior: smooth; }
+
+  /* 窄屏适配：折叠右侧备注(viewport < 2000px,放不下 main 1392 + 备注 300 两侧) */
+  @media (max-width: 2000px) {
+    .note-aside {
+      position: static;
+      width: auto;
+      margin: 20px 0 4px;
+    }
+    .note-aside .note-content {
+      min-height: 100px;
+    }
+  }
+  /* 极窄屏(viewport < 1500px)隐藏浮动目录，协作按钮 + 置顶 fallback 到右下角 */
+  @media (max-width: 1500px) {
+    .left-dock {
+      position: static;
+      transform: none;
+      width: auto;
+    }
+    .float-toc { display: none; }
+    .collab-actions {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      z-index: 200;
+    }
+    .back-to-top {
+      position: fixed;
+      bottom: 96px;
+      right: 22px;
+      z-index: 200;
+    }
+  }
+
+  /* ===== 改动历史区 ===== */
+  .history-block {
+    margin: 0 0 32px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--paper);
+  }
+  .history-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    background: linear-gradient(to right, #e2eaf3, #fbfcfe);
+    border-bottom: 1px solid var(--line-soft);
+    flex-wrap: wrap;
+  }
+  .history-head .h-title {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", serif;
+    color: var(--accent);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .history-head .h-count {
+    background: var(--accent);
+    color: #fffcf7;
+    padding: 1px 9px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-family: Consolas, monospace;
+    font-weight: 600;
+    min-width: 22px;
+    text-align: center;
+  }
+  .history-head .h-count.zero { background: var(--muted); }
+  .history-head .h-hint {
+    color: var(--muted);
+    font-size: 12.5px;
+    letter-spacing: 0.3px;
+  }
+  .history-head .h-editor-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .history-head .h-editor-wrap .label { white-space: nowrap; }
+  .history-head .h-editor-input {
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 5px 9px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--ink);
+    background: white;
+    width: 140px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .history-head .h-editor-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #f5faff;
+  }
+  .history-head .h-editor-input::placeholder { color: #aab6c6; }
+  .history-head .h-btn {
+    background: rgba(26, 39, 64, 0.85);
+    color: #d4e3f5;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+  }
+  .history-head .h-btn:hover { background: var(--accent); }
+  .history-head .h-btn.danger { background: rgba(110, 48, 56, 0.75); }
+  .history-head .h-btn.danger:hover { background: #c0392b; }
+  .history-body {
+    background: var(--paper);
+  }
+  .history-block.collapsed .history-body { display: none; }
+  /* ===== 历史表格(真 table + rowspan 合并 + 浏览器原生垂直居中 + 列分隔)===== */
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 13px;
+    background: var(--paper);
+  }
+  .history-table colgroup col.col-ts     { width: 110px; }
+  .history-table colgroup col.col-who    { width: 100px; }
+  .history-table colgroup col.col-action { width: 88px; }
+  .history-table colgroup col.col-del    { width: 36px; }
+  .history-table thead.hide { display: none; }
+  .history-table thead th {
+    padding: 10px 14px;
+    text-align: left;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    background: #e2e8f0;
+    border-right: 1px solid rgba(180, 196, 216, 0.55);
+    box-shadow: inset 0 -2px 0 var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .history-table thead th:last-child {
+    border-right: none;
+    text-align: center;
+    opacity: 0.4;
+    font-size: 11px;
+  }
+  .history-table thead th.h-action-th { text-align: center; }
+  .history-table tbody td {
+    padding: 9px 14px;
+    border-top: 1px solid var(--line-soft);
+    border-right: 1px solid rgba(180, 196, 216, 0.45); /* 列分隔淡线 */
+    vertical-align: middle;                              /* 垂直居中(rowspan 单元格自动撑高 → 文本自然居中)*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .history-table tbody td:last-child { border-right: none; }
+  .history-table tbody tr:first-child td { border-top: none; }
+  .history-table tbody tr.history-entry {
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .history-table tbody tr.history-entry:hover { background: #e2eaf3; }
+  .history-table tbody tr.history-entry:hover td.h-scope { color: var(--accent); }
+  .history-table tbody tr.history-entry.no-target { cursor: not-allowed; }
+  /* hover 时 内容列尾巴显示 ↗ 跳转提示 */
+  .history-table tbody tr.history-entry:hover td.h-scope::after {
+    content: " ↗";
+    color: var(--gold);
+    font-size: 11px;
+    margin-left: 4px;
+    opacity: 0.7;
+  }
+  .history-table tbody tr.history-entry.no-target:hover td.h-scope::after { content: ""; }
+  /* 时间 / 编辑者(rowspan 合并后整列视觉是分组锚点)*/
+  .history-table tbody td.h-ts {
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    background: rgba(253, 249, 239, 0.55);
+  }
+  .history-table tbody td.h-who {
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 13px;
+    text-align: center;
+    background: rgba(253, 249, 239, 0.55);
+  }
+  .history-table tbody td.h-scope {
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 12.5px;
+  }
+  .history-table tbody td.h-action-cell { text-align: center; }
+  .history-table tbody td.h-action-cell .h-action {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    background: var(--hl);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .history-table tbody td.h-action-cell .h-action.a-clear        { background: #bdd5ff; color: var(--accent); }
+  .history-table tbody td.h-action-cell .h-action.a-add-row      { background: #d9e2cc; color: #5e7a3a; }
+  .history-table tbody td.h-action-cell .h-action.a-delete-row   { background: #f3dcdc; color: #c0392b; }
+  .history-table tbody td.h-action-cell .h-action.a-restore-row  { background: #d9e2cc; color: #5e7a3a; }
+  .history-table tbody td.h-summary {
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+  .history-table tbody td.h-del-cell { text-align: center; padding: 0; }
+  .history-table tbody td.h-del-cell .h-del {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--muted);
+    width: 22px;
+    height: 22px;
+    line-height: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+    opacity: 0;
+    transition: all 0.12s;
+    font-family: inherit;
+  }
+  .history-table tbody tr.history-entry:hover .h-del { opacity: 0.7; }
+  .history-table tbody td.h-del-cell .h-del:hover {
+    opacity: 1;
+    background: #bdd5ff;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  /* 空状态 */
+  .history-table tbody td.history-empty {
+    padding: 22px;
+    color: var(--muted);
+    font-size: 13px;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.7;
+    cursor: default;
+    border-top: none;
+    border-right: none;
+    white-space: normal;
+  }
+  .history-table tbody tr.is-empty:hover { background: none; cursor: default; }
+  /* ===== 历史 翻页器 ===== */
+  .history-pager {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-top: 1px solid var(--line-soft);
+    background: #f3f7fc;
+    font-size: 12.5px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .history-pager.hide { display: none; }
+  .history-pager .hp-btn {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 4px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--ink);
+    font-family: inherit;
+    transition: all 0.12s;
+    min-width: 30px;
+  }
+  .history-pager .hp-btn:hover:not(:disabled) {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  .history-pager .hp-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .history-pager .hp-info {
+    margin-left: auto;
+    font-size: 12px;
+  }
+  .history-pager .hp-info strong {
+    color: var(--accent);
+    font-family: Consolas, monospace;
+    margin: 0 2px;
+  }
+  /* ===== 跳转目标 高亮闪烁 ===== */
+  @keyframes history-jump-flash-kf {
+    0%   { background-color: #a5cdf5; box-shadow: inset 0 0 0 2px #0891b2, 0 0 12px rgba(58, 124, 165, 0.6); }
+    40%  { background-color: #dbeafe; box-shadow: inset 0 0 0 2px rgba(8, 145, 178, 0.55), 0 0 8px rgba(8, 145, 178, 0.3); }
+    100% { background-color: transparent; box-shadow: inset 0 0 0 0 transparent, 0 0 0 transparent; }
+  }
+  .history-jump-flash {
+    animation: history-jump-flash-kf 2s ease-out;
+    border-radius: 3px;
+  }
+  /* ===== 提示 toast ===== */
+  .history-toast {
+    position: fixed;
+    bottom: 88px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(26, 39, 64, 0.94);
+    color: #d4e3f5;
+    padding: 10px 22px;
+    border-radius: 4px;
+    font-size: 13px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.3px;
+  }
+  .history-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-6px);
+  }
+  @media (max-width: 900px) {
+    /* 窄屏：表格保留原结构，横向溢出可滚 */
+    .history-body { overflow-x: auto; }
+    .history-pager .hp-info { width: 100%; margin-left: 0; text-align: center; }
+  }
+
+  /* ===== 评审反馈调整标记(第二/三轮评审「旧 vs 新」标记套件,用法见 review-markup-kit.md) ===== */
+  .changeset-summary {
+    background: linear-gradient(to right, #fff8d6, #fefce8);
+    border-left: 4px solid #d4a85a;
+    padding: 14px 18px 12px;
+    margin: 16px 0 24px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .changeset-summary .cs-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: #8a6a1f;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  .changeset-summary .cs-body { color: #5a4d23; line-height: 1.7; }
+  .changeset-summary code { background: rgba(212,168,90,0.18); padding: 1px 5px; border-radius: 3px; }
+
+  .changeset-old {
+    background: #f0f0f0 !important;
+    color: #999 !important;
+    position: relative;
+    opacity: 0.7;
+    margin-top: 14px !important;
+  }
+  .changeset-old::before {
+    content: "✗ 已移除";
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-size: 10px;
+    background: #999;
+    color: white;
+    padding: 1px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    z-index: 2;
+  }
+  .changeset-old, .changeset-old * {
+    text-decoration: line-through !important;
+    text-decoration-color: #999 !important;
+    color: #999 !important;
+  }
+  .changeset-old strong, .changeset-old em, .changeset-old .skill-name,
+  .changeset-old .skill-id, .changeset-old .skill-tag, .changeset-old .chip,
+  .changeset-old .skill-mech, .changeset-old .num, .changeset-old .name,
+  .changeset-old th, .changeset-old td.phase, .changeset-old .stage-tag,
+  .changeset-old .combo-section-title, .changeset-old .trigger-name,
+  .changeset-old .branch-target {
+    background: transparent !important;
+    color: #999 !important;
+    border-color: #ccc !important;
+  }
+  .changeset-old::before { text-decoration: none !important; }
+
+  .changeset-new {
+    background: #fff8d6;
+    border-left: 3px solid #d4a85a;
+    padding: 10px 14px 12px;
+    position: relative;
+    margin-top: 14px;
+    border-radius: 4px;
+  }
+  .changeset-new::before {
+    content: "✦ 新增 / 调整";
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-size: 10px;
+    background: #d4a85a;
+    color: white;
+    padding: 1px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+  }
+
+  /* TR 行不能做 absolute 定位锚点,::before 会漂位 → 禁用徽章,改在首列加内联标记 */
+  tr.changeset-old::before, tr.changeset-new::before { content: none !important; }
+  tr.changeset-old > td:first-child::before {
+    content: "✗ 已移除 ";
+    display: inline-block;
+    background: #999;
+    color: white;
+    padding: 0 5px;
+    border-radius: 2px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-decoration: none !important;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  tr.changeset-new > td:first-child::before {
+    content: "✦ 新 ";
+    display: inline-block;
+    background: #d4a85a;
+    color: white;
+    padding: 0 5px;
+    border-radius: 2px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+
+  /* 内联标记(用于段落/表格单元格里的关键短语,不破坏行级排版) */
+  .cs-old-inline {
+    background: #f0f0f0;
+    color: #999 !important;
+    text-decoration: line-through;
+    text-decoration-color: #999;
+    padding: 0 5px;
+    border-radius: 2px;
+    margin: 0 1px;
+  }
+  .cs-new-inline {
+    background: #fff8d6;
+    color: #5a4d23 !important;
+    border-left: 2px solid #d4a85a;
+    padding: 0 6px;
+    border-radius: 0 2px 2px 0;
+    margin: 0 1px;
+  }
+</style>
+<script id="__embed_state__">window.__EMBED_STATE__ = {};window.__EMBED_IDB__ = {};window.__EMBED_META__ = {};</script>
+</head>
+<body>
+
+<!-- 媒体放大浮窗 + 遮罩 -->
+<div class="media-popup-backdrop" id="mediaPopupBackdrop"></div>
+<div class="media-popup" id="mediaPopup" role="dialog" aria-modal="true">
+  <div class="popup-header" id="mediaPopupHeader">
+    <span class="popup-title">📺 媒体预览 · 拖标题移动 · 拖右下角调整大小</span>
+    <button type="button" class="popup-close" id="mediaPopupClose" title="关闭(Esc)">✕</button>
+  </div>
+  <div class="popup-body" id="mediaPopupBody">
+    <span class="popup-resize-hint">↘ resize</span>
+  </div>
+</div>
+
+<!-- 左侧浮动操作坞：章节导航 + 协作工具栏（垂直居中稍偏下，统一交互区域） -->
+<div class="left-dock">
+  <!-- 浮动目录（滚过封面后显示） -->
+  <aside class="float-toc" id="floatToc">
+    <div class="toc-label">章节导航</div>
+    <ol id="floatTocList"></ol>
+  </aside>
+  <!-- 协作工具栏 -->
+  <div class="collab-actions">
+    <button class="collab-btn" id="exportBtn" title="把你的所有修改（评审备注 / 划除 / 新增 / 编辑）打包进 HTML 文件，下载并发回给设计师 / 团队">📤 导出修改版</button>
+    <button class="collab-btn danger" id="resetBtn" title="清空本地所有协作数据（适合美术拿到新版 HTML 时清空旧痕迹）">♻️ 重置本地</button>
+  </div>
+  <!-- 置顶按钮（滚出页顶后才显示）-->
+  <button type="button" class="back-to-top" id="backToTop" title="回到页面顶部">↑ 置顶</button>
+</div>
+
+<main>
+
+<!-- Cover -->
+<div class="cover">
+  <div class="tag">效果与养成 · 演示稿 DEMO</div>
+  <h1>苍岚 · 效果与养成设计（gacha 移植）</h1>
+  <div class="sub">CangLan — 演示「技能附带效果 + 命座解锁效果 + 养成物效果 + 属性投放 + 数值建模验证」如何落到一个具体角色</div>
+  <div class="meta">
+    <div><span class="k">配套方法论</span><span class="v">act-combat-design</span></div>
+    <div><span class="k">示例项目</span><span class="v">gacha《星澜纪》（移植语境）</span></div>
+    <div><span class="k">角色原版</span><span class="v">买断制《孤刃行》· 薙刀「势」蓄力</span></div>
+    <div><span class="k">本稿范围</span><span class="v">效果 / 养成 / 属性投放 / 数值验证</span></div>
+    <div><span class="k">基础机制</span><span class="v">势 / 一闪 / 凝势（沿用原版）</span></div>
+    <div><span class="k">数值结论</span><span class="v">满命 +95% · 健康区内 · PVP 临界待复核</span></div>
+  </div>
+</div>
+
+<!-- 协作流程说明（结构固定，照填即可，一般无需改文案） -->
+<div class="collab-help">
+  <div class="ch-title">📋 文档协作使用说明</div>
+  <p>本稿是<strong>给人评审用的</strong>设计稿，可在浏览器内直接<strong>写评审备注</strong>（每章末尾的「📝 评审备注」区）。<br>
+  ⚠️ <strong>修改只临时缓存在当前标签页</strong>：F5 刷新会保留，但<strong>关闭标签页 / 浏览器即丢失</strong> — <strong style="color: var(--accent);">必须点左侧「📤 导出修改版」才能永久保存</strong>。</p>
+  <ol>
+    <li>在每章末尾的 <strong>📝 评审备注</strong> 区写意见（支持文本 / 链接 / Ctrl+V 粘贴截图 / 拖拽视频 / B站·YouTube 链接）</li>
+    <li>改完点左侧 <strong>📤 导出修改版</strong> → 下载一份带你全部备注的 HTML（文件名带日期 + 你的名字）</li>
+    <li>发回给设计师；收件人打开后文档<strong>自动加载你的备注</strong>作为新基线，<strong>📜 改动历史</strong>留痕（谁 · 何时 · 改了哪）</li>
+  </ol>
+  <div class="role-note">
+    💡 本稿聚焦<strong>效果 / 养成 / 属性 / 数值</strong>四层的评审 —— 基础动作 / 资源清单等生产明细在<strong>角色主设计稿</strong>里，本稿不重复。整体意见写每章末右侧 <strong>📝 评审备注</strong> 区即可。
+  </div>
+</div>
+
+<!-- 改动历史（结构固定，自动记录，无需改） -->
+<div class="history-block" id="historyBlock">
+  <div class="history-head">
+    <span class="h-title">📜 改动历史</span>
+    <span class="h-count zero" id="historyCount">0</span>
+    <span class="h-hint">改动评审备注 / 资源清单时自动记录（谁 · 何时 · 改了哪）</span>
+    <div class="h-editor-wrap">
+      <span class="label">当前编辑者：</span>
+      <input type="text" id="editorNameInput" class="h-editor-input" placeholder="填你的名字 / 角色" maxlength="30">
+      <button type="button" class="h-btn" id="historyToggleBtn" title="折叠 / 展开历史列表">折叠 ▴</button>
+      <button type="button" class="h-btn danger" id="historyClearBtn" title="只清历史，不影响其他协作数据">清空历史</button>
+    </div>
+  </div>
+  <div class="history-body">
+    <table class="history-table" id="historyTable">
+      <colgroup>
+        <col class="col-ts">
+        <col class="col-who">
+        <col>
+        <col class="col-action">
+        <col>
+        <col class="col-del">
+      </colgroup>
+      <thead class="hide" id="historyListHeader">
+        <tr>
+          <th>时间</th>
+          <th>编辑者</th>
+          <th>内容</th>
+          <th class="h-action-th">操作</th>
+          <th>摘要</th>
+          <th>✕</th>
+        </tr>
+      </thead>
+      <tbody id="historyList"></tbody>
+    </table>
+    <div class="history-pager hide" id="historyPager">
+      <button class="hp-btn" id="hpFirst" type="button" title="首页">«</button>
+      <button class="hp-btn" id="hpPrev" type="button" title="上一页">‹</button>
+      <button class="hp-btn" id="hpNext" type="button" title="下一页">›</button>
+      <button class="hp-btn" id="hpLast" type="button" title="末页">»</button>
+      <span class="hp-info">第 <strong id="hpCur">1</strong> / <strong id="hpTotal">1</strong> 页 · 每页 10 条 · 共 <strong id="hpTotalN">0</strong> 条</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC（自动生成，无需手填） -->
+<div class="toc">
+  <div class="toc-title">目 录</div>
+  <ol id="topTocList"></ol>
+</div>
+
+<section id="philosophy">
+  <h2>壹 · 设计说明</h2>
+  <div class="philosophy">
+    <strong>本稿演示「技能附带效果 + 命座解锁效果 + 养成物效果 + 属性投放 + 数值建模验证」如何落到一个具体角色。</strong><br><br>
+    🧪 <em>跨语境说明</em>：示例角色苍岚的 canonical 项目是<strong>买断制无命座</strong>的《孤刃行》。本稿把她<strong>移植到 gacha 示例项目《星澜纪》</strong>下，专门演示 gacha 的命座 / 养成物 / 属性投放设计 + 数值验证；与买断制原版（苍岚-战斗设计.md）是两个语境，不要混读。<br><br>
+    <em>角色基础机制</em>：势 / 一闪 / 凝势 沿用原版（基础动作 / 招式明细见角色主设计稿），本稿只展开「效果 + 养成 + 数值」三层。
+  </div>
+  <aside class="note-aside" data-key="note-philosophy">
+    <div class="note-label">📝 评审备注 · 壹<span class="clear-btn" data-clear="note-philosophy">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<section id="plot">
+  <h2>贰 · 技能附带效果</h2>
+  <p style="font-size: 14px; color: var(--muted);">任何项目通用 —— 每招挂什么 buff / debuff / 标记 / 状态。</p>
+
+  <table>
+    <thead><tr><th>招式</th><th>附带效果</th><th>类型</th></tr></thead>
+    <tbody>
+      <tr><td>普攻 4 段</td><td>末段击退 + 自身回 1「势」</td><td>控制 + 资源生成</td></tr>
+      <tr><td>完美闪避</td><td>自身「残影」（可接反击）+ 回 1 势</td><td>自 buff + 资源</td></tr>
+      <tr><td>闪避反击</td><td>对敌浮空</td><td>控制</td></tr>
+      <tr><td>凝势（核心特殊技）</td><td>自身「止水」减伤 20% + 势 stack（每层 −移速）</td><td>stacking buff（带权衡）</td></tr>
+      <tr><td>斩势 1–3 层</td><td>对敌削韧</td><td>削韧 debuff</td></tr>
+      <tr><td>破势·一闪（4 层）</td><td>大削韧 + 穿透 + 对破韧 / 倒地目标处决标记</td><td>条件处决</td></tr>
+      <tr><td>弹反成功</td><td>自身回 1 势 + 对敌硬直</td><td>资源 + 控制</td></tr>
+      <tr><td>终结技·奔雷</td><td>自身霸体 + AOE 雷光</td><td>自 buff + 群伤</td></tr>
+    </tbody>
+  </table>
+  <aside class="note-aside" data-key="note-plot">
+    <div class="note-label">📝 评审备注 · 贰<span class="clear-btn" data-clear="note-plot">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<section id="overview">
+  <h2>叁 · 命座 C0–C6 解锁效果</h2>
+  <p style="font-size: 14px; color: var(--muted);">按命座 / 星魂 5 段付费哲学：C0 必保完整 · C2 质变拐点 · C6 机制变质。</p>
+
+  <table>
+    <thead><tr><th>命座</th><th>效果</th><th>段位定位</th></tr></thead>
+    <tbody>
+      <tr><td>C0</td><td>势 / 一闪核心循环完整</td><td>必保完整</td></tr>
+      <tr><td>C1</td><td>凝势回势 +15%</td><td>数值小补</td></tr>
+      <tr><td><strong>C2</strong></td><td>处决条件放宽：「易伤窗内」目标也可处决</td><td><strong>质变拐点（解锁新触发）</strong></td></tr>
+      <tr><td>C3</td><td>一闪 / 斩势 +2 级</td><td>数值</td></tr>
+      <tr><td>C4</td><td>完美闪避 / 弹反回 2 势（原 1）</td><td>循环提速（效果改）</td></tr>
+      <tr><td>C5</td><td>终结技 +2 级</td><td>数值</td></tr>
+      <tr><td><strong>C6</strong></td><td>满势一闪后入「奔雷态」3s：普攻附雷光范围斩 + 凝势瞬满</td><td><strong>鲸鱼勋章（机制变质）</strong></td></tr>
+    </tbody>
+  </table>
+  <aside class="note-aside" data-key="note-overview">
+    <div class="note-label">📝 评审备注 · 叁<span class="clear-btn" data-clear="note-overview">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<section id="detail">
+  <h2>肆 · 养成物套装效果</h2>
+  <p style="font-size: 14px; color: var(--muted);">gacha 养成物（圣痕类）2 / 4 件套；4 件套是流派核心。</p>
+
+  <table>
+    <thead><tr><th>套装</th><th>2 件套</th><th>4 件套</th></tr></thead>
+    <tbody>
+      <tr><td>「止水」</td><td>凝势减伤 +10%</td><td>势达 4 层时，下记一闪 +40% 伤害 + 50% 削韧（流派核心）</td></tr>
+      <tr><td>「奔雷」</td><td>终结技伤害 +15%</td><td>终结技后 6s 内暴击伤害 +30%</td></tr>
+    </tbody>
+  </table>
+  <aside class="note-aside" data-key="note-detail">
+    <div class="note-label">📝 评审备注 · 肆<span class="clear-btn" data-clear="note-detail">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<section id="bind">
+  <h2>伍 · 属性投放 · 资源「势」· 操作循环</h2>
+  <p style="font-size: 14px; color: var(--muted);">怎么堆词条、势怎么转、循环怎么打 —— 落地 / 养成向。</p>
+
+  <h3>属性投放（输出 · 单体）</h3>
+  <table>
+    <thead><tr><th>词条</th><th>优先级</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>暴击率 / 暴击伤害</td><td>★★★（最高）</td><td>双爆，目标比例 CR : CD ≈ 1 : 2（如 65% / 130%）</td></tr>
+      <tr><td>攻击力 %</td><td>★★★</td><td>主词条主力，乘区直乘</td></tr>
+      <tr><td>充能效率</td><td>★★</td><td>够循环点出终结技即可，过量浪费</td></tr>
+      <tr><td>击破 / 减韧</td><td>★（次要）</td><td>苍岚靠一闪削韧已够，不主堆击破赛道</td></tr>
+      <tr><td>增伤 %</td><td>—（不主堆）</td><td>她<strong>无自带增伤</strong>，走暴击赛道；硬堆增伤会踩「加法增伤区稀释」天花板（见「陆」边际）</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13.5px;color:var(--muted);">→ 一句话：<strong>暴击赛道 + 攻击力</strong>，不碰增伤（避免稀释），充能够用即可。</p>
+  <p style="font-size:12.5px;color:var(--muted);"><strong>为什么 CR : CD = 1 : 2</strong>：暴击乘区 ≈ 1 + 暴击率 × 暴击伤害；双爆词条总量固定时，<strong>CR : CD = 1 : 2 令 CR × CD 期望最大</strong>。<strong>算例</strong>（同词条预算）：65% / 130% → 1 + 0.65 × 1.30 = <strong>1.845</strong>；90% / 80% → 1 + 0.90 × 0.80 = 1.72 —— 前者更高，故按 1 : 2 堆。</p>
+
+  <h3>资源「势」经济（0–4 层）</h3>
+  <table>
+    <thead><tr><th>动作</th><th>势变化</th></tr></thead>
+    <tbody>
+      <tr><td>普攻 4 段一套</td><td>+1</td></tr>
+      <tr><td>完美闪避 / 弹反成功</td><td>+1（C4 后 +2）</td></tr>
+      <tr><td>斩势（1–3 层）</td><td>即时消耗，威力随层数</td></tr>
+      <tr><td>破势·一闪（4 层）</td><td>消耗 4，处决</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13.5px;color:var(--muted);">势<strong>只在释放 / 切人时清空</strong>（不随时间衰减）。<strong>张力</strong>：凝势每层 −移速，蓄越满越脆 → 「再蓄一层博伤害 vs 现在放保安全」。</p>
+
+  <h3>操作循环</h3>
+  <ul>
+    <li><strong>短轴</strong>：普攻 4 段（回 1 势）→ 凝势补到 2–3 层 → 看破绽放斩势</li>
+    <li><strong>长轴</strong>：弹反 / 完美闪避攒势 + 普攻铺垫 → Boss 大破绽 → 凝满 4 层 → <strong>破势·一闪处决</strong> → 终结技「奔雷」收尾</li>
+    <li><strong>心法</strong>：用防御操作（闪 / 弹）反哺进攻资源；在 Boss 破绽窗精准塞一记满势一闪</li>
+  </ul>
+
+  <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:16px 0;">
+    <svg viewBox="0 0 720 210" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="苍岚操作循环流程图：短轴 普攻4段回1势 到 凝势补2到3 到 斩势；长轴 攒势 到 凝满4势 到 破势一闪处决 到 终结技奔雷">
+      <text x="6" y="60" font-size="13" fill="#5a6578">短轴</text>
+      <rect x="60" y="34" width="150" height="48" rx="8" fill="#e8eef5" stroke="#94a3b8"/>
+      <text x="135" y="54" text-anchor="middle" font-size="12.5" fill="#1e40af">普攻 4 段</text>
+      <text x="135" y="71" text-anchor="middle" font-size="11" fill="#5a6578">+1 势</text>
+      <text x="228" y="64" text-anchor="middle" font-size="18" fill="#3b82f6">&#8594;</text>
+      <rect x="246" y="34" width="150" height="48" rx="8" fill="#e8eef5" stroke="#94a3b8"/>
+      <text x="321" y="62" text-anchor="middle" font-size="12.5" fill="#1e40af">凝势补到 2&#8211;3</text>
+      <text x="414" y="64" text-anchor="middle" font-size="18" fill="#3b82f6">&#8594;</text>
+      <rect x="432" y="34" width="130" height="48" rx="8" fill="#fdeecd" stroke="#b45309"/>
+      <text x="497" y="62" text-anchor="middle" font-size="12.5" fill="#b45309">斩势</text>
+      <text x="6" y="160" font-size="13" fill="#5a6578">长轴</text>
+      <rect x="60" y="134" width="126" height="48" rx="8" fill="#e8eef5" stroke="#94a3b8"/>
+      <text x="123" y="154" text-anchor="middle" font-size="12" fill="#1e40af">攒势</text>
+      <text x="123" y="171" text-anchor="middle" font-size="10.5" fill="#5a6578">闪 / 弹 / 普攻</text>
+      <text x="200" y="164" text-anchor="middle" font-size="17" fill="#3b82f6">&#8594;</text>
+      <rect x="214" y="134" width="118" height="48" rx="8" fill="#e8eef5" stroke="#94a3b8"/>
+      <text x="273" y="162" text-anchor="middle" font-size="12" fill="#1e40af">凝满 4 势</text>
+      <text x="346" y="164" text-anchor="middle" font-size="17" fill="#3b82f6">&#8594;</text>
+      <rect x="360" y="134" width="128" height="48" rx="8" fill="#fdeecd" stroke="#b45309"/>
+      <text x="424" y="154" text-anchor="middle" font-size="12" fill="#b45309">破势·一闪</text>
+      <text x="424" y="171" text-anchor="middle" font-size="10.5" fill="#b45309">处决</text>
+      <text x="502" y="164" text-anchor="middle" font-size="17" fill="#3b82f6">&#8594;</text>
+      <rect x="516" y="134" width="138" height="48" rx="8" fill="#dbeafe" stroke="#1e40af"/>
+      <text x="585" y="162" text-anchor="middle" font-size="12" fill="#1e40af">终结技·奔雷</text>
+    </svg>
+    <div style="color:#5a6578;font-size:13px;margin-top:8px;line-height:1.7;">&#9650; 短轴日常铺垫；长轴在 Boss 破绽窗凑满 4 势打出<strong>破势·一闪处决</strong>，终结技收尾。<span style="color:#b45309;">金框 = 核心爆发点</span>。</div>
+  </div>
+  <aside class="note-aside" data-key="note-bind">
+    <div class="note-label">📝 评审备注 · 伍<span class="clear-btn" data-clear="note-bind">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<section id="assets">
+  <h2>陆 · 数值建模验证 + 边际效应</h2>
+  <p style="font-size: 14px; color: var(--muted);">用《星澜纪》乘区式（技能 × 增伤 × 暴击，守方乘区归一化为 1）跑 C0→C6，并看几处边际。<strong>本章数值为相对指数 / 倍率</strong>（已归一化），绝对伤害需代入项目真实面板复算。</p>
+
+  <h3>命座养成梯度</h3>
+  <table>
+    <thead><tr><th>命座</th><th>C0</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th><th>C6</th></tr></thead>
+    <tbody>
+      <tr><td>累计指数</td><td>100</td><td>105</td><td>118</td><td>125</td><td>134</td><td>142</td><td>195</td></tr>
+      <tr><td>逐级增量</td><td>—</td><td>+5%</td><td><strong>+12%</strong></td><td>+6%</td><td>+7%</td><td>+6%</td><td><strong>+37%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:18px 0;">
+    <svg viewBox="0 0 720 360" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="苍岚命座 C0 到 C6 累计强度指数曲线，从 100 升到 195，C2 与 C6 为质变跳点，C6 落在加号 80 到 120 百分比健康区间">
+      <rect x="80" y="50" width="600" height="80" fill="#e8f3ec"/>
+      <text x="676" y="46" text-anchor="end" font-size="11" fill="#1f7a4d">C6 健康区间 +80~120%</text>
+      <line x1="80" y1="40" x2="80" y2="300" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="80" y1="300" x2="690" y2="300" stroke="#94a3b8" stroke-width="1"/>
+      <g font-size="11" fill="#94a3b8">
+        <line x1="80" y1="290" x2="680" y2="290" stroke="#e2e8f0"/><text x="72" y="294" text-anchor="end">100</text>
+        <line x1="80" y1="210" x2="680" y2="210" stroke="#e2e8f0"/><text x="72" y="214" text-anchor="end">140</text>
+        <line x1="80" y1="130" x2="680" y2="130" stroke="#e2e8f0"/><text x="72" y="134" text-anchor="end">180</text>
+        <line x1="80" y1="50" x2="680" y2="50" stroke="#e2e8f0"/><text x="72" y="54" text-anchor="end">220</text>
+      </g>
+      <polyline points="80,290 180,280 280,254 380,240 480,222 580,206 680,100" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+      <g font-size="12" fill="#1a2332" text-anchor="middle">
+        <circle cx="80" cy="290" r="4" fill="#1e40af"/><text x="80" y="282">100</text>
+        <circle cx="180" cy="280" r="4" fill="#1e40af"/><text x="180" y="272">105</text>
+        <circle cx="280" cy="254" r="5.5" fill="#b45309"/><text x="280" y="244" fill="#b45309">118</text>
+        <circle cx="380" cy="240" r="4" fill="#1e40af"/><text x="380" y="232">125</text>
+        <circle cx="480" cy="222" r="4" fill="#1e40af"/><text x="480" y="214">134</text>
+        <circle cx="580" cy="206" r="4" fill="#1e40af"/><text x="580" y="198">142</text>
+        <circle cx="680" cy="100" r="5.5" fill="#b45309"/><text x="672" y="92" fill="#b45309" text-anchor="end">195</text>
+      </g>
+      <g font-size="12" fill="#5a6578" text-anchor="middle">
+        <text x="80" y="318">C0</text><text x="180" y="318">C1</text><text x="280" y="318">C2</text>
+        <text x="380" y="318">C3</text><text x="480" y="318">C4</text><text x="580" y="318">C5</text><text x="680" y="318">C6</text>
+      </g>
+      <text x="20" y="30" font-size="12" fill="#5a6578">累计强度指数（C0=100）</text>
+    </svg>
+    <div style="color:#5a6578;font-size:13px;margin-top:8px;line-height:1.75;">
+      ▲ 命座养成曲线（金点 = 质变跳点 C2 / C6）。<br>
+      <strong>怎么算</strong>：每命座效果折算成对「循环 DPS」的增益 %，在 C0 = 100 基准上累乘成累计指数（乘区式 技能 × 增伤 × 暴击，守方乘区归一化为 1）。<br>
+      <strong>为什么这么算</strong>：C2 / C6 做质变跳点（付费拐点 + 鲸鱼勋章），其余平滑补，符合 5 段付费哲学。<br>
+      <strong>算的过程</strong>：C1 回势 +15% → 循环约 +5% → <strong>105</strong>；C2 处决放宽 → 均摊约 +12% → <strong>118</strong>；C3 技能 +2 级 → +6% → <strong>125</strong>；C4 回势 ×2 → +7% → <strong>134</strong>；C5 技能 +2 级 → +6% → <strong>142</strong>；C6 奔雷态 → +37% → <strong>195</strong>。<br>
+      <strong>结果</strong>：195 ÷ 100 = <strong>满命 +95%</strong>，落 +80~120% 健康区。
+    </div>
+  </div>
+
+  <h3>边际效应</h3>
+  <table>
+    <thead><tr><th>维度</th><th>边际表现（示例）</th><th>设计意图</th></tr></thead>
+    <tbody>
+      <tr><td>势层 → 斩势威力</td><td>1 / 2 / 3 层 ≈ 1.0× / 1.4× / 1.9×；<strong>4 层一闪 ≈ 3.5× + 处决</strong>（边际跳升）</td><td>4 层质变 → 鼓励「蓄满」博弈</td></tr>
+      <tr><td>凝势 → 移速</td><td>每层 −移速 ≈ 15% / 30% / 50% / 70%，<strong>边际递增的机动惩罚</strong></td><td>平衡「蓄满」风险：越肥越脆</td></tr>
+      <tr><td>增伤词条</td><td>加法 bucket，自拐边际 ≈ S ÷ (1+面板)；苍岚无自拐 → <strong>不踩稀释</strong></td><td>走暴击赛道规避增伤天花板</td></tr>
+      <tr><td>命座</td><td>C0→C6 +95%，C2 / C6 质变跳点（见上图）</td><td>付费哲学：平滑补 + 拐点放量</td></tr>
+    </tbody>
+  </table>
+
+  <div style="background:#f4f8fd;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:16px 0;">
+    <svg viewBox="0 0 720 300" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="势层双轴图：斩势一闪伤害倍率随势层升高，1势1.0倍到4势3.5倍质变跳升；剩余移速随凝势层数下降，85%到30%；体现蓄越满越强也越脆的张力">
+      <line x1="80" y1="40" x2="80" y2="260" stroke="#94a3b8"/>
+      <line x1="80" y1="260" x2="660" y2="260" stroke="#94a3b8"/>
+      <line x1="660" y1="40" x2="660" y2="260" stroke="#94a3b8"/>
+      <g font-size="11" fill="#94a3b8">
+        <text x="72" y="264" text-anchor="end">0</text>
+        <text x="72" y="154" text-anchor="end">2.0</text>
+        <text x="72" y="44" text-anchor="end">4.0&#215;</text>
+        <text x="668" y="264" text-anchor="start">0</text>
+        <text x="668" y="154" text-anchor="start">50</text>
+        <text x="668" y="44" text-anchor="start">100%</text>
+      </g>
+      <rect x="125" y="205" width="50" height="55" fill="#378ADD"/>
+      <rect x="265" y="183" width="50" height="77" fill="#378ADD"/>
+      <rect x="405" y="155" width="50" height="105" fill="#378ADD"/>
+      <rect x="545" y="68" width="50" height="192" fill="#b45309"/>
+      <g font-size="12" text-anchor="middle">
+        <text x="150" y="198" fill="#1e40af">1.0&#215;</text>
+        <text x="290" y="176" fill="#1e40af">1.4&#215;</text>
+        <text x="430" y="148" fill="#1e40af">1.9&#215;</text>
+        <text x="570" y="61" fill="#b45309" font-weight="500">3.5&#215;</text>
+      </g>
+      <polyline points="150,73 290,106 430,150 570,194" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-dasharray="5 3"/>
+      <circle cx="150" cy="73" r="4" fill="#1D9E75"/>
+      <circle cx="290" cy="106" r="4" fill="#1D9E75"/>
+      <circle cx="430" cy="150" r="4" fill="#1D9E75"/>
+      <circle cx="570" cy="194" r="4" fill="#1D9E75"/>
+      <g font-size="11" fill="#0f6e56" text-anchor="middle">
+        <text x="150" y="66">85%</text>
+        <text x="290" y="99">70%</text>
+        <text x="430" y="143">50%</text>
+        <text x="570" y="210">30%</text>
+      </g>
+      <g font-size="12" fill="#5a6578" text-anchor="middle">
+        <text x="150" y="278">1 势</text>
+        <text x="290" y="278">2 势</text>
+        <text x="430" y="278">3 势</text>
+        <text x="570" y="278">4 势</text>
+      </g>
+      <text x="20" y="30" font-size="11" fill="#5a6578">斩势 / 一闪 倍率（1 势斩势 = 1.0）</text>
+      <text x="700" y="30" font-size="11" fill="#5a6578" text-anchor="end">剩余移速 %</text>
+    </svg>
+    <div style="color:#5a6578;font-size:13px;margin-top:8px;line-height:1.7;">&#9650; 势越高 &#8594; 斩势/一闪倍率越高（蓝柱；<span style="color:#b45309;">4 势一闪 3.5&#215; 质变，金柱</span>），但凝势剩余移速越低（绿虚线 85%&#8594;30%）。这就是<strong>「蓄越满、越强、也越脆」</strong>的核心张力。<br>
+      <strong>怎么算 · 过程</strong>：斩势倍率按势层近线性偏上 —— 1 势 1.0×（基准），每层约 +0.45×，至 3 势 1.9×；4 势改走破势·一闪，跳到 3.5× 且附处决（质变、非线性）。移速惩罚每层递增 −15 / −15 / −20 / −20% → 剩 85 / 70 / 50 / 30%。<br>
+      <strong>结果</strong>：4 势伤害 ≈ 1 势斩势的 3.5 倍（基准为 1 势斩势 = 1.0；换算成 vs 普攻段约 8×，对应 §五「爆发」）、却只剩 30% 移速 —— 收益与风险同时见顶，逼出「再蓄一层 vs 现在放」的决策。</div>
+  </div>
+
+  <h3>§ 五健康自检</h3>
+  <table>
+    <thead><tr><th>维度</th><th>基线</th><th>苍岚</th><th>判</th></tr></thead>
+    <tbody>
+      <tr><td>满命总梯度</td><td>+80~120%</td><td><strong>+95%</strong></td><td>✅</td></tr>
+      <tr><td>逐级</td><td>累计严格递增</td><td>100 &lt; 105 &lt; … &lt; 195</td><td>✅</td></tr>
+      <tr><td>C0 完整</td><td>必须</td><td>核心循环 C0 即完整</td><td>✅</td></tr>
+      <tr><td>爆发</td><td>5~15×</td><td>一闪 ≈ 8× 普攻段</td><td>✅</td></tr>
+      <tr><td>增伤区</td><td>×≤1.5</td><td>≈1.1（靠暴击）</td><td>✅</td></tr>
+      <tr><td>暴击</td><td>CR:CD 1:2 不溢出</td><td>遵守</td><td>✅</td></tr>
+      <tr><td>养成物套装</td><td>4pc ≈ 质变命座量级</td><td>「止水」4pc 条件 +40%</td><td>✅</td></tr>
+      <tr><td>PVP 满命 / 0 命</td><td>≤1.8×</td><td>原始梯度 1.95× 逼近上限；HP/防御不随命座涨，有效战力比 ≈1.6×</td><td>⚠️ 临界</td></tr>
+      <tr><td>场景梯度（群伤 C 单体）</td><td>40~55%</td><td>苍岚是单体角色</td><td>N/A</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12.5px;color:var(--muted);"><strong>PVP 比怎么算</strong>：原始伤害梯度 = 累计指数比 195 ÷ 100 = <strong>1.95×</strong>；但 PVP 战力还含 HP / 防御（不随命座涨），把伤害提升摊进总战力后<strong>有效比 ≈ 1.6×</strong>（示例估算）。1.95× 看着逼近 1.8× 上限、有效 1.6× 又在区内 —— 正因临界，<strong>必须用项目真实 PVP 公式跑，别用简化式拍板</strong>。</p>
+
+  <div class="philosophy" style="margin-top:14px;">🔎 <strong>本演示暴露的方法论价值</strong>：gacha + PVP 语境下，§ 五的 PVP 阈值主动拦下一个临界点（满命伤害梯度逼近 1.8× 上限），提示必须用项目<strong>真实 PVP 公式</strong>复核 —— 正是「用真实公式跑、别用简化式」的用例。</div>
+  <aside class="note-aside" data-key="note-assets">
+    <div class="note-label">📝 评审备注 · 陆<span class="clear-btn" data-clear="note-assets">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<section id="metarules">
+  <h2>柒 · 最终总结</h2>
+  <div class="philosophy">
+    <strong>一句话：静如止水，动如奔雷；蓄得越满，一闪越狠，但也越脆。</strong><br><br>
+    苍岚把「蓄力—释放」做成一套<strong>可主动管理的节奏资源（势）</strong>，效果 / 养成 / 数值三层闭环：<br><br>
+    · <strong>效果层</strong> —— 势 / 一闪 / 止水：普攻·闪避·弹反生成势，斩势·破势一闪消耗，凝势减伤但减速；<br>
+    · <strong>养成层</strong> —— 命座 C0–C6 沿付费哲学平滑补 + C2 / C6 质变跳点，养成物套装强化流派；<br>
+    · <strong>数值层</strong> —— 暴击赛道（不碰增伤、避免稀释）+ 势层 / 凝势的递增边际 + 命座 +95% 健康梯度，经 §十 建模验证落在健康区。<br><br>
+    唯一待办：<strong>PVP 满命 / 0 命比临界</strong>（1.95× 原始梯度逼近 1.8× 上限），需用项目真实 PVP 公式复核 —— 这正是方法论「用真实公式跑、别用简化式」的价值所在。
+  </div>
+  <aside class="note-aside" data-key="note-metarules">
+    <div class="note-label">📝 评审备注 · 柒<span class="clear-btn" data-clear="note-metarules">清空</span></div>
+    <div class="note-content" contenteditable="true"></div>
+  </aside>
+</section>
+
+<!-- Final Quote（点睛收尾，可选；无则删） -->
+<div class="final-quote">
+【一段诗意收尾 —— 把角色弧光 / 核心机制凝练成 2-4 行。示例，删掉换你的。】
+</div>
+
+<footer>
+  战斗设计 · 【对象名】 · 【日期 / 作者】
+</footer>
+
+</main>
+
+<script>
+  // 备份原始 DOM 快照(在所有 init 之前),用于"导出修改版"时还原 baseline + 注入数据
+  window.__ORIGINAL_HTML__ = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+  // === Tab 切换 ===
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-tab');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + target).classList.add('active');
+      window.scrollTo({ top: document.getElementById('overview').offsetTop - 20, behavior: 'smooth' });
+    });
+  });
+
+  // === 存储 key 前缀(避免跟同域其他文档冲突) — 多文档共存时改成你文档专属前缀 ===
+  const LS_PREFIX = 'cl-gacha-';
+  // 协作数据用 sessionStorage:关闭标签页自动清空 / F5 刷新保留 / 只有点"📤 导出修改版"才永久写入 HTML 文件
+  const __LS = window.sessionStorage;
+
+  // === IndexedDB 兜底存大文件(sessionStorage ~5MB 满时降级) ===
+  const IDB_NAME = 'combat-doc';
+  const IDB_STORE = 'contrib';
+  function __openIDB() {
+    return new Promise((resolve, reject) => {
+      if (!window.indexedDB) return reject(new Error('IndexedDB not supported'));
+      const req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE);
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  window.__saveContribToIDB = function(tid, rid, html) {
+    return __openIDB().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction([IDB_STORE], 'readwrite');
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+      tx.objectStore(IDB_STORE).put(html, tid + '-' + rid);
+    }));
+  };
+  window.__loadContribFromIDB = function(tid, rid) {
+    return __openIDB().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction([IDB_STORE], 'readonly');
+      const req = tx.objectStore(IDB_STORE).get(tid + '-' + rid);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    }));
+  };
+  window.__getAllContribFromIDB = function() {
+    return __openIDB().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction([IDB_STORE], 'readonly');
+      const store = tx.objectStore(IDB_STORE);
+      const reqKeys = store.getAllKeys();
+      const reqVals = store.getAll();
+      // 用 tx.oncomplete 等两个请求都完成 — 不能把 reqKeys.onsuccess 嵌在 reqVals.onsuccess 里赋值，
+      // 因为 reqKeys 先于 reqVals 完成，赋值时它的 success 事件已经错过 → Promise 永久挂起
+      tx.oncomplete = () => {
+        const out = {};
+        (reqKeys.result || []).forEach((k, i) => { out[k] = reqVals.result[i]; });
+        resolve(out);
+      };
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error);
+    })).catch(() => ({}));
+  };
+  window.__clearContribIDB = function() {
+    return __openIDB().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction([IDB_STORE], 'readwrite');
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+      tx.objectStore(IDB_STORE).clear();
+    })).catch(() => {});
+  };
+
+  // === 0. 协作：session 级数据管理 + 加载内嵌数据 ===
+  // 机制：协作数据存 sessionStorage(关 tab 自动清空) + IndexedDB(持久，用 session flag 模拟同样行为)
+  //   - 新 session(首次打开 / 关 tab 重开)→ 清空一切，从 HTML 内嵌数据重建
+  //   - F5 刷新(同一 session)→ 保留 sessionStorage + IDB,不重建(编辑不丢)
+  (async function initEmbeddedData() {
+    const SESSION_FLAG = LS_PREFIX + '__session_init__';
+    const isNewSession = !__LS.getItem(SESSION_FLAG);
+    if (!isNewSession) return; // F5 刷新：啥也不做，保留本 session 编辑
+
+    // 新 session → 从内嵌数据重建
+    __LS.setItem(SESSION_FLAG, '1');
+    // 清空残留(sessionStorage 关 tab 已自动清，IDB 是持久的需手动清)
+    Object.keys(__LS).filter(k => k.startsWith(LS_PREFIX) && k !== SESSION_FLAG)
+      .forEach(k => __LS.removeItem(k));
+
+    const hasLS = typeof window.__EMBED_STATE__ === 'object' && window.__EMBED_STATE__ && Object.keys(window.__EMBED_STATE__).length > 0;
+    const hasIDB = typeof window.__EMBED_IDB__ === 'object' && window.__EMBED_IDB__ && Object.keys(window.__EMBED_IDB__).length > 0;
+
+    // ⚠️ 必须先同步恢复 sessionStorage,再走任何 await ——
+    //    后续的 (function initResources)() 等同步 IIFE 紧跟着本 IIFE 调用执行,
+    //    一旦在恢复 LS 之前 await 让出控制权,initResources 就会读到空 LS,
+    //    按"原始模板"渲染 DOM,导致 deleted-rows / contrib 全部不生效。
+    if (hasLS) {
+      Object.keys(window.__EMBED_STATE__).forEach(k => {
+        try { __LS.setItem(k, window.__EMBED_STATE__[k]); } catch (e) { console.warn('SS restore fail:', k, e); }
+      });
+    }
+
+    if (window.__clearContribIDB) {
+      try { await window.__clearContribIDB(); } catch (e) {}
+    }
+    // 加载内嵌 IndexedDB 数据(异步)
+    if (hasIDB && window.__saveContribToIDB) {
+      for (const key of Object.keys(window.__EMBED_IDB__)) {
+        const dash = key.indexOf('-');
+        if (dash < 0) continue;
+        try {
+          await window.__saveContribToIDB(key.slice(0, dash), key.slice(dash + 1), window.__EMBED_IDB__[key]);
+        } catch (e) { console.warn('IDB restore fail:', key, e); }
+      }
+      // IDB 异步写入完成，reload 让 makeContribCell 重新读(reload 后 SESSION_FLAG 已存在，不会再重建)
+      location.reload();
+    }
+  })();
+
+  // === 1. 资源清单：复选框 + 新增 + 删除 + 持久化 ===
+  (function initResources() {
+    /* ===== rid 命名规则 =====
+       静态行： r0, r1, r2... (按 HTML 顺序，稳定)
+       用户新增行： n0, n1, n2... (递增，稳定)
+       rid 一旦分配永不变，删除行不复用 rid */
+
+    // 1.1 标记 tid + 静态行 rid
+    document.querySelectorAll('.res-table').forEach((tbl, ti) => {
+      tbl.setAttribute('data-tid', 't' + ti);
+      tbl.querySelectorAll('tbody tr').forEach((tr, ri) => {
+        if (!tr.hasAttribute('data-rid')) tr.setAttribute('data-rid', 'r' + ri);
+      });
+    });
+
+    // 1.1b 注入"资产名称"列(动作列后 = index 2,策划填，作为普通数据列受编辑态管控)
+    //   必须在 ref/contrib/操作 列注入之前执行 — 这三列 append 到末尾，asset 插在 index 2
+    document.querySelectorAll('.res-table').forEach(tbl => {
+      const theadTr = tbl.querySelector('thead tr');
+      if (theadTr && !theadTr.querySelector('.asset-th')) {
+        const th = document.createElement('th');
+        th.className = 'asset-th';
+        th.textContent = '资产名称';
+        if (theadTr.children[2]) theadTr.insertBefore(th, theadTr.children[2]);
+        else theadTr.appendChild(th);
+      }
+      tbl.querySelectorAll('tbody tr').forEach(tr => {
+        if (tr.querySelector('.asset-cell')) return;
+        const td = document.createElement('td');
+        td.className = 'asset-cell';
+        if (tr.children[2]) tr.insertBefore(td, tr.children[2]);
+        else tr.appendChild(td);
+      });
+    });
+
+    // === 富媒体粘贴/拖拽 helper(图/动图/视频/视频 URL/B站/YouTube) ===
+    const MAX_VIDEO_BYTES = 200 * 1024 * 1024; // 200 MB 视频内嵌上限(__LS 满会 fallback 到 IndexedDB)
+    function readFileAsBase64(file) {
+      return new Promise((res, rej) => {
+        const fr = new FileReader();
+        fr.onload = () => res(fr.result);
+        fr.onerror = rej;
+        fr.readAsDataURL(file);
+      });
+    }
+    function insertHtmlAtCaret(html) {
+      const sel = window.getSelection();
+      if (!sel || !sel.rangeCount) {
+        document.execCommand('insertHTML', false, html);
+        return;
+      }
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+      const wrap = document.createElement('div');
+      wrap.innerHTML = html;
+      const frag = document.createDocumentFragment();
+      let last;
+      while (wrap.firstChild) { last = wrap.firstChild; frag.appendChild(last); }
+      range.insertNode(frag);
+      if (last) {
+        range.setStartAfter(last);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
+    // 媒体 wrap 模板(含 ⛶ 放大 + ✕ 删除按钮)
+    function mediaWrapHtml(innerHtml) {
+      return '<span class="media-wrap" contenteditable="false" draggable="false">' + innerHtml +
+        '<button type="button" class="media-zoom" title="弹窗放大预览(可拖动 + 调整大小)">⛶</button>' +
+        '<button type="button" class="media-del" title="删除该媒体(也可按 Backspace/Delete)">✕</button></span>';
+    }
+    function tryEmbedFile(file, cell) {
+      if (file.type.startsWith('image/')) {
+        readFileAsBase64(file).then(dataUrl => {
+          insertHtmlAtCaret(mediaWrapHtml('<img src="' + dataUrl + '" />'));
+          cell.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        return true;
+      }
+      if (file.type.startsWith('video/')) {
+        if (file.size > MAX_VIDEO_BYTES) {
+          alert('⚠️ 视频过大 (' + (file.size/1024/1024).toFixed(1) + ' MB,超 200 MB 上限)。\n建议：\n1. 压缩视频后重试\n2. 上传到网盘 / B站 / YouTube,贴链接');
+          return false;
+        }
+        // 提示但不强制阻断：> 50MB 给个 confirm
+        if (file.size > 50 * 1024 * 1024) {
+          if (!confirm('⚠️ 视频 ' + (file.size/1024/1024).toFixed(1) + ' MB 较大。\n\n本地存储已切换到 IndexedDB(容量可达 GB 级),理论可存。\n但导出文件会包含整个视频(base64 编码),文件会非常大。\n\n继续吗？\n建议大视频改贴网盘/B站/YouTube 链接，更轻便。')) {
+            return false;
+          }
+        }
+        readFileAsBase64(file).then(dataUrl => {
+          insertHtmlAtCaret(mediaWrapHtml('<video src="' + dataUrl + '" controls></video>'));
+          cell.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        return true;
+      }
+      return false;
+    }
+    function tryEmbedVideoUrl(text, cell) {
+      const t = text.trim();
+      // 直链 mp4/webm/mov
+      if (/^https?:\/\/.+\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i.test(t)) {
+        insertHtmlAtCaret(mediaWrapHtml('<video src="' + t + '" controls></video>'));
+        cell.dispatchEvent(new Event('input', { bubbles: true }));
+        return true;
+      }
+      // B 站 BVxxxx
+      const bili = t.match(/bilibili\.com\/video\/(BV[\w]+)/);
+      if (bili) {
+        insertHtmlAtCaret(mediaWrapHtml('<iframe src="https://player.bilibili.com/player.html?bvid=' + bili[1] + '&autoplay=0" frameborder="0" allowfullscreen></iframe>'));
+        cell.dispatchEvent(new Event('input', { bubbles: true }));
+        return true;
+      }
+      // YouTube
+      const yt = t.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([\w-]+)/);
+      if (yt) {
+        insertHtmlAtCaret(mediaWrapHtml('<iframe src="https://www.youtube.com/embed/' + yt[1] + '" frameborder="0" allowfullscreen></iframe>'));
+        cell.dispatchEvent(new Event('input', { bubbles: true }));
+        return true;
+      }
+      return false;
+    }
+    // 扫描 cell 内未包裹的媒体元素，用 .media-wrap 包起来(还原已保存内容时用) + 补缺 zoom 按钮
+    window.wrapLooseMedia = function wrapLooseMedia(cell) {
+      cell.querySelectorAll('img, video, iframe').forEach(el => {
+        el.setAttribute('draggable', 'false'); // 禁用 HTML5 拖拽，避免浏览器把媒体当 HTML 拖到 cell 里重复插入
+        const parent = el.parentElement;
+        if (parent && parent.classList.contains('media-wrap')) {
+          parent.setAttribute('draggable', 'false');
+          // 已有 wrap,但可能缺 zoom 按钮(旧数据兼容)
+          if (!parent.querySelector('.media-zoom')) {
+            const zoom = document.createElement('button');
+            zoom.type = 'button';
+            zoom.className = 'media-zoom';
+            zoom.title = '弹窗放大预览(可拖动 + 调整大小)';
+            zoom.textContent = '⛶';
+            const existDel = parent.querySelector('.media-del');
+            if (existDel) parent.insertBefore(zoom, existDel);
+            else parent.appendChild(zoom);
+          }
+          return;
+        }
+        const wrap = document.createElement('span');
+        wrap.className = 'media-wrap';
+        wrap.contentEditable = 'false';
+        wrap.setAttribute('draggable', 'false');
+        parent.insertBefore(wrap, el);
+        wrap.appendChild(el);
+        const zoom = document.createElement('button');
+        zoom.type = 'button';
+        zoom.className = 'media-zoom';
+        zoom.title = '弹窗放大预览(可拖动 + 调整大小)';
+        zoom.textContent = '⛶';
+        wrap.appendChild(zoom);
+        const del = document.createElement('button');
+        del.type = 'button';
+        del.className = 'media-del';
+        del.title = '删除该媒体(也可按 Backspace/Delete)';
+        del.textContent = '✕';
+        wrap.appendChild(del);
+      });
+    };
+    window.bindRichMedia = function bindRichMedia(cell) {
+      // 粘贴：文件(图/视频) + 文本(视频 URL/B站/YT)
+      cell.addEventListener('paste', e => {
+        // 文件优先(图/视频)— 都拦截后自己生成带 ✕ 的 wrapper
+        const items = e.clipboardData ? e.clipboardData.items : null;
+        if (items) {
+          for (const item of items) {
+            if (item.kind === 'file') {
+              const file = item.getAsFile();
+              if (file && (file.type.startsWith('image/') || file.type.startsWith('video/'))) {
+                e.preventDefault();
+                tryEmbedFile(file, cell);
+                return;
+              }
+            }
+          }
+        }
+        // 文本：检测视频 URL
+        const text = e.clipboardData ? e.clipboardData.getData('text/plain') : '';
+        if (text && tryEmbedVideoUrl(text, cell)) {
+          e.preventDefault();
+          return;
+        }
+      });
+
+      // 键盘删除媒体(光标紧邻媒体时 Backspace/Delete 删除整个媒体)
+      cell.addEventListener('keydown', e => {
+        if (e.key !== 'Backspace' && e.key !== 'Delete') return;
+        const sel = window.getSelection();
+        if (!sel || !sel.rangeCount) return;
+        const range = sel.getRangeAt(0);
+        if (!range.collapsed) return; // 有选区让默认删除
+        const node = range.startContainer;
+        const offset = range.startOffset;
+        let target = null;
+        const isMediaWrap = n => n && n.nodeType === Node.ELEMENT_NODE && n.classList && n.classList.contains('media-wrap');
+        if (e.key === 'Backspace') {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const prev = node.childNodes[offset - 1];
+            if (isMediaWrap(prev)) target = prev;
+          } else if (node.nodeType === Node.TEXT_NODE && offset === 0) {
+            let prev = node.previousSibling;
+            while (prev && prev.nodeType === Node.TEXT_NODE && !prev.textContent.trim()) prev = prev.previousSibling;
+            if (isMediaWrap(prev)) target = prev;
+          }
+        } else {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const next = node.childNodes[offset];
+            if (isMediaWrap(next)) target = next;
+          } else if (node.nodeType === Node.TEXT_NODE && offset === node.length) {
+            let next = node.nextSibling;
+            while (next && next.nodeType === Node.TEXT_NODE && !next.textContent.trim()) next = next.nextSibling;
+            if (isMediaWrap(next)) target = next;
+          }
+        }
+        if (target) {
+          e.preventDefault();
+          target.remove();
+          cell.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
+      // 禁止单元格内已存在的媒体被拖动(防止浏览器原生 HTML 拖拽，把 video 当 HTML 复制到 cell 内造成重复插入)
+      cell.addEventListener('dragstart', e => {
+        if (e.target.closest('.media-wrap')) {
+          e.preventDefault();
+        }
+      });
+      // 拖拽：仅响应外部文件
+      cell.addEventListener('dragover', e => {
+        if (!e.dataTransfer) return;
+        const types = e.dataTransfer.types || [];
+        // 仅当包含外部文件时高亮(拖拽页面内元素时 types 通常含 text/html 但不含 Files)
+        if ((types.indexOf ? types.indexOf('Files') : Array.from(types).indexOf('Files')) !== -1) {
+          e.preventDefault();
+          cell.classList.add('drag-over');
+        }
+      });
+      cell.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
+      cell.addEventListener('drop', e => {
+        cell.classList.remove('drag-over');
+        // 拖入的是外部文件 → 处理
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+          e.preventDefault();
+          cell.focus();
+          for (const file of e.dataTransfer.files) tryEmbedFile(file, cell);
+          return;
+        }
+        // 拖动的是页面内 HTML(如已有的 video)→ 阻止默认行为，避免复制粘贴造成重复
+        if (e.dataTransfer && e.dataTransfer.types && Array.from(e.dataTransfer.types).indexOf('text/html') !== -1) {
+          e.preventDefault();
+        }
+      });
+    };
+
+    // 1.2a 注入"参考"列 + "产出/协作"列(都可编辑富媒体，独立持久化 + IDB 兜底)
+    //   kind='ref'     → 策划提供的参考材料(蓝调)
+    //   kind='contrib' → 美术/特效/音效填的产出(金调)
+    const MEDIA_CELL_CONF = {
+      ref:     { cls: 'ref-cell',     keyPfx: 'ref-',     ph: '📚 策划参考(链接/截图/视频)…' },
+      contrib: { cls: 'contrib-cell', keyPfx: 'contrib-', ph: '📎 你的产出(链接/截图/视频)…' },
+    };
+    function makeMediaCell(tr, kind, providedTbl) {
+      const conf = MEDIA_CELL_CONF[kind];
+      const td = document.createElement('td');
+      td.className = conf.cls;
+      td.contentEditable = 'true';
+      td.setAttribute('data-placeholder', conf.ph);
+      const tbl = providedTbl || tr.closest('table');
+      const tid = tbl ? tbl.getAttribute('data-tid') : null;
+      const rid = tr.getAttribute('data-rid');
+      const fullKey = (t, r) => LS_PREFIX + conf.keyPfx + t + '-' + r;
+      if (tid && rid) {
+        const saved = __LS.getItem(fullKey(tid, rid));
+        if (saved === '__IDB__' && window.__loadContribFromIDB) {
+          window.__loadContribFromIDB(conf.keyPfx + tid, rid).then(html => {
+            if (html) {
+              td.innerHTML = html;
+              if (typeof window.wrapLooseMedia === 'function') window.wrapLooseMedia(td);
+              td.setAttribute('data-empty', td.textContent.trim() === '' ? 'true' : 'false');
+            }
+          }).catch(err => console.warn('IDB load failed:', err));
+        } else if (saved) {
+          td.innerHTML = saved;
+          if (typeof window.wrapLooseMedia === 'function') window.wrapLooseMedia(td);
+        }
+      }
+      const setEmpty = () => td.setAttribute('data-empty', td.textContent.trim() === '' ? 'true' : 'false');
+      setEmpty();
+      td.addEventListener('input', () => {
+        setEmpty();
+        const t = tr.closest('table') || providedTbl;
+        const _tid = t ? t.getAttribute('data-tid') : null;
+        const _rid = tr.getAttribute('data-rid');
+        if (!_tid || !_rid) return;
+        try {
+          __LS.setItem(fullKey(_tid, _rid), td.innerHTML);
+        } catch (e) {
+          if (e && e.name === 'QuotaExceededError') {
+            if (window.__saveContribToIDB) {
+              window.__saveContribToIDB(conf.keyPfx + _tid, _rid, td.innerHTML).then(() => {
+                try { __LS.setItem(fullKey(_tid, _rid), '__IDB__'); } catch (e2) {}
+              }).catch(err => {
+                alert('⚠️ 浏览器存储已满，且 IndexedDB 兜底也失败：' + err.message + '\n\n建议改贴链接(网盘/B站/YouTube)');
+              });
+            } else {
+              alert('⚠️ 浏览器存储已满！\n你的修改未保存。请删除大图/视频或改用链接形式。');
+            }
+          }
+        }
+      });
+      td.addEventListener('blur', setEmpty);
+      if (window.bindRichMedia) window.bindRichMedia(td);
+      return td;
+    }
+    // 向后兼容包装
+    function makeContribCell(tr, providedTbl) { return makeMediaCell(tr, 'contrib', providedTbl); }
+    function makeRefCell(tr, providedTbl) { return makeMediaCell(tr, 'ref', providedTbl); }
+
+    // 先注入"参考"列，再注入"产出/协作"列(顺序：数据列 → 参考 → 产出 → 操作)
+    document.querySelectorAll('.res-table').forEach(tbl => {
+      const theadTr = tbl.querySelector('thead tr');
+      if (theadTr && !theadTr.querySelector('.ref-th')) {
+        const th = document.createElement('th');
+        th.className = 'ref-th';
+        th.textContent = '📚 参考';
+        theadTr.appendChild(th);
+      }
+      tbl.querySelectorAll('tbody tr').forEach(tr => {
+        if (tr.querySelector('.ref-cell')) return;
+        tr.appendChild(makeRefCell(tr));
+      });
+    });
+    document.querySelectorAll('.res-table').forEach(tbl => {
+      const theadTr = tbl.querySelector('thead tr');
+      if (theadTr && !theadTr.querySelector('.contrib-th')) {
+        const th = document.createElement('th');
+        th.className = 'contrib-th';
+        th.textContent = '📎 产出/协作';
+        theadTr.appendChild(th);
+      }
+      tbl.querySelectorAll('tbody tr').forEach(tr => {
+        if (tr.querySelector('.contrib-cell')) return;
+        tr.appendChild(makeContribCell(tr));
+      });
+    });
+
+    // 1.2b 注入"操作"列(thead 加 th + 每行 tbody 加 cb-cell,放在 contrib 之后)
+    document.querySelectorAll('.res-table').forEach(tbl => {
+      const theadTr = tbl.querySelector('thead tr');
+      if (theadTr && !theadTr.querySelector('.cb-th')) {
+        const th = document.createElement('th');
+        th.className = 'cb-th';
+        th.textContent = '操作';
+        theadTr.appendChild(th);
+      }
+      tbl.querySelectorAll('tbody tr').forEach(tr => {
+        if (tr.querySelector('.cb-cell')) return;
+        tr.appendChild(makeActionCell(tr, 'view'));
+      });
+    });
+
+    // 1.3 注入"+ 新增资源"按钮(所有 res-table 都注入，复用表也允许新增 ——
+    //     评审过程会发现"还有别的复用资源该归这里"，必须能直接加;
+    //     新增的复用行依旧继承 .reuse-table 的视觉降权与"无需新产出"占位语义)
+    document.querySelectorAll('.res-table').forEach(tbl => {
+      if (tbl.nextElementSibling?.classList.contains('add-row-btn')) return;
+      const btn = document.createElement('button');
+      btn.className = 'add-row-btn';
+      btn.textContent = '新增资源';
+      btn.addEventListener('click', () => addNewRow(tbl));
+      tbl.parentNode.insertBefore(btn, tbl.nextSibling);
+    });
+
+    // === 操作列工厂(view 模式 / edit 模式) ===
+    function makeActionCell(tr, mode) {
+      const td = document.createElement('td');
+      td.className = 'cb-cell';
+      if (mode === 'view') {
+        const editBtn = document.createElement('span');
+        editBtn.className = 'row-action-btn row-edit-btn';
+        editBtn.textContent = '编辑';
+        editBtn.title = '编辑本行内容';
+        editBtn.addEventListener('click', e => { e.stopPropagation(); enterEditMode(tr); });
+        td.appendChild(editBtn);
+        // 划除按钮(view 模式可见) — 提供明确入口，不依赖"点空白处"
+        const isCut = tr.classList.contains('is-deleted');
+        const cutBtn = document.createElement('span');
+        cutBtn.className = 'row-action-btn row-cut-btn' + (isCut ? ' restore' : '');
+        cutBtn.textContent = isCut ? '恢复' : '划除';
+        cutBtn.title = '划除本行(标记移出方案) / 再点恢复';
+        cutBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          tr.classList.toggle('is-deleted');
+          saveDeleted();
+          const cut = tr.classList.contains('is-deleted');
+          cutBtn.textContent = cut ? '恢复' : '划除';
+          cutBtn.classList.toggle('restore', cut);
+        });
+        td.appendChild(cutBtn);
+      } else if (mode === 'edit') {
+        const okBtn = document.createElement('span');
+        okBtn.className = 'row-action-btn row-confirm-btn';
+        okBtn.textContent = '确定';
+        okBtn.title = '保存编辑内容并锁定本行';
+        okBtn.addEventListener('click', e => { e.stopPropagation(); exitEditMode(tr); });
+        td.appendChild(okBtn);
+        const cutBtn = document.createElement('span');
+        cutBtn.className = 'row-action-btn row-remove-btn';
+        cutBtn.textContent = '划除';
+        cutBtn.title = '划除本行(跟点击行空白处效果一致，可再次点击恢复)';
+        cutBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          exitEditMode(tr);          // 先退出编辑态
+          tr.classList.add('is-deleted');
+          saveDeleted();
+        });
+        td.appendChild(cutBtn);
+      }
+      return td;
+    }
+
+    function refreshActionCell(tr, mode) {
+      const old = tr.querySelector('.cb-cell');
+      if (old) old.remove();
+      tr.appendChild(makeActionCell(tr, mode));
+    }
+
+    // === 进入/退出 编辑态 ===
+    function enterEditMode(tr) {
+      tr.classList.add('is-editing');
+      tr.classList.remove('is-deleted'); // 编辑时取消划线
+      // 数据列设可编辑
+      const tds = tr.querySelectorAll('td');
+      tds.forEach((td, i) => {
+        if (td.classList.contains('cb-cell')) return;
+        if (td.classList.contains('ref-cell') || td.classList.contains('contrib-cell')) return; // 参考/产出列始终可编辑，不受编辑态控制
+        if (i === 0) return; // # 列不可编辑
+        td.contentEditable = 'true';
+        if (!td.getAttribute('data-placeholder')) {
+          td.setAttribute('data-placeholder', i === 1 ? '填动作名…' : (i === 2 ? '填资产名…' : '填内容…'));
+        }
+        updateEmptyState(td);
+        if (!td._editBound) {
+          td.addEventListener('input', () => updateEmptyState(td));
+          td.addEventListener('blur', () => updateEmptyState(td));
+          td._editBound = true;
+        }
+      });
+      refreshActionCell(tr, 'edit');
+      // 自动聚焦第二列
+      const focusTd = tr.querySelector('td:nth-child(2)');
+      if (focusTd) focusTd.focus();
+      saveDeleted(); // 之前可能被划线状态，save 一下
+    }
+
+    function exitEditMode(tr) {
+      // 新增行 + 全空 → 直接丢弃，不保存
+      if (tr.hasAttribute('data-added')) {
+        const allTds = tr.querySelectorAll('td');
+        let allEmpty = true;
+        for (let i = 1; i < allTds.length - 3; i++) { // 跳过 # 和最后三列(参考 + 协作 + 操作)
+          if (allTds[i].textContent.trim() !== '') { allEmpty = false; break; }
+        }
+        if (allEmpty) {
+          const tbl = tr.closest('table');
+          tr.remove();
+          renumberDisplayedIdx(tbl);
+          saveAddedRows();
+          return;
+        }
+      }
+      tr.classList.remove('is-editing');
+      // 锁定数据列
+      tr.querySelectorAll('td').forEach((td, i) => {
+        if (td.classList.contains('cb-cell')) return;
+        if (td.classList.contains('ref-cell') || td.classList.contains('contrib-cell')) return; // 参考/产出列始终可编辑
+        if (i === 0) return;
+        td.contentEditable = 'false';
+        td.removeAttribute('data-placeholder');
+        td.removeAttribute('data-empty');
+      });
+      refreshActionCell(tr, 'view');
+      // 持久化编辑结果
+      if (tr.hasAttribute('data-added')) {
+        saveAddedRows();
+      } else {
+        saveStaticEdits(tr);
+      }
+      // 同步更新数字(退出编辑态后行重新计入统计)
+      if (typeof updateAllRowCounts === 'function') updateAllRowCounts();
+    }
+
+    // (永久删除功能已移除 — 改为"划除"toggle is-deleted)
+
+    function updateEmptyState(td) {
+      td.setAttribute('data-empty', td.textContent.trim() === '' ? 'true' : 'false');
+    }
+    function renumberDisplayedIdx(tbl) {
+      // 重排显示序号(td:first-child),rid 保持不变
+      tbl.querySelectorAll('tbody tr').forEach((tr, idx) => {
+        const firstTd = tr.querySelector('td:first-child');
+        if (firstTd && !firstTd.querySelector('span.row-cb-wrap')) {
+          firstTd.textContent = idx + 1;
+        }
+      });
+    }
+
+    // === 持久化：划线状态 ===
+    function loadDeleted() {
+      const arr = JSON.parse(__LS.getItem(LS_PREFIX + 'deleted-rows') || '[]');
+      arr.forEach(k => {
+        const [tid, rid] = k.split('|');
+        const tr = document.querySelector(`.res-table[data-tid="${tid}"] tr[data-rid="${rid}"]`);
+        if (tr) tr.classList.add('is-deleted');
+      });
+    }
+    function saveDeleted() {
+      const arr = [];
+      document.querySelectorAll('.res-table tbody tr.is-deleted').forEach(tr => {
+        const tid = tr.closest('table').getAttribute('data-tid');
+        const rid = tr.getAttribute('data-rid');
+        if (tid && rid) arr.push(tid + '|' + rid);
+      });
+      __LS.setItem(LS_PREFIX + 'deleted-rows', JSON.stringify(arr));
+      // 同步更新数字(双保险，不依赖 MutationObserver)
+      if (typeof updateAllRowCounts === 'function') updateAllRowCounts();
+    }
+
+    // (永久删除静态行的逻辑已废弃 — 一次性清掉残留 storage,让所有被永久删除的预制行恢复)
+    __LS.removeItem(LS_PREFIX + 'removed-static');
+
+    // === 持久化：静态行被编辑过的内容覆盖 ===
+    function saveStaticEdits(tr) {
+      const tid = tr.closest('table').getAttribute('data-tid');
+      const rid = tr.getAttribute('data-rid');
+      const cells = [];
+      const allTds = tr.querySelectorAll('td');
+      for (let i = 1; i < allTds.length - 3; i++) { // 跳过 # 和最后三列(参考 + 协作 + 操作)
+        cells.push(allTds[i].innerHTML);
+      }
+      const data = JSON.parse(__LS.getItem(LS_PREFIX + 'static-edits') || '{}');
+      data[tid + '|' + rid] = cells;
+      __LS.setItem(LS_PREFIX + 'static-edits', JSON.stringify(data));
+    }
+    function applyStaticEdits() {
+      const data = JSON.parse(__LS.getItem(LS_PREFIX + 'static-edits') || '{}');
+      Object.keys(data).forEach(k => {
+        const [tid, rid] = k.split('|');
+        const tr = document.querySelector(`.res-table[data-tid="${tid}"] tr[data-rid="${rid}"]`);
+        if (!tr) return;
+        const cells = data[k];
+        const tds = tr.querySelectorAll('td');
+        cells.forEach((html, i) => {
+          if (tds[i + 1] && !tds[i + 1].classList.contains('cb-cell')) {
+            tds[i + 1].innerHTML = html;
+          }
+        });
+      });
+    }
+
+    // === 持久化：用户新增行(兼容旧 new-rows 数据) ===
+    function loadAddedRows() {
+      // 优先读新 key,兼容旧 key
+      let data = JSON.parse(__LS.getItem(LS_PREFIX + 'added-rows') || 'null');
+      if (!data) {
+        data = JSON.parse(__LS.getItem(LS_PREFIX + 'new-rows') || '{}');
+      }
+      let nidCounter = {};
+      Object.keys(data).forEach(tid => {
+        const tbl = document.querySelector(`.res-table[data-tid="${tid}"]`);
+        if (!tbl) return;
+        nidCounter[tid] = 0;
+        data[tid].forEach(rowData => {
+          let cells, confirmed;
+          if (Array.isArray(rowData)) { cells = rowData; confirmed = false; }
+          else { cells = rowData.cells; confirmed = !!rowData.confirmed; }
+          const rid = 'n' + (nidCounter[tid]++);
+          buildAddedRow(tbl, rid, cells, confirmed);
+        });
+      });
+      document.querySelectorAll('.res-table').forEach(renumberDisplayedIdx);
+    }
+    function saveAddedRows() {
+      const data = {};
+      document.querySelectorAll('.res-table').forEach(tbl => {
+        const tid = tbl.getAttribute('data-tid');
+        const rows = [];
+        tbl.querySelectorAll('tbody tr[data-added]').forEach(tr => {
+          const cells = [];
+          const allTds = tr.querySelectorAll('td');
+          for (let i = 1; i < allTds.length - 3; i++) { // 跳过 # 和最后三列(参考 + 协作 + 操作)
+            cells.push(allTds[i].innerHTML);
+          }
+          rows.push({
+            cells: cells,
+            confirmed: !tr.classList.contains('is-editing')
+          });
+        });
+        if (rows.length) data[tid] = rows;
+      });
+      __LS.setItem(LS_PREFIX + 'added-rows', JSON.stringify(data));
+    }
+
+    function addNewRow(tbl) {
+      // 计算下一个 nid
+      let maxN = -1;
+      tbl.querySelectorAll('tbody tr[data-added]').forEach(tr => {
+        const rid = tr.getAttribute('data-rid') || '';
+        if (rid.startsWith('n')) {
+          const n = parseInt(rid.slice(1));
+          if (!isNaN(n) && n > maxN) maxN = n;
+        }
+      });
+      const nid = 'n' + (maxN + 1);
+      const tr = buildAddedRow(tbl, nid, null, false);
+      renumberDisplayedIdx(tbl);
+      saveAddedRows();
+      // 聚焦第二列
+      const focusTd = tr.querySelector('td:nth-child(2)');
+      if (focusTd) focusTd.focus();
+    }
+
+    function buildAddedRow(tbl, rid, cells, confirmed) {
+      const thead = tbl.querySelector('thead tr');
+      const colCount = thead.children.length;
+      // 排除最后 3 列(参考列 + 协作列 + 操作列),剩下是数据列
+      const dataColCount = colCount - 3;
+      const tbody = tbl.querySelector('tbody');
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-added', '1');
+      tr.setAttribute('data-rid', rid);
+      if (!confirmed) tr.classList.add('is-editing');
+      for (let i = 0; i < dataColCount; i++) {
+        const td = document.createElement('td');
+        if (i === 0) {
+          td.textContent = ''; // 占位，稍后 renumberDisplayedIdx 填入
+        } else {
+          if (i === 2) td.className = 'asset-cell'; // 资产名称列(动作列后)
+          if (!confirmed) {
+            td.contentEditable = 'true';
+            td.setAttribute('data-placeholder', i === 1 ? '填动作名…' : (i === 2 ? '填资产名…' : '填内容…'));
+            td.addEventListener('input', () => updateEmptyState(td));
+            td.addEventListener('blur', () => updateEmptyState(td));
+            td._editBound = true;
+          }
+          if (cells && cells[i - 1] !== undefined) td.innerHTML = cells[i - 1];
+          if (!confirmed) updateEmptyState(td);
+        }
+        tr.appendChild(td);
+      }
+      // 参考列 + 协作列 + 操作列(传入 tbl 避免 tr.closest 返回 null)
+      tr.appendChild(makeRefCell(tr, tbl));
+      tr.appendChild(makeContribCell(tr, tbl));
+      tr.appendChild(makeActionCell(tr, confirmed ? 'view' : 'edit'));
+      tbody.appendChild(tr);
+      return tr;
+    }
+
+    // === 媒体按钮 mousedown 拦截：防止 contenteditable 抢焦点导致 click 被吞 ===
+    document.addEventListener('mousedown', e => {
+      if (e.target.closest('.media-zoom, .media-del')) {
+        e.preventDefault();
+      }
+    });
+
+    // === 媒体 ✕ 按钮点击委托(删除当前媒体 wrap) ===
+    document.addEventListener('click', e => {
+      const del = e.target.closest('.media-del');
+      if (!del) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const wrap = del.closest('.media-wrap');
+      const host = del.closest('.contrib-cell, .note-content');
+      if (wrap) wrap.remove();
+      if (host) host.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    // === 媒体 ⛶ 放大按钮 → 弹窗预览 ===
+    document.addEventListener('click', e => {
+      const zoom = e.target.closest('.media-zoom');
+      if (!zoom) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const wrap = zoom.closest('.media-wrap');
+      if (!wrap) {
+        console.warn('⛶ 找不到 .media-wrap');
+        return;
+      }
+      const media = wrap.querySelector('video, iframe, img');
+      if (!media) {
+        console.warn('⛶ 找不到 video/iframe/img');
+        return;
+      }
+      if (typeof window.__openMediaPopup !== 'function') {
+        console.warn('⛶ __openMediaPopup 未定义');
+        alert('弹窗未初始化，请刷新页面试试。');
+        return;
+      }
+      window.__openMediaPopup(media);
+    });
+
+    // === 全局点击：点行任意空白(非按钮、非编辑区) → toggle is-deleted ===
+    document.addEventListener('click', e => {
+      if (e.target.closest('[contenteditable="true"]')) return;
+      if (e.target.closest('.add-row-btn, .clear-btn, .note-content, .float-toc, .tab-btn, .row-action-btn, .media-del, .media-zoom, .media-popup, .popup-close')) return;
+      const tr = e.target.closest('.res-table tbody tr');
+      if (!tr) return;
+      if (tr.classList.contains('is-editing')) return; // 编辑态不响应划线
+      tr.classList.toggle('is-deleted');
+      saveDeleted();
+    });
+
+    // === 监听编辑态 input,实时存草稿(避免编辑中刷新丢字) ===
+    document.addEventListener('input', e => {
+      const tr = e.target.closest('.res-table tbody tr.is-editing');
+      if (!tr) return;
+      if (tr.hasAttribute('data-added')) {
+        saveAddedRows();
+      } else {
+        saveStaticEdits(tr);
+      }
+    });
+
+    // === 启动 ===
+    applyStaticEdits();     // 1. 应用静态行内容覆盖
+    loadAddedRows();        // 2. 加载用户新增行
+    loadDeleted();          // 3. 加载划线状态
+    document.querySelectorAll('.res-table').forEach(renumberDisplayedIdx);
+
+    // === 章节数量自动同步 ===
+    // 把 h4 里的"X 个 / X 项"替换为实时统计(剔除划除行 + 编辑态草稿) + 包裹 .dyn-count 高亮
+    function updateAllRowCounts() {
+      try {
+        // === 1. 更新 h4 标题里的"X 个 / X 项" ===
+        document.querySelectorAll('#assets h4').forEach(h4 => {
+          if (!/\d+\s*[个项]/.test(h4.textContent)) return;
+          let sib = h4.nextElementSibling;
+          while (sib && !sib.matches('.res-table')) {
+            if (sib.matches('h3, h4')) return;
+            sib = sib.nextElementSibling;
+          }
+          if (!sib) return;
+          let count = 0;
+          sib.querySelectorAll('tbody tr').forEach(tr => {
+            if (tr.classList.contains('is-deleted')) return;
+            if (tr.classList.contains('is-editing')) return;
+            count++;
+          });
+          let html = h4.innerHTML.replace(/<span class="dyn-count">(\d+)<\/span>/g, '$1');
+          html = html.replace(/(\d+)(\s*[个项])/, '<span class="dyn-count">' + count + '</span>$2');
+          if (html !== h4.innerHTML) h4.innerHTML = html;
+        });
+
+        // === 2. 更新顶部"新增工作量汇总"卡片 ===
+        // 6 个 h3 章节(一/二/三/四/五/六) 对应 6 张卡；每个 h3 下统计所有"非复用"res-table 的有效行
+        const sumCards = document.querySelectorAll('.res-summary .res-sum-card');
+        const catH3s = Array.from(document.querySelectorAll('#assets h3'))
+          .filter(h3 => /^[一二三四六]、/.test(h3.textContent)); // 跳过「五、场景/演出」(无量化资源,无对应卡,避免程序卡错位)
+        catH3s.forEach((h3, idx) => {
+          if (!sumCards[idx]) return;
+          let total = 0;
+          let sib = h3.nextElementSibling;
+          while (sib && !sib.matches('h3')) {
+            if (sib.matches('.res-table')) {
+              // 看紧邻前一个 h4 标题是否含"复用",有则不计入新增
+              let prev = sib.previousElementSibling;
+              while (prev && !prev.matches('h4, h3')) prev = prev.previousElementSibling;
+              const isReuse = prev && /复用/.test(prev.textContent);
+              if (!isReuse) {
+                sib.querySelectorAll('tbody tr').forEach(tr => {
+                  if (tr.classList.contains('is-deleted')) return;
+                  if (tr.classList.contains('is-editing')) return;
+                  total++;
+                });
+              }
+            }
+            sib = sib.nextElementSibling;
+          }
+          const nEl = sumCards[idx].querySelector('.n');
+          if (nEl && nEl.textContent !== String(total)) {
+            nEl.textContent = String(total);
+            // 数字变化高亮 0.6s(金色 + 放大)
+            nEl.classList.add('pulse');
+            clearTimeout(nEl._pulseT);
+            nEl._pulseT = setTimeout(() => nEl.classList.remove('pulse'), 600);
+          }
+        });
+      } catch (e) { console.warn('updateAllRowCounts failed:', e); }
+    }
+    let _cntTimer;
+    const scheduleCountUpdate = () => {
+      clearTimeout(_cntTimer);
+      _cntTimer = setTimeout(updateAllRowCounts, 60);
+    };
+    const _assetsEl = document.getElementById('assets');
+    if (_assetsEl && typeof MutationObserver !== 'undefined') {
+      try {
+        new MutationObserver(scheduleCountUpdate).observe(_assetsEl, {
+          attributes: true,
+          attributeFilter: ['class'],
+          subtree: true,
+          childList: true,
+        });
+      } catch (e) { console.warn('MutationObserver setup failed:', e); }
+    }
+    // 多次调用保险：某些时序下首次调用可能因 DOM 还未稳定而漏处理
+    updateAllRowCounts();
+    setTimeout(updateAllRowCounts, 100);
+    setTimeout(updateAllRowCounts, 500);
+    // 暴露到 window,方便其他 init 块(媒体弹窗等)在 DOM 变化后手动触发
+    window.__updateAllCounts = updateAllRowCounts;
+  })();
+
+  // === 媒体放大浮窗(可拖拽 + resize)— 懒查找版，确保任意时机调用都能 work ===
+  function __getPopupEls() {
+    return {
+      popup: document.getElementById('mediaPopup'),
+      backdrop: document.getElementById('mediaPopupBackdrop'),
+      body: document.getElementById('mediaPopupBody'),
+      header: document.getElementById('mediaPopupHeader'),
+      close: document.getElementById('mediaPopupClose'),
+    };
+  }
+  function __clearPopupBody(body) {
+    if (!body) return;
+    Array.from(body.children).forEach(c => {
+      if (!c.classList.contains('popup-resize-hint')) c.remove();
+    });
+  }
+  // 立即定义到 window — 不管 init 是否跑过，都能用
+  window.__openMediaPopup = function openMediaPopup(mediaEl) {
+    const els = __getPopupEls();
+    if (!els.popup || !els.body) {
+      console.error('未找到弹窗 DOM:', els);
+      alert('未找到弹窗 DOM 节点(mediaPopup / mediaPopupBody),HTML 可能不完整。');
+      return;
+    }
+    __clearPopupBody(els.body);
+    const clone = mediaEl.cloneNode(true);
+    if (clone.tagName === 'VIDEO') {
+      clone.setAttribute('controls', '');
+      clone.removeAttribute('autoplay');
+    }
+    els.body.insertBefore(clone, els.body.firstChild);
+    els.popup.classList.add('show');
+    if (els.backdrop) els.backdrop.classList.add('show');
+  };
+  window.__closeMediaPopup = function closeMediaPopup() {
+    const els = __getPopupEls();
+    if (!els.popup) return;
+    els.popup.classList.remove('show');
+    if (els.backdrop) els.backdrop.classList.remove('show');
+    if (els.body) {
+      els.body.querySelectorAll('video').forEach(v => { try { v.pause(); } catch (e) {} });
+      __clearPopupBody(els.body);
+    }
+  };
+
+  // 初始化关闭按钮 + Esc + 拖拽(可重试，即使 IIFE 启动时元素不存在也不影响)
+  (function bindPopupInteractions() {
+    const els = __getPopupEls();
+    if (els.close) els.close.addEventListener('click', window.__closeMediaPopup);
+    if (els.backdrop) els.backdrop.addEventListener('click', window.__closeMediaPopup);
+    document.addEventListener('keydown', e => {
+      const popup = document.getElementById('mediaPopup');
+      if (e.key === 'Escape' && popup && popup.classList.contains('show')) {
+        window.__closeMediaPopup();
+      }
+    });
+    // 拖拽
+    if (els.header && els.popup) {
+      let dragging = false, dx = 0, dy = 0;
+      els.header.addEventListener('mousedown', e => {
+        if (e.target.closest('.popup-close')) return;
+        const rect = els.popup.getBoundingClientRect();
+        dragging = true;
+        dx = e.clientX - rect.left;
+        dy = e.clientY - rect.top;
+        els.popup.style.marginLeft = '0';
+        els.popup.style.left = rect.left + 'px';
+        els.popup.style.top = rect.top + 'px';
+        e.preventDefault();
+      });
+      document.addEventListener('mousemove', e => {
+        if (!dragging) return;
+        let nx = Math.max(0, Math.min(window.innerWidth - 40, e.clientX - dx));
+        let ny = Math.max(0, Math.min(window.innerHeight - 30, e.clientY - dy));
+        els.popup.style.left = nx + 'px';
+        els.popup.style.top = ny + 'px';
+      });
+      document.addEventListener('mouseup', () => { dragging = false; });
+    }
+  })();
+
+  // === 协作工具：导出 / 重置 ===
+  (function initCollab() {
+    // 导出修改版(async — 含 IndexedDB 大文件)
+    document.getElementById('exportBtn')?.addEventListener('click', async () => {
+      try {
+        // 1. 收集 LS_PREFIX 数据
+        const data = {};
+        Object.keys(__LS).forEach(k => {
+          if (k.startsWith(LS_PREFIX)) data[k] = __LS.getItem(k);
+        });
+        // 2. 收集 IndexedDB 数据(大视频等)
+        let idbData = {};
+        if (window.__getAllContribFromIDB) {
+          try { idbData = await window.__getAllContribFromIDB(); } catch (e) { console.warn('IDB collect failed:', e); }
+        }
+        const defaultName = (typeof window.__getEditorName === 'function' ? window.__getEditorName() : '') || '';
+        const meta = {
+          exporter: prompt('请输入你的角色/姓名(选填，用于收件人识别),例如"美术 A / 张三":', defaultName) || '匿名',
+          exportedAt: new Date().toISOString(),
+        };
+        const idbCount = Object.keys(idbData).length;
+        const idbBytes = Object.values(idbData).reduce((sum, v) => sum + (v ? v.length : 0), 0);
+        if (idbCount > 0) {
+          if (!confirm('检测到 ' + idbCount + ' 个大文件存在 IndexedDB,总计约 ' + (idbBytes/1024/1024).toFixed(1) + ' MB。\n\n是否一同打包到导出文件？(否则只导出 __LS 部分)\n\n注意：含大视频的 HTML 文件会很大，传输可能慢。')) {
+            idbData = {}; // 用户选不打包
+          }
+        }
+        // 3. 取原始 HTML(在 init 之前备份的快照)
+        let html = window.__ORIGINAL_HTML__ || ('<!DOCTYPE html>\n' + document.documentElement.outerHTML);
+        // 4. 移除旧内嵌脚本
+        //    ⚠️ 正则与内嵌脚本开标签都必须用字符串拼接构造 —— 本段源码里绝不能出现完整连续的
+        //    embed 开标签字面量，否则它会被快照进 __ORIGINAL_HTML__,正则会从本段源码处开始
+        //    误匹配，一路非贪婪吃到主脚本真正的结尾标签，把文档尾部整段删掉(导出文件被截断)。
+        const embedOpenTag = '<scr' + 'ipt id="__embed_state__">';
+        html = html.replace(new RegExp('<scr' + 'ipt id="__embed_state__">[\\s\\S]*?<\\/script>', 'g'), '');
+        // 5. 注入新数据脚本
+        const dataScript =
+          embedOpenTag +
+          'window.__EMBED_STATE__ = ' + JSON.stringify(data) + ';' +
+          'window.__EMBED_IDB__ = ' + JSON.stringify(idbData) + ';' +
+          'window.__EMBED_META__ = ' + JSON.stringify(meta) + ';' +
+          '<\/script>';
+        html = html.replace('</head>', dataScript + '\n</head>');
+        // 6. 触发下载
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        const now = new Date();
+        const ts = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+        const safeName = (meta.exporter || 'collab').replace(/[\\/:*?"<>|]/g, '_');
+        a.download = '战斗设计_审阅稿_' + ts + '_' + safeName + '.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+        const sizeMB = (blob.size / 1024 / 1024).toFixed(1);
+        alert('✅ 已导出：' + a.download + ' (' + sizeMB + ' MB)\n\n请将此文件发回给设计师 / 团队。\n收件人打开后，文档会自动询问是否加载你的修改。');
+      } catch (e) {
+        alert('❌ 导出失败：' + e.message);
+        console.error(e);
+      }
+    });
+
+    // 重置本地(含 IndexedDB)
+    document.getElementById('resetBtn')?.addEventListener('click', async () => {
+      const localKeys = Object.keys(__LS).filter(k => k.startsWith(LS_PREFIX));
+      let idbCount = 0;
+      if (window.__getAllContribFromIDB) {
+        try { idbCount = Object.keys(await window.__getAllContribFromIDB()).length; } catch (e) {}
+      }
+      if (localKeys.length === 0 && idbCount === 0) {
+        alert('本地暂无协作数据，无需重置。');
+        return;
+      }
+      if (!confirm(
+        '清空本地所有协作数据 (__LS ' + localKeys.length + ' 条 + IndexedDB ' + idbCount + ' 条) ?\n\n' +
+        '包括：评审备注 / 划除标记 / 新增资源 / 编辑覆盖 / 大文件(视频等)。\n\n' +
+        '【适用场景】美术拿到新版 HTML 时清空旧痕迹，从干净状态开始审阅。'
+      )) return;
+      localKeys.forEach(k => __LS.removeItem(k));
+      if (window.__clearContribIDB) await window.__clearContribIDB();
+      alert('✅ 已清空本地数据。页面即将刷新。');
+      location.reload();
+    });
+  })();
+
+  // === 2. 评审备注 持久化 ===
+  (function initNotes() {
+    document.querySelectorAll('.note-aside').forEach(aside => {
+      const key = aside.getAttribute('data-key');
+      const content = aside.querySelector('.note-content');
+      if (!content || !key) return;
+      // 还原
+      const saved = __LS.getItem(LS_PREFIX + key);
+      if (saved) content.innerHTML = saved;
+      // 扫描包裹裸媒体
+      if (typeof window.wrapLooseMedia === 'function') window.wrapLooseMedia(content);
+      // 实时保存(配额异常时提醒)
+      content.addEventListener('input', () => {
+        try {
+          __LS.setItem(LS_PREFIX + key, content.innerHTML);
+        } catch (e) {
+          if (e && e.name === 'QuotaExceededError') {
+            alert('⚠️ 浏览器存储已满！\n你的修改未保存。请删除大图/视频或改用链接形式。');
+          }
+        }
+      });
+      // 富媒体粘贴/拖拽(图/动图/视频/视频URL/B站/YouTube)
+      if (typeof window.bindRichMedia === 'function') window.bindRichMedia(content);
+    });
+    // 清空按钮
+    document.querySelectorAll('.clear-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const key = btn.getAttribute('data-clear');
+        const content = btn.closest('.note-aside').querySelector('.note-content');
+        if (content && confirm('清空本节备注？')) {
+          content.innerHTML = '';
+          __LS.removeItem(LS_PREFIX + key);
+        }
+      });
+    });
+  })();
+
+  // === 改动历史 模块(自动记录 + 翻页 + 点击跳转 + 高亮)===
+  (function initHistory() {
+    const HIST_KEY = LS_PREFIX + '__history__';
+    const EDITOR_KEY = LS_PREFIX + '__editor__';
+    const HIST_MAX = 300;
+    const HIST_DEBOUNCE = 1800;
+    const PAGE_SIZE = 10;
+
+    let currentPage = 1;
+
+    // ---- 存储 ----
+    function getHistory() {
+      try { return JSON.parse(__LS.getItem(HIST_KEY) || '[]'); } catch (e) { return []; }
+    }
+    function saveHistory(arr) {
+      let trimmed = arr.length > HIST_MAX ? arr.slice(-HIST_MAX) : arr;
+      try {
+        __LS.setItem(HIST_KEY, JSON.stringify(trimmed));
+      } catch (e) {
+        if (e && e.name === 'QuotaExceededError') {
+          trimmed = trimmed.slice(-Math.floor(HIST_MAX / 2));
+          try { __LS.setItem(HIST_KEY, JSON.stringify(trimmed)); } catch (e2) {}
+        }
+      }
+    }
+    function getEditor() { return __LS.getItem(EDITOR_KEY) || ''; }
+    function setEditor(v) {
+      v = (v || '').trim();
+      if (v) __LS.setItem(EDITOR_KEY, v);
+      else __LS.removeItem(EDITOR_KEY);
+    }
+
+    // ---- 工具 ----
+    function escapeHtml(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function fmtTs(iso) {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return '';
+      const pad = n => String(n).padStart(2, '0');
+      return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) +
+             ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+    function fmtDate(iso) {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return '';
+      const pad = n => String(n).padStart(2, '0');
+      return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+    }
+
+    // ---- 基线快照 + 内容指纹对比 ----
+    // 用 textContent + 媒体源列表 作为"用户视角的内容指纹",绕开 contenteditable 删空后留 <br>/&nbsp; 等渲染层差异。
+    function elementSignature(el) {
+      if (!el) return '';
+      const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+      const mediaSigs = [];
+      el.querySelectorAll('img, video, iframe').forEach(m => {
+        const src = m.getAttribute('src') || '';
+        mediaSigs.push(m.tagName + ':' + src.slice(0, 200));
+      });
+      return text + '||' + mediaSigs.join('|');
+    }
+    const _baselines = new WeakMap();
+    function snapshotBaseline(el) {
+      if (!el || _baselines.has(el)) return;
+      _baselines.set(el, elementSignature(el));
+    }
+    function isAtBaseline(el) {
+      if (!el || !_baselines.has(el)) return false; // 没基线就不算回到原点(默认会记录)
+      return _baselines.get(el) === elementSignature(el);
+    }
+    // 移除已有的"同 内容块 同编辑者"记录(净结果回到基线时清除痕迹)
+    function removeMatchingEntry(target) {
+      if (!target) return false;
+      const arr = getHistory();
+      const who = getEditor() || '匿名';
+      const tKey = targetKey(target);
+      let changed = false;
+      for (let i = arr.length - 1; i >= 0; i--) {
+        const en = arr[i];
+        if (en.who === who && en.target && targetKey(en.target) === tKey) {
+          arr.splice(i, 1);
+          changed = true;
+          break;
+        }
+      }
+      if (changed) {
+        saveHistory(arr);
+        renderHistory();
+      }
+      return changed;
+    }
+    // 首次 focus 进入某个 contenteditable 时 → 快照基线(用户尚未输入)
+    document.addEventListener('focusin', e => {
+      const t = e.target;
+      if (!t || t.id === 'editorNameInput') return;
+      if (t.isContentEditable) snapshotBaseline(t);
+    }, true);
+    // 初始化后延后一拍批量快照(IDB 异步恢复完之后)
+    setTimeout(() => {
+      document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+        if (el.id === 'editorNameInput') return;
+        snapshotBaseline(el);
+      });
+    }, 600);
+    function actionLabel(a) {
+      return ({ edit:'编辑', clear:'清空', 'add-row':'新增', 'delete-row':'划除', 'restore-row':'恢复' })[a] || a;
+    }
+    function cssEscape(s) {
+      if (typeof CSS !== 'undefined' && CSS.escape) return CSS.escape(String(s));
+      return String(s).replace(/(["\\])/g, '\\$1');
+    }
+    // 同 target 同 scope 的"内容块"标识(用于合并 — 同一编辑者对同一块内容的多次操作只留一条最终状态)
+    function targetKey(t) {
+      if (!t || !t.type) return null;
+      if (t.type === 'note') return 'note:' + t.key;
+      if (t.type === 'cell') return 'cell:' + t.tid + '/' + t.rid + '/' + (t.cellClass || ('col' + t.colIdx));
+      if (t.type === 'row')  return 'row:'  + t.tid + '/' + t.rid;
+      return null;
+    }
+
+    // ---- 记录(每个 内容块×编辑者 只保留一条最终状态) ----
+    function logEntry(scope, action, summary, target) {
+      if (!scope) return;
+      const arr = getHistory();
+      const nowMs = Date.now();
+      const who = getEditor() || '匿名';
+      const tKey = targetKey(target);
+
+      // 折叠策略：note/cell 的 edit/clear,同 内容块+同编辑者 → 更新已有记录(替换为最新状态)并移到末尾
+      // row 的 add-row / delete-row / restore-row 单独由 logRowToggle 处理 cancel-out,不走本合并
+      const canMerge = tKey && target && (target.type === 'note' || target.type === 'cell') &&
+                       (action === 'edit' || action === 'clear');
+      if (canMerge) {
+        for (let i = arr.length - 1; i >= 0; i--) {
+          const en = arr[i];
+          if (en.who !== who) continue;
+          if (!en.target || targetKey(en.target) !== tKey) continue;
+          if (en.action !== 'edit' && en.action !== 'clear') continue;
+          // 命中 — 更新内容 + 移到末尾(保持时间序：最新在最后)
+          arr.splice(i, 1);
+          en.ts = new Date(nowMs).toISOString();
+          en.scope = scope;
+          en.summary = summary || '';
+          en.target = target;
+          // count 仅对"相同 action 连续重复"计数；action 变化(edit↔clear)重置为 1
+          en.count = (en.action === action) ? ((en.count || 1) + 1) : 1;
+          en.action = action;
+          arr.push(en);
+          saveHistory(arr);
+          currentPage = 1;
+          renderHistory();
+          return;
+        }
+      }
+
+      // 无可合并目标 → 新增
+      const entry = {
+        ts: new Date(nowMs).toISOString(),
+        who: who, scope: scope, action: action,
+        summary: summary || ''
+      };
+      if (target) entry.target = target;
+      arr.push(entry);
+      saveHistory(arr);
+      currentPage = 1;
+      renderHistory();
+    }
+
+    const _debTimers = new WeakMap();
+    function debouncedLog(el, scope, action, summaryFn, target) {
+      const prev = _debTimers.get(el);
+      if (prev) clearTimeout(prev);
+      const t = setTimeout(() => {
+        try {
+          // 净结果回到基线 → 不记录，且清除任何已有的同 内容块/编辑者 痕迹
+          if (isAtBaseline(el)) {
+            removeMatchingEntry(target);
+          } else {
+            logEntry(scope, action, summaryFn(), target);
+          }
+        } catch (e) { console.warn('history log fail:', e); }
+        _debTimers.delete(el);
+      }, HIST_DEBOUNCE);
+      _debTimers.set(el, t);
+    }
+
+    function summaryFromContent(el) {
+      const text = (el.textContent || '').trim().replace(/\s+/g, ' ');
+      const mediaCount = el.querySelectorAll('img, video, iframe').length;
+      const parts = [];
+      if (text.length > 0) {
+        const preview = text.length > 24 ? text.slice(0, 24) + '…' : text;
+        parts.push('文字 ' + text.length + ' 字 「' + preview + '」');
+      }
+      if (mediaCount > 0) parts.push('媒体 ' + mediaCount + ' 个');
+      return parts.length ? parts.join(' · ') : '已清空';
+    }
+
+    // 同时返回 scope(显示)+ target(跳转)
+    function resolveLocation(el) {
+      const noteAside = el.closest && el.closest('.note-aside');
+      if (noteAside) {
+        const key = noteAside.getAttribute('data-key') || '';
+        const label = noteAside.querySelector('.note-label');
+        let txt = label ? (label.firstChild ? label.firstChild.textContent : label.textContent) : key;
+        const scope = (txt || key).replace(/\s+清空\s*$/, '').trim() || key;
+        return { scope: scope, target: { type: 'note', key: key } };
+      }
+      const td = el.closest && el.closest('td');
+      if (td && td.closest('.res-table')) {
+        const tr = td.closest('tr');
+        const tbl = tr.closest('.res-table');
+        const tid = tbl ? (tbl.getAttribute('data-tid') || '') : '';
+        const rid = tr.getAttribute('data-rid') || '';
+        let colName = '', cellClass = '';
+        if (td.classList.contains('contrib-cell'))      { colName = '📎 产出/协作'; cellClass = 'contrib-cell'; }
+        else if (td.classList.contains('ref-cell'))     { colName = '📚 参考';     cellClass = 'ref-cell'; }
+        else if (td.classList.contains('asset-cell'))   { colName = '资产名称';    cellClass = 'asset-cell'; }
+        const colIdx = Array.prototype.indexOf.call(tr.children, td);
+        if (!colName) {
+          const th = tbl.querySelector('thead th:nth-child(' + (colIdx + 1) + ')');
+          colName = th ? th.textContent.trim() : '列' + colIdx;
+        }
+        const firstData = tr.children[1] ? tr.children[1].textContent.trim().slice(0, 16) : '';
+        const tail = firstData ? ' "' + firstData + '"' : '';
+        return {
+          scope: '资源 · ' + tid + '/' + rid + tail + ' · ' + colName,
+          target: { type: 'cell', tid: tid, rid: rid, cellClass: cellClass || null, colIdx: colIdx }
+        };
+      }
+      return { scope: '', target: null };
+    }
+
+    // === Hook 1:contenteditable input ===
+    document.addEventListener('input', e => {
+      const t = e.target;
+      if (!t || !t.closest) return;
+      if (t.id === 'editorNameInput') return;
+      const ce = t.closest('[contenteditable="true"]');
+      if (!ce) return;
+      const loc = resolveLocation(ce);
+      if (!loc.scope) return;
+      debouncedLog(ce, loc.scope, 'edit', () => summaryFromContent(ce), loc.target);
+    }, true);
+
+    // === Hook 2:.clear-btn 备注清空 ===
+    document.addEventListener('click', e => {
+      const btn = e.target.closest && e.target.closest('.clear-btn');
+      if (!btn) return;
+      const aside = btn.closest('.note-aside');
+      if (!aside) return;
+      setTimeout(() => {
+        const content = aside.querySelector('.note-content');
+        if (!content) return;
+        const empty = (content.textContent || '').trim() === '' &&
+                      content.querySelectorAll('img, video, iframe').length === 0;
+        if (!empty) return;
+        const key = aside.getAttribute('data-key') || '';
+        const label = aside.querySelector('.note-label');
+        let txt = label ? (label.firstChild ? label.firstChild.textContent : label.textContent) : key;
+        const scope = (txt || key).replace(/\s+清空\s*$/, '').trim() || key;
+        // 取消 input 触发的待办，避免一次清空记两条
+        const prev = _debTimers.get(content);
+        if (prev) { clearTimeout(prev); _debTimers.delete(content); }
+        const target = { type: 'note', key: key };
+        // 基线为空时清空 → 净结果与基线相同，不记录(并清除已有痕迹)
+        if (isAtBaseline(content)) {
+          removeMatchingEntry(target);
+          return;
+        }
+        logEntry(scope, 'clear', '清空备注', target);
+      }, 30);
+    }, true);
+
+    // === Hook 3:新增资源行 ===
+    document.addEventListener('click', e => {
+      const btn = e.target.closest && e.target.closest('.add-row-btn');
+      if (!btn) return;
+      setTimeout(() => {
+        const tbl = btn.previousElementSibling && btn.previousElementSibling.classList.contains('res-table')
+          ? btn.previousElementSibling
+          : btn.closest('section') && btn.closest('section').querySelector('.res-table');
+        const tid = tbl ? (tbl.getAttribute('data-tid') || '') : '';
+        let newRid = '';
+        if (tbl) {
+          const news = tbl.querySelectorAll('tbody tr[data-rid^="n"]');
+          if (news.length) newRid = news[news.length - 1].getAttribute('data-rid');
+        }
+        const target = newRid ? { type: 'row', tid: tid, rid: newRid } : null;
+        logEntry('资源 · ' + tid + (newRid ? '/' + newRid : ''), 'add-row', '新增空行', target);
+      }, 30);
+    }, true);
+
+    // === Hook 4:行划除 / 恢复(净结果为零时取消最近的反向记录，不新增) ===
+    function logRowToggle(tr, source) {
+      if (!tr) return;
+      const tbl = tr.closest('.res-table');
+      const tid = tbl ? (tbl.getAttribute('data-tid') || '') : '';
+      const rid = tr.getAttribute('data-rid') || '';
+      const isDel = tr.classList.contains('is-deleted');
+      const action = isDel ? 'delete-row' : 'restore-row';
+      const inverse = isDel ? 'restore-row' : 'delete-row';
+
+      // 找该行最近一条 type=row 的历史：如果是反向操作 → 取消(净结果为零)
+      const arr = getHistory();
+      for (let i = arr.length - 1; i >= 0; i--) {
+        const en = arr[i];
+        if (!en.target || en.target.type !== 'row' || en.target.tid !== tid || en.target.rid !== rid) continue;
+        if (en.action === inverse) {
+          arr.splice(i, 1);
+          saveHistory(arr);
+          renderHistory();
+          return;
+        }
+        break; // 同行最近一条不是反向 → 跳出，走正常 log
+      }
+
+      const firstData = tr.children[1] ? tr.children[1].textContent.trim().slice(0, 16) : '';
+      const tail = firstData ? ' "' + firstData + '"' : '';
+      logEntry('资源 · ' + tid + '/' + rid + tail,
+               action,
+               (isDel ? '划除' : '恢复') + (source ? ' (' + source + ')' : ''),
+               { type: 'row', tid: tid, rid: rid });
+    }
+    document.addEventListener('click', e => {
+      const cutBtn = e.target.closest && e.target.closest('.row-cut-btn, .row-remove-btn');
+      if (cutBtn) {
+        const tr = cutBtn.closest('tr');
+        setTimeout(() => logRowToggle(tr, '按钮'), 30);
+        return;
+      }
+      if (e.target.closest('[contenteditable="true"]')) return;
+      if (e.target.closest('.add-row-btn, .clear-btn, .note-content, .float-toc, .tab-btn, .row-action-btn, .media-del, .media-zoom, .media-popup, .popup-close, .history-block')) return;
+      const tr = e.target.closest && e.target.closest('.res-table tbody tr');
+      if (!tr) return;
+      if (tr.classList.contains('is-editing')) return;
+      setTimeout(() => logRowToggle(tr, '行点击'), 30);
+    }, true);
+
+    // ---- 跳转 + 高亮 ----
+    function findTargetEl(target) {
+      if (!target || !target.type) return null;
+      if (target.type === 'note') {
+        return document.querySelector('.note-aside[data-key="' + cssEscape(target.key) + '"]');
+      }
+      if (target.type === 'cell' || target.type === 'row') {
+        const tr = document.querySelector(
+          '.res-table[data-tid="' + cssEscape(target.tid) + '"] tr[data-rid="' + cssEscape(target.rid) + '"]'
+        );
+        if (!tr) return null;
+        if (target.type === 'row') return tr;
+        if (target.cellClass) {
+          const cell = tr.querySelector('td.' + target.cellClass);
+          if (cell) return cell;
+        }
+        if (typeof target.colIdx === 'number' && tr.children[target.colIdx]) {
+          return tr.children[target.colIdx];
+        }
+        return tr;
+      }
+      return null;
+    }
+    function triggerFlash(el) {
+      el.classList.remove('history-jump-flash');
+      void el.offsetWidth; // force reflow → restart animation
+      el.classList.add('history-jump-flash');
+      setTimeout(() => el.classList.remove('history-jump-flash'), 2050);
+    }
+    function applyFlash(el) {
+      if (!el) return;
+      if (el.tagName === 'TR') {
+        const tds = el.querySelectorAll('td');
+        if (tds.length === 0) triggerFlash(el);
+        else tds.forEach(triggerFlash);
+      } else {
+        triggerFlash(el);
+      }
+    }
+    let _toastTimer = null;
+    function showToast(msg) {
+      let t = document.getElementById('historyToast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'historyToast';
+        t.className = 'history-toast';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      requestAnimationFrame(() => t.classList.add('show'));
+      if (_toastTimer) clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+    function jumpToTarget(target) {
+      const el = findTargetEl(target);
+      if (!el) {
+        showToast('该位置已不存在 (可能行被取消或本地已重置)');
+        return;
+      }
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      applyFlash(el);
+    }
+
+    // ---- UI 元素 ----
+    const els = {
+      block:    document.getElementById('historyBlock'),
+      list:     document.getElementById('historyList'),
+      header:   document.getElementById('historyListHeader'),
+      count:    document.getElementById('historyCount'),
+      editor:   document.getElementById('editorNameInput'),
+      toggle:   document.getElementById('historyToggleBtn'),
+      clear:    document.getElementById('historyClearBtn'),
+      pager:    document.getElementById('historyPager'),
+      hpCur:    document.getElementById('hpCur'),
+      hpTotal:  document.getElementById('hpTotal'),
+      hpTotalN: document.getElementById('hpTotalN'),
+      hpFirst:  document.getElementById('hpFirst'),
+      hpPrev:   document.getElementById('hpPrev'),
+      hpNext:   document.getElementById('hpNext'),
+      hpLast:   document.getElementById('hpLast')
+    };
+
+    function renderHistory() {
+      if (!els.list) return;
+      const arr = getHistory();
+      const N = arr.length;
+      if (els.count) {
+        els.count.textContent = N;
+        els.count.classList.toggle('zero', N === 0);
+      }
+      if (els.header) els.header.classList.toggle('hide', N === 0);
+      if (N === 0) {
+        els.list.innerHTML = '<tr class="is-empty"><td colspan="6" class="history-empty">还没有改动记录 — 编辑任何评审备注 / 资源清单后会自动出现在这里。<br>导出修改版时，历史会一同打包带走，收件人能看到所有变更轨迹。</td></tr>';
+        if (els.pager) els.pager.classList.add('hide');
+        return;
+      }
+      const totalPages = Math.max(1, Math.ceil(N / PAGE_SIZE));
+      if (currentPage < 1) currentPage = 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      const reversed = arr.slice().reverse(); // 最新在前
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const slice = reversed.slice(start, start + PAGE_SIZE);
+
+      // === 分组：连续 (同日期 + 同编辑者) 的 entry 合并成一组(用于 rowspan 垂直居中)===
+      const groups = [];
+      let cur = null;
+      slice.forEach((en, idx) => {
+        const dateStr = fmtDate(en.ts);
+        const absIdx = N - 1 - (start + idx);
+        if (cur && cur.dateStr === dateStr && cur.who === en.who) {
+          cur.entries.push({ en, absIdx });
+        } else {
+          cur = { dateStr, who: en.who, entries: [{ en, absIdx }] };
+          groups.push(cur);
+        }
+      });
+
+      const html = groups.map(group => {
+        const rs = group.entries.length;
+        const rsAttr = rs > 1 ? ' rowspan="' + rs + '"' : '';
+        return group.entries.map((item, i) => {
+          const en = item.en;
+          const cnt = en.count && en.count > 1 ? ' ×' + en.count : '';
+          const hasTarget = !!en.target;
+          const targetAttr = hasTarget ? ' data-target="' + escapeHtml(JSON.stringify(en.target)) + '"' : '';
+          const classes = 'history-entry' + (hasTarget ? '' : ' no-target');
+          // 组内首行渲染 时间 + 编辑者(rowspan),后续行跳过这两列(浏览器原生处理垂直居中)
+          const headCells = (i === 0)
+            ? '<td class="h-ts"' + rsAttr + '>' + escapeHtml(group.dateStr) + '</td>' +
+              '<td class="h-who"' + rsAttr + ' title="' + escapeHtml(group.who) + '">@' + escapeHtml(group.who) + '</td>'
+            : '';
+          return '<tr class="' + classes + '"' + targetAttr + '>' +
+            headCells +
+            '<td class="h-scope" title="' + escapeHtml(en.scope) + '">' + escapeHtml(en.scope) + '</td>' +
+            '<td class="h-action-cell"><span class="h-action a-' + escapeHtml(en.action) + '">' + escapeHtml(actionLabel(en.action)) + escapeHtml(cnt) + '</span></td>' +
+            '<td class="h-summary" title="' + escapeHtml(en.summary) + '">' + escapeHtml(en.summary) + '</td>' +
+            '<td class="h-del-cell"><button class="h-del" type="button" data-idx="' + item.absIdx + '" title="删除该条历史">✕</button></td>' +
+          '</tr>';
+        }).join('');
+      }).join('');
+      els.list.innerHTML = html;
+
+      if (els.pager) {
+        els.pager.classList.toggle('hide', N <= PAGE_SIZE);
+        if (els.hpCur)    els.hpCur.textContent = currentPage;
+        if (els.hpTotal)  els.hpTotal.textContent = totalPages;
+        if (els.hpTotalN) els.hpTotalN.textContent = N;
+        if (els.hpFirst)  els.hpFirst.disabled = currentPage <= 1;
+        if (els.hpPrev)   els.hpPrev.disabled  = currentPage <= 1;
+        if (els.hpNext)   els.hpNext.disabled  = currentPage >= totalPages;
+        if (els.hpLast)   els.hpLast.disabled  = currentPage >= totalPages;
+      }
+    }
+
+    // 列表点击：✕ 删除单条 / 其他位置 → 跳转 + 高亮
+    if (els.list) {
+      els.list.addEventListener('click', e => {
+        // ✕ 单条删除(优先匹配，阻止冒泡)
+        const delBtn = e.target.closest('.h-del');
+        if (delBtn) {
+          e.stopPropagation();
+          e.preventDefault();
+          const idx = parseInt(delBtn.getAttribute('data-idx'), 10);
+          if (isNaN(idx)) return;
+          const arr = getHistory();
+          if (idx < 0 || idx >= arr.length) return;
+          arr.splice(idx, 1);
+          saveHistory(arr);
+          renderHistory(); // currentPage 在 render 内会自动 clamp
+          showToast('已删除该条历史');
+          return;
+        }
+        // 整行 → 跳转
+        const li = e.target.closest('.history-entry');
+        if (!li) return;
+        if (li.classList.contains('no-target')) {
+          showToast('该条记录无定位信息，无法跳转');
+          return;
+        }
+        const targetJson = li.getAttribute('data-target');
+        if (!targetJson) return;
+        let target = null;
+        try { target = JSON.parse(targetJson); } catch (e2) {}
+        if (!target) { showToast('定位信息异常，无法跳转'); return; }
+        jumpToTarget(target);
+      });
+    }
+
+    // 翻页
+    function changePage(np) {
+      const arr = getHistory();
+      const totalPages = Math.max(1, Math.ceil(arr.length / PAGE_SIZE));
+      currentPage = Math.min(totalPages, Math.max(1, np));
+      renderHistory();
+    }
+    if (els.hpFirst) els.hpFirst.addEventListener('click', () => changePage(1));
+    if (els.hpPrev)  els.hpPrev .addEventListener('click', () => changePage(currentPage - 1));
+    if (els.hpNext)  els.hpNext .addEventListener('click', () => changePage(currentPage + 1));
+    if (els.hpLast)  els.hpLast .addEventListener('click', () => changePage(Infinity));
+
+    // 编辑者名字
+    if (els.editor) {
+      els.editor.value = getEditor();
+      els.editor.addEventListener('input', () => setEditor(els.editor.value));
+      els.editor.addEventListener('change', () => setEditor(els.editor.value));
+    }
+    // 折叠 / 展开
+    if (els.toggle && els.block) {
+      els.toggle.addEventListener('click', () => {
+        const collapsed = els.block.classList.toggle('collapsed');
+        els.toggle.textContent = collapsed ? '展开 ▾' : '折叠 ▴';
+      });
+    }
+    // 清空历史
+    if (els.clear) {
+      els.clear.addEventListener('click', () => {
+        if (!confirm('清空本地改动历史？\n(只清历史列表，不影响评审备注 / 资源清单 / 大文件等其他协作数据)')) return;
+        __LS.removeItem(HIST_KEY);
+        currentPage = 1;
+        renderHistory();
+      });
+    }
+
+    window.__getEditorName = getEditor;
+
+    renderHistory();
+  })();
+
+  // === 置顶按钮(随左侧坞排布，滚出页顶才出现) ===
+  (function initBackToTop() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
+    const SHOW_AT = 240;
+    function update() {
+      btn.classList.toggle('visible', window.scrollY > SHOW_AT);
+    }
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  // === 资源清单·复用区视觉标记(零美术成本 — 跟"新增"区分，避免视觉混淆) ===
+  (function initReuseMarker() {
+    document.querySelectorAll('#assets h4').forEach(h4 => {
+      const text = h4.textContent || '';
+      // 命中规则：含"复用"且不含"新增"(避免混合段误标)
+      if (!text.includes('复用')) return;
+      if (text.includes('新增')) return;
+      h4.classList.add('reuse-h4');
+      if (!h4.querySelector('.reuse-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'reuse-badge';
+        badge.textContent = '✓ 零成本';
+        h4.insertBefore(badge, h4.firstChild);
+      }
+      // 找紧跟的 res-table 或 ul 加对应标记类(遇到下一个 h3/h4 则停)
+      let sib = h4.nextElementSibling;
+      while (sib && !sib.matches('table.res-table, ul, h3, h4')) {
+        sib = sib.nextElementSibling;
+      }
+      if (!sib || sib.matches('h3, h4')) return;
+      if (sib.matches('table.res-table')) sib.classList.add('reuse-table');
+      else if (sib.tagName === 'UL') sib.classList.add('reuse-list');
+    });
+  })();
+
+  // === 3. 章节导航(浮动目录 + 顶部目录) · 两级树 · 收起展开 · P1/P2 分组 · tab 联动 ===
+  (function initTocs() {
+    // ⚠️ 改章节(增删 / 改名 / 调顺序)时同步这里：id 要跟 <section id> 对上，
+    //    label = 浮动目录显示文案，topLabel = 顶部内联目录显示文案。
+    const SECTIONS = [
+      { id: 'philosophy', label: '壹 · 设计说明', topLabel: '设计说明' },
+      { id: 'plot', label: '贰 · 技能附带效果', topLabel: '技能附带效果' },
+      { id: 'overview', label: '叁 · 命座解锁效果', topLabel: '命座解锁效果' },
+      { id: 'detail', label: '肆 · 养成物套装', topLabel: '养成物套装' },
+      { id: 'bind', label: '伍 · 属性 · 资源 · 循环', topLabel: '属性 · 资源 · 循环' },
+      { id: 'assets', label: '陆 · 数值建模验证', topLabel: '数值建模验证' },
+      { id: 'metarules', label: '柒 · 最终总结', topLabel: '最终总结' }
+    ];
+
+    function cleanH3(h3) {
+      return (h3.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+    function tabPanelPrefix(panel) {
+      if (!panel) return '';
+      const tabId = panel.id.replace('panel-', '');
+      const btn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+      if (!btn || !btn.childNodes[0]) return '';
+      const first = btn.childNodes[0].textContent.trim();
+      return first.split('·')[0].trim();
+    }
+
+    // 构建一棵两级 toc 到指定容器(同 panel 的子项分组 + 组标签 li 分隔)
+    function buildTree(listEl, getMainLabel) {
+      SECTIONS.forEach(s => {
+        const section = document.getElementById(s.id);
+        if (!section) return;
+        const h3s = Array.from(section.querySelectorAll('h3'));
+        h3s.forEach((h3, i) => {
+          if (!h3.id) h3.id = s.id + '-h3-' + i;
+        });
+        const hasChildren = h3s.length > 0;
+
+        const li = document.createElement('li');
+        li.className = 'toc-main';
+
+        const row = document.createElement('div');
+        row.className = 'toc-main-row';
+        if (hasChildren) {
+          const chev = document.createElement('button');
+          chev.type = 'button';
+          chev.className = 'toc-chevron';
+          chev.title = '展开/折叠子标题';
+          chev.setAttribute('aria-expanded', 'false');
+          chev.textContent = '▸';
+          row.appendChild(chev);
+        } else {
+          const sp = document.createElement('span');
+          sp.className = 'toc-chevron-spacer';
+          row.appendChild(sp);
+        }
+        const a = document.createElement('a');
+        a.href = '#' + s.id;
+        a.textContent = getMainLabel(s);
+        a.dataset.tocMain = '1';
+        row.appendChild(a);
+        li.appendChild(row);
+
+        if (hasChildren) {
+          const subOl = document.createElement('ol');
+          subOl.className = 'toc-sub';
+          let lastPanelId = '__none__';
+          h3s.forEach(h3 => {
+            const panel = h3.closest('.tab-panel');
+            const panelId = panel ? panel.id : '';
+            // panel 切换 → 插入组标签 li(场次分割)
+            if (panel && panelId !== lastPanelId) {
+              const labelLi = document.createElement('li');
+              labelLi.className = 'toc-group-label';
+              labelLi.setAttribute('data-panel', panelId);
+              labelLi.textContent = tabPanelPrefix(panel);
+              subOl.appendChild(labelLi);
+            }
+            lastPanelId = panelId;
+            const subLi = document.createElement('li');
+            if (panel) subLi.setAttribute('data-panel', panel.id);
+            const subA = document.createElement('a');
+            subA.href = '#' + h3.id;
+            // 已有组标签时不重复 "第X场 · " 前缀，直接放纯 h3 文本
+            subA.textContent = cleanH3(h3);
+            if (panel) subA.dataset.tabPanel = panel.id;
+            subLi.appendChild(subA);
+            subOl.appendChild(subLi);
+          });
+          li.appendChild(subOl);
+        }
+        listEl.appendChild(li);
+      });
+    }
+
+    // 点击：chevron 切收起展开 / 子项落在 tab-panel 时自动切 tab + 平滑滚到 h3
+    function bindClick(listEl) {
+      listEl.addEventListener('click', e => {
+        const chev = e.target.closest('.toc-chevron');
+        if (chev) {
+          e.preventDefault();
+          const li = chev.closest('.toc-main');
+          if (li) {
+            const expanded = li.classList.toggle('expanded');
+            chev.setAttribute('aria-expanded', String(expanded));
+          }
+          return;
+        }
+        const subLink = e.target.closest('.toc-sub a');
+        if (subLink && subLink.dataset.tabPanel) {
+          const panelId = subLink.dataset.tabPanel;
+          const panel = document.getElementById(panelId);
+          if (panel && !panel.classList.contains('active')) {
+            e.preventDefault();
+            const tabId = panelId.replace('panel-', '');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            const btn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+            if (btn) btn.classList.add('active');
+            panel.classList.add('active');
+            const target = document.getElementById(subLink.getAttribute('href').slice(1));
+            if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+          }
+        }
+      });
+    }
+
+    // === 浮动目录(左侧坞)===
+    const floatToc = document.getElementById('floatToc');
+    const floatList = document.getElementById('floatTocList');
+    if (floatList) {
+      buildTree(floatList, s => s.label);
+      bindClick(floatList);
+    }
+
+    // 浮动目录:accordion 模式 — 滚动联动显示/隐藏 + 主&子高亮 + 只有当前章节展开,其他自动收起
+    if (floatToc && floatList) {
+      const cover = document.querySelector('.cover');
+      const sections = SECTIONS.map(s => document.getElementById(s.id)).filter(Boolean);
+      let _prevCurrentMain = null;
+      let _userClosedCurrent = false; // 用户主动收起当前章节 → 滚动时不要再自动展开它(仅在当前章节生命周期内生效)
+
+      // chevron 点击拦截:
+      // - 非当前章节的 chevron → 改为跳转(避免点了"闪一下又被 accordion 收回"的违和感)
+      // - 当前章节的 chevron → 让原 bindClick 处理 toggle,然后记录最终状态
+      floatList.addEventListener('click', e => {
+        const chev = e.target.closest('.toc-chevron');
+        if (!chev) return;
+        const li = chev.closest('.toc-main');
+        if (!li) return;
+        const a = li.querySelector('.toc-main-row > a');
+        const id = a && (a.getAttribute('href') || '').slice(1);
+        if (id !== _prevCurrentMain) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          const target = document.getElementById(id);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+        setTimeout(() => {
+          _userClosedCurrent = !li.classList.contains('expanded');
+        }, 0);
+      }, true);
+
+      function update() {
+        const scrollY = window.scrollY;
+        const showAt = cover.offsetTop + cover.offsetHeight + 80;
+        if (scrollY > showAt) floatToc.classList.add('visible');
+        else floatToc.classList.remove('visible');
+
+        let currentMain = null;
+        sections.forEach(s => {
+          if (s.getBoundingClientRect().top < 160) currentMain = s.id;
+        });
+        let currentH3 = null;
+        floatList.querySelectorAll('.toc-sub a').forEach(a => {
+          const id = (a.getAttribute('href') || '').slice(1);
+          const el = document.getElementById(id);
+          if (!el) return;
+          const panel = el.closest('.tab-panel');
+          if (panel && !panel.classList.contains('active')) return;
+          if (el.getBoundingClientRect().top < 180) currentH3 = id;
+        });
+
+        floatList.querySelectorAll('a').forEach(a => {
+          const id = (a.getAttribute('href') || '').slice(1);
+          const isMain = !!a.dataset.tocMain;
+          const isActive = isMain ? id === currentMain : id === currentH3;
+          a.classList.toggle('active', isActive);
+        });
+
+        // 章节切换 → 重置用户标志(进入新章节默认行为接管)
+        if (currentMain !== _prevCurrentMain) {
+          _userClosedCurrent = false;
+          _prevCurrentMain = currentMain;
+        }
+
+        // accordion:每个 tick 强制"只有 currentMain 展开,其他全收"
+        floatList.querySelectorAll('.toc-main').forEach(li => {
+          const mainA = li.querySelector('.toc-main-row > a');
+          const id = mainA && (mainA.getAttribute('href') || '').slice(1);
+          const isCurrent = id === currentMain;
+          const isExpanded = li.classList.contains('expanded');
+          const chev = li.querySelector('.toc-chevron');
+          if (isCurrent) {
+            if (!_userClosedCurrent && !isExpanded) {
+              li.classList.add('expanded');
+              if (chev) chev.setAttribute('aria-expanded', 'true');
+            }
+          } else if (isExpanded) {
+            li.classList.remove('expanded');
+            if (chev) chev.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    }
+
+    // === 顶部内联目录 ===
+    const topList = document.getElementById('topTocList');
+    if (topList) {
+      buildTree(topList, s => s.topLabel);
+      bindClick(topList);
+    }
+  })();
+</script>
+<style>
+/* 图表点击放大 lightbox(独立功能,不影响协作交互层)· 支持滚轮缩放 + 拖动平移 */
+svg[role="img"]{cursor:zoom-in;transition:opacity .15s;}
+svg[role="img"]:hover{opacity:.85;}
+.fig-lb{position:fixed;inset:0;background:rgba(20,28,42,.82);z-index:99999;display:none;align-items:center;justify-content:center;padding:28px;cursor:zoom-out;}
+.fig-lb.open{display:flex;}
+.fig-lb-inner{background:var(--paper);border-radius:10px;padding:22px 24px;max-width:96vw;max-height:92vh;overflow:hidden;cursor:grab;box-shadow:0 10px 50px rgba(0,0,0,.45);}
+.fig-lb-inner svg{width:94vw!important;max-width:none!important;height:auto;max-height:88vh!important;transition:transform .06s ease-out;}
+.fig-lb-hint{position:fixed;top:16px;right:22px;color:#fff;font-size:13px;opacity:.9;background:rgba(0,0,0,.3);padding:4px 13px;border-radius:14px;}
+.fig-lb-reset{position:fixed;top:16px;left:22px;color:#fff;font-size:12px;opacity:.9;background:rgba(0,0,0,.3);padding:4px 13px;border-radius:14px;cursor:pointer;}
+.fig-lb-reset:hover{opacity:1;background:rgba(0,0,0,.5);}
+</style>
+<script>
+(function(){
+  var lb=document.createElement('div');lb.className='fig-lb';
+  lb.innerHTML='<div class="fig-lb-reset">↺ 复位</div><div class="fig-lb-hint">滚轮缩放 · 拖动平移 · 点空白 / Esc 关闭</div><div class="fig-lb-inner"></div>';
+  document.body.appendChild(lb);
+  var inner=lb.querySelector('.fig-lb-inner');
+  var scale=1,tx=0,ty=0,drag=false,lx=0,ly=0,cur=null;
+  function applyT(){if(cur)cur.style.transform='translate('+tx+'px,'+ty+'px) scale('+scale+')';}
+  function reset(){scale=1;tx=0;ty=0;applyT();}
+  function openLB(svg){inner.innerHTML='';cur=svg.cloneNode(true);cur.style.transformOrigin='center center';inner.appendChild(cur);reset();lb.classList.add('open');}
+  function closeLB(){lb.classList.remove('open');inner.innerHTML='';cur=null;}
+  document.querySelectorAll('svg[role="img"]').forEach(function(svg){
+    svg.style.cursor='zoom-in';
+    svg.addEventListener('click',function(e){e.stopPropagation();openLB(svg);});
+  });
+  lb.addEventListener('click',function(e){if(!inner.contains(e.target)&&!e.target.classList.contains('fig-lb-reset'))closeLB();});
+  lb.querySelector('.fig-lb-reset').addEventListener('click',function(e){e.stopPropagation();reset();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('open'))closeLB();});
+  inner.addEventListener('wheel',function(e){if(!cur)return;e.preventDefault();scale*=(e.deltaY<0?1.15:1/1.15);scale=Math.max(0.4,Math.min(6,scale));applyT();},{passive:false});
+  inner.addEventListener('mousedown',function(e){if(!cur)return;drag=true;lx=e.clientX;ly=e.clientY;inner.style.cursor='grabbing';e.preventDefault();});
+  window.addEventListener('mousemove',function(e){if(!drag)return;tx+=e.clientX-lx;ty+=e.clientY-ly;lx=e.clientX;ly=e.clientY;applyT();});
+  window.addEventListener('mouseup',function(){if(drag){drag=false;inner.style.cursor='grab';}});
+})();
+</script></body></html>

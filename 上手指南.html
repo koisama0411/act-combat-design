@@ -154,7 +154,7 @@
         <div class="two-layer">
           <div class="layer keep">
             <div class="lh">🟢 方法论 + 行业知识库（可迁移，跟着你走）</div>
-            <p>设计流程、5 维质量标尺、42 条元规则、跨游戏借鉴库、角色原型 / Boss 范式、打击感 / 数值 / Boss AI 工程基线……</p>
+            <p>设计流程、5 维质量标尺、46 条元规则、跨游戏借鉴库、角色原型 / Boss 范式、打击感 / 数值 / Boss AI 工程基线……</p>
             <div class="ex">这部分是<strong>所有项目通用</strong>的，开箱即用。</div>
           </div>
           <div class="layer proj">
@@ -177,8 +177,8 @@
         <div class="card"><div class="ic">🤖</div><b>任意 agent 开箱即用</b><p>纯 markdown 知识库 + 可粘贴 system prompt，Claude Code 当 skill、GPT / Claude.ai / Cursor 当上传文件，都能跑。</p></div>
         <div class="card"><div class="ic">📑</div><b>审阅 / 落地分离</b><p>设计稿（给人评审"好不好"）与生产资源表（给美术 / 程序"照着做"）分两套产出，互不淹没。</p></div>
         <div class="card"><div class="ic">🙋</div><b>默认人审 + 可选全自动</b><p>默认在关键决策点停下来跟你一起定；你说"完全出一版"就一口气出全套 + 标好假设。</p></div>
-        <div class="card"><div class="ic">📚</div><b>厚实的行业知识库</b><p>角色原型、Boss 范式、42 条元规则、70+ 游戏借鉴、打击感 / 数值 / Boss AI 工程基线 —— 设计有据可依，不拍脑袋。</p></div>
-        <div class="card"><div class="ic">🎁</div><b>自带模板 + 完整示例</b><p>审阅级 HTML 模板 + 资源表模板 + 两个从零做好的示例（角色「苍岚」、Boss「孤鸦」），照葫芦画瓢。</p></div>
+        <div class="card"><div class="ic">📚</div><b>厚实的行业知识库</b><p>角色原型、Boss 范式、46 条元规则、70+ 游戏借鉴、打击感 / 数值 / Boss AI 工程基线 —— 设计有据可依，不拍脑袋。</p></div>
+        <div class="card"><div class="ic">🎁</div><b>自带模板 + 完整示例</b><p>审阅级 HTML 模板 + 资源表模板 + 三个从零做好的示例（角色「苍岚」分稿、角色「烬羽」完整稿、Boss「孤鸦」），照葫芦画瓢。</p></div>
       </div>
     </section>
 
@@ -203,7 +203,7 @@
           <div class="f"><code>design-doc-structure.md</code><span>设计文档的 sheet 结构与字段</span></div>
           <div class="f"><code>moveset-design.md</code><span>招式集设计法（各招式类型的设计手艺；不预设固定招式）</span></div>
           <div class="f"><code>design-aesthetics.md</code><span>5 维质量标尺 + 战斗节奏理论（判断设计好坏）</span></div>
-          <div class="f"><code>meta-rules.md</code><span>🌟 42 条元规则 + 机制创新 5 步法（思维核心）</span></div>
+          <div class="f"><code>meta-rules.md</code><span>🌟 46 条元规则 + 机制创新 5 步法（思维核心）</span></div>
           <div class="f"><code>anti-patterns.md</code><span>16 条设计反模式自检清单</span></div>
         </div>
       </details>
@@ -271,8 +271,24 @@
           <div class="card"><div class="ic">👹</div><b>Boss</b><p>阶段表、技能详情、AI &amp; 连招策略、金 / 紫预警标注 等</p></div>
           <div class="card"><div class="ic">📈</div><b>效果与养成</b><p>技能附带效果、命座 / 养成物、属性投放、数值图示 + 算的过程 等</p></div>
         </div>
-        <p style="margin:12px 0 0;font-size:13.5px;color:var(--muted);">三类都自带同一套<strong>协作交互</strong>：📝 评审备注 · 📜 改动留痕 · 🖼️ 贴图贴视频 · 📤 一键导出回传 · 两级目录 —— 给团队评审、迭代到定稿。</p>
-        <p style="margin:8px 0 0;font-size:13px;">看实例 → <a href="output/characters/cang-lan/苍岚-审阅稿.html">苍岚（角色）</a> · <a href="output/bosses/gu-ya/孤鸦-审阅稿.html">孤鸦（Boss）</a> · <a href="output/characters/cang-lan/苍岚-效果与养成-gacha演示.html">苍岚 · 效果与养成</a></p>
+        <p style="margin:12px 0 0;font-size:13.5px;color:var(--muted);">三类都自带同一套<strong>协作交互</strong>：📝 评审备注 · 📜 改动留痕 · 🖼️ 贴图贴视频 · 📤 一键导出回传 · 两级目录 · 🔍 <strong>正文图表点击放大</strong>（按界面 fit 完整显示，宽图撑满 / 高图触顶自动等比缩、都不被裁，滚轮再放大看细节）—— 给团队评审、迭代到定稿。</p>
+        <p style="margin:8px 0 0;font-size:13px;">看实例 → <a href="output/characters/jin-yu/烬羽-战斗设计及养成效果.html">烬羽（角色 · 完整稿）</a> · <a href="output/characters/cang-lan/苍岚-战斗设计.html">苍岚（角色 · 分稿）</a> · <a href="output/bosses/gu-ya/孤鸦-审阅稿.html">孤鸦（Boss）</a> · <a href="output/characters/cang-lan/苍岚-养成与效果.html">苍岚 · 效果与养成</a></p>
+      </div>
+
+      <div class="fig">
+        <div style="font-weight:600;color:var(--accent);margin-bottom:6px;">🧍 角色设计稿 = 分稿 / 完整稿两种规格</div>
+        <p style="margin:0 0 10px;color:var(--muted);">同一个角色，按节奏需求选一种规格出（用户<strong>明示</strong>就按明示，<strong>没明示 AI 会先问一句</strong>再动手）：</p>
+        <div class="two-layer">
+          <div class="layer keep">
+            <div class="lh">📑 分稿 —— 战斗设计稿 + 养成稿分开</div>
+            <p>「先出战斗设计稿、之后单独再出养成稿」的分步节奏，各自精简。样板：<strong>苍岚</strong>（<code>苍岚-战斗设计</code> + <code>苍岚-养成与效果</code> 两份）。</p>
+          </div>
+          <div class="layer proj">
+            <div class="lh">📘 完整稿 —— 一份到底 9 章全</div>
+            <p>「要一份完整的」的一站式节奏，含数值建模 / 配队 / 资源清单全部内容 + 操作 / 资源 / 数值三类图。样板：<strong>烬羽</strong>（<code>烬羽-战斗设计及养成效果</code> 一份）。</p>
+          </div>
+        </div>
+        <div class="cap">▲ 文件命名按<strong>稿件内容</strong>统一规范：<code>角色名-战斗设计</code> / <code>角色名-养成与效果</code> / <code>角色名-战斗设计及养成效果</code> / <code>角色名-资源需求</code>。「审阅稿」是稿件的<strong>协作形态</strong>（所有设计稿都自带这套交互），不进文件名。</div>
       </div>
     </section>
 
@@ -309,7 +325,7 @@
         <div class="layer proj">
           <div class="lh">🌌 《星澜纪》· 抽卡 gacha 二游</div>
           <p>视角 3D / 60fps · 三人队切人联动 · <strong>命座 C0–C6 + 养成物套装 + PVP</strong> · 五行元素 · 红黄预警</p>
-          <div class="ex">配套演示：苍岚 gacha 移植（命座 / 养成物效果 + §十 数值验证）→ <a href="output/characters/cang-lan/md/苍岚-效果与养成-gacha演示.md">苍岚-效果与养成-gacha演示.md</a></div>
+          <div class="ex">配套演示：苍岚 gacha 移植（命座 / 养成物效果 + §十 数值验证）→ <a href="output/characters/cang-lan/md/苍岚-养成与效果.md">苍岚-养成与效果.md</a></div>
         </div>
       </div>
 
@@ -370,10 +386,11 @@
 ├─ CHANGELOG.md / .html  更新记录（每次更了啥）
 ├─ conventions/         ★ 定义你项目的战斗约定（TEMPLATE + 买断 / gacha 双范例）
 ├─ references/          知识库（23 份：方法论 + 知识 + 工程基线 + 工具链）
-├─ templates/           空白模板：审阅级 HTML + 落地资源需求
+├─ templates/           空白模板：角色完整稿 HTML（blank-character-design-doc）+ 通用审阅 HTML + 落地资源需求
 ├─ scripts/             xlsx inspect / 生成脚本（Windows-only）
 ├─ output/              产出区（按单位分文件夹）
-│  ├─ characters/cang-lan/   示例角色「苍岚」：md/ 源稿 + 审阅 HTML + 资源 xlsx
+│  ├─ characters/cang-lan/   示例角色「苍岚」（分稿）：md/ 源稿 + 审阅 HTML ×2 + 资源 xlsx
+│  ├─ characters/jin-yu/     示例角色「烬羽」（完整稿）：md/ 源稿 + 审阅 HTML（9 章全 + 10 图）
 │  └─ bosses/gu-ya/          示例 Boss「孤鸦」：md/ 源稿 + 审阅 HTML + 资源 xlsx
 └─ knowledge-local/     ★ 本地知识区：自我更新（默认关闭）+ 项目指定知识；不进 git</pre>
       <div class="note">📁 <strong>每个单位一个文件夹</strong>：markdown 源稿放 <code>&lt;单位&gt;/md/</code>，渲染成品（HTML / xlsx）放单位根目录。你自己的产出也照此结构落 <code>output/</code> 下。</div>
@@ -383,16 +400,24 @@
     <!-- ⑧ 示例 -->
     <section id="examples">
       <h2><span class="no">8</span>自带示例</h2>
-      <div class="lead">两个从零做好的原创示例（IP 无关，虚构项目《孤刃行》），演示"约定 → 角色 / Boss → 审阅稿 + 落地稿"全流程。<strong>不需要可整个删除。</strong></div>
+      <div class="lead">三个从零做好的原创示例（IP 无关，虚构项目《孤刃行》《星澜纪》），演示"约定 → 角色 / Boss → 审阅稿 + 落地稿"全流程，并覆盖角色稿的<strong>分稿 / 完整稿两种规格</strong>。<strong>不需要可整个删除。</strong></div>
       <div class="grid">
         <div class="card">
-          <div class="ic">🗡️</div><b>角色「苍岚」</b>
-          <p>薙刀女武者，核心机制「势」蓄力层数（蓄到几层放的实时博弈）。</p>
+          <div class="ic">🗡️</div><b>角色「苍岚」· 分稿样板</b>
+          <p>薙刀女武者，核心机制「势」蓄力层数（蓄到几层放的实时博弈）。<strong>战斗设计稿 + 养成稿分开</strong>两份。</p>
           <p style="margin-top:8px;">
-            <a href="output/characters/cang-lan/苍岚-审阅稿.html">审阅 HTML</a> ·
-            <a href="output/characters/cang-lan/md/苍岚-战斗设计.md">设计稿</a> ·
-            <a href="output/characters/cang-lan/md/苍岚-资源需求.md">资源 md</a> ·
-            <a href="output/characters/cang-lan/苍岚-资源需求.xlsx">xlsx</a>
+            <a href="output/characters/cang-lan/苍岚-战斗设计.html">战斗设计 HTML</a> ·
+            <a href="output/characters/cang-lan/苍岚-养成与效果.html">养成与效果 HTML</a> ·
+            <a href="output/characters/cang-lan/md/苍岚-战斗设计.md">设计稿 md</a> ·
+            <a href="output/characters/cang-lan/苍岚-资源需求.xlsx">资源 xlsx</a>
+          </p>
+        </div>
+        <div class="card">
+          <div class="ic">🔥</div><b>角色「烬羽」· 完整稿样板</b>
+          <p>延迟引爆型火术者（挂《星澜纪》gacha），核心机制延迟堆叠择机引爆。<strong>一份到底 9 章全</strong> + 10 图（操作循环 / 资源流转 / 数值建模 5 图）。</p>
+          <p style="margin-top:8px;">
+            <a href="output/characters/jin-yu/烬羽-战斗设计及养成效果.html">完整稿 HTML</a> ·
+            <a href="output/characters/jin-yu/md/烬羽-战斗设计及养成效果.md">源稿 md</a>
           </p>
         </div>
         <div class="card">
@@ -406,7 +431,7 @@
           </p>
         </div>
       </div>
-      <div class="ok">✅ 建议先打开<strong>「苍岚」或「孤鸦」的审阅 HTML</strong>，亲手点点看交互（折叠目录 / 评审备注 / 资源表增删 / 导出）——这就是本方法论审阅方向产出的样子。</div>
+      <div class="ok">✅ 建议先打开<strong>「烬羽」完整稿</strong>（一份到底 9 章全 + 数值建模图）或<strong>「苍岚」分稿 / 「孤鸦」审阅 HTML</strong>，亲手点点看交互（折叠目录 / 评审备注 / 资源表增删 / 图表点击放大 / 导出）——这就是本方法论审阅方向产出的样子。</div>
     </section>
 
     <!-- ⑨ 快速开始 -->
@@ -416,7 +441,7 @@
         <li>读 <a href="USAGE.md"><b>USAGE.md</b></a>，按你用的 AI 工具选加载方式（Claude Code / GPT / Claude.ai / Cursor）。</li>
         <li>填 <a href="conventions/TEMPLATE.md"><b>conventions/TEMPLATE.md</b></a>（或让 AI 帮你填）——把<strong>你项目的战斗约定</strong>定下来。</li>
         <li>跟 AI 说「<b>设计 XXX 角色</b>」或「<b>设计 XXX Boss</b>」，按 6 Phase 流程走；想一步到位就说「<b>完全出一版</b>」。</li>
-        <li>想看样板 → 打开 <a href="output/bosses/gu-ya/孤鸦-审阅稿.html"><b>孤鸦审阅稿</b></a> 或 <a href="output/characters/cang-lan/苍岚-审阅稿.html"><b>苍岚审阅稿</b></a>。</li>
+        <li>想看样板 → 打开 <a href="output/characters/jin-yu/烬羽-战斗设计及养成效果.html"><b>烬羽完整稿</b></a>（9 章全）、<a href="output/characters/cang-lan/苍岚-战斗设计.html"><b>苍岚分稿</b></a> 或 <a href="output/bosses/gu-ya/孤鸦-审阅稿.html"><b>孤鸦审阅稿</b></a>。</li>
       </ol>
     </section>
 
@@ -435,8 +460,8 @@
       <details><summary>资源 xlsx 在非 Windows 上能生成吗？<span class="chev">▸</span></summary>
         <div class="body"><p>xlsx 生成脚本（<code>scripts/</code>，PowerShell + Excel COM）<strong>仅 Windows + Excel / WPS</strong>。非 Windows 用通用的 markdown 资源表（<code>templates/blank-resource-requirements.md</code>）即可，内容一样，只是格式。</p></div>
       </details>
-      <details><summary>自带的示例（苍岚 / 孤鸦）会污染我的项目吗？<span class="chev">▸</span></summary>
-        <div class="body"><p>不会。它们是放在 <code>output/</code> 下、明确标注"示例·可删"的演示产出。不需要直接删掉两个文件夹即可。</p></div>
+      <details><summary>自带的示例（苍岚 / 烬羽 / 孤鸦）会污染我的项目吗？<span class="chev">▸</span></summary>
+        <div class="body"><p>不会。它们是放在 <code>output/</code> 下、明确标注"示例·可删"的演示产出。不需要直接删掉三个文件夹即可。</p></div>
       </details>
     </section>
 

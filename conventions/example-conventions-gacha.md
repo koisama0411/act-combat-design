@@ -4,7 +4,7 @@
 >
 > ⚠️ 它**刻意区别于** [《孤刃行》（买断制单机）](example-conventions.md)，用来证明同一套方法论也能落到「二游三人队 + 命座 + 养成物」这类项目。
 >
-> 配套演示 → [苍岚 · gacha 移植效果稿](../output/characters/cang-lan/md/苍岚-效果与养成-gacha演示.md)（把买断制示例角色苍岚移植到本约定下，演示命座 / 养成物效果 + §十 数值验证）。
+> 配套演示 → [苍岚 · gacha 移植效果稿](../output/characters/cang-lan/md/苍岚-养成与效果.md)（把买断制示例角色苍岚移植到本约定下，演示命座 / 养成物效果 + §十 数值验证）。
 
 ---
 
@@ -58,4 +58,4 @@
 
 ---
 
-> 配套演示角色 → [苍岚 · gacha 移植效果稿](../output/characters/cang-lan/md/苍岚-效果与养成-gacha演示.md)
+> 配套演示角色 → [苍岚 · gacha 移植效果稿](../output/characters/cang-lan/md/苍岚-养成与效果.md)

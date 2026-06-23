@@ -9,6 +9,7 @@ output/*
 output/characters/*
 !output/characters/.gitkeep
 !output/characters/cang-lan/
+!output/characters/jin-yu/
 
 output/bosses/*
 !output/bosses/.gitkeep

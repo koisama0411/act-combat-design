@@ -62,7 +62,7 @@
 
 ## 五、范例
 
-- [`output/characters/cang-lan/苍岚-效果与养成-gacha演示.html`](../output/characters/cang-lan/苍岚-效果与养成-gacha演示.html)（若未删）+ [md 源稿](../output/characters/cang-lan/md/苍岚-效果与养成-gacha演示.md) —— 苍岚移植到 gacha 示例项目《星澜纪》，7 章 + 3 图 + 四要素注解俱全。
+- [`output/characters/cang-lan/苍岚-养成与效果.html`](../output/characters/cang-lan/苍岚-养成与效果.html)（若未删）+ [md 源稿](../output/characters/cang-lan/md/苍岚-养成与效果.md) —— 苍岚移植到 gacha 示例项目《星澜纪》，7 章 + 3 图 + 四要素注解俱全。
 
 > 范例在 `output/`（标「可删」）—— 即使被删，本范式（结构 + 图 + 注解）仍是完整文字模板，不依赖它。
 

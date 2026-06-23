@@ -32,7 +32,7 @@ output/bosses/gu-ya/                  # 一个单位
 ## 约定 · Convention
 
 - **这是"产出"区**。空白模板（输入）在 [`../templates/`](../templates/)——别把产出写进 templates。
-- 本 `output/` 下自带两份**示例产出**：`characters/cang-lan/`（苍岚）、`bosses/gu-ya/`（孤鸦）——act-combat-design 用来演示输出长什么样，**不需要可整个删除**。
+- 本 `output/` 下自带三份**示例产出**：`characters/cang-lan/`（苍岚分稿）、`characters/jin-yu/`（烬羽完整稿）、`bosses/gu-ya/`（孤鸦）——act-combat-design 用来演示输出长什么样，**不需要可整个删除**。
 - `output/` 下的内容**默认被 `.gitignore` 忽略**（除本 README 与 `.gitkeep`），这样你的 WIP 设计稿不会污染仓库。需要把某份稿子纳入版本控制时，自行 `git add -f`。
 - **路径可改**：这只是默认推荐。你也可以让 AI 输出到你项目自己的文档目录（例如你团队的 `docs/战斗设计/`）。把你的偏好写进 [`../conventions/`](../conventions/TEMPLATE.md) 或直接告诉 AI 即可。
 - 命名建议：`<对象中文名>-战斗设计.md`（玩家角色）/ `<对象中文名>-Boss设计.md`（Boss）。

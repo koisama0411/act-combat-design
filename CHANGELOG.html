@@ -57,6 +57,50 @@
   </header>
 
   <section class="ver">
+    <h2>v1.2 <span class="date">2026-06-23</span></h2>
+    <p class="tldr">本次主要：新增<strong>完整角色稿模板</strong> + <strong>完整稿满配样板「烬羽」</strong>，并把「角色设计稿」明确成<strong>分稿 / 完整稿两种规格</strong> + <strong>文件命名规范</strong> + <strong>数值建模硬标准</strong>；元规则 42 → 46 条、角色原型库去项目脱敏、只保留业界 F–Q 12 种。</p>
+    <div class="notice">
+      <p><strong>对使用者</strong>：pull 后<strong>无需操作</strong> —— 新增模板 / 样板 / 范式细化，既有「分稿」流程不变；想出一份到底的完整稿时多一套模板可用。无破坏性变更。</p>
+    </div>
+
+    <div class="group">
+      <span class="tag add">新增 Added</span>
+      <ul>
+        <li><strong>完整角色稿模板</strong> —— <code>templates/blank-character-design-doc.html</code>：通用 9 章（设计定位哲学 / 核心机制 / 招式详解 / 🟡 资源系统（深入，按角色）/ 养成命座 / 🟡 配队协力（按项目）/ 数值建模 / 资源清单 / 自检）+ <strong>三类图骨架</strong>（贰 操作循环示意图、肆 资源流转示意图、柒 数值建模 5 图）+ 完整协作交互层 + 图表 lightbox。</li>
+        <li><strong>完整稿满配样板「烬羽」</strong> —— <code>output/characters/jin-yu/</code>（延迟引爆型火术者，挂《星澜纪》gacha）：9 章全 + 10 图（操作循环 / 资源流转 / 数值建模 5 图）。作「完整稿」满配样板，区别于苍岚的「分稿」样板。</li>
+        <li><strong>角色原型库 project-agnostic 化</strong> —— <code>character-archetypes.md</code>：移除项目脱敏的基础 5 种（A–E）+ R 延迟引爆，<strong>只保留业界调研 F–Q 12 种</strong>；各项目自家原型放本地知识区。延迟引爆机制仍由完整稿样板「烬羽」演示。</li>
+        <li><strong>4 条新元规则（K 组）</strong> —— <code>meta-rules.md</code>：操作核心方向先对齐 / 消极动作不触发爆发 / 资源返现易空转（走限时窗）/ 异格不换皮三轴分流（元规则 42 → 46 条）。</li>
+      </ul>
+    </div>
+
+    <div class="group">
+      <span class="tag chg">变更 Changed</span>
+      <ul>
+        <li><strong>角色完整稿范式细化</strong> —— <code>design-doc-structure.md</code> 明确<strong>两种规格</strong>：分稿（战斗设计稿 + 养成稿分开）/ 完整稿（一份 9 章），并给<strong>判断逻辑</strong>（用户明示按明示、没明示就问）。</li>
+        <li><strong>文件命名规范</strong> —— 同上：<code>角色名-战斗设计</code> / <code>角色名-养成与效果</code> / <code>角色名-战斗设计及养成效果</code> / <code>角色名-资源需求</code>；「审阅稿」是协作形态、不进文件名。</li>
+        <li><strong>数值建模硬标准</strong> —— 同上：无论完整稿还是分稿养成稿，数值建模必配 <strong>5 图 + 三段注解 + 平衡自检表</strong>，只写表不配图 = 不合格。</li>
+        <li><strong>图表 lightbox 按界面 fit 完整显示</strong> —— <code>review-html-components.md</code>：<code>width:94vw</code> + <code>max-height:88vh</code> + <code>height:auto</code>，宽图撑满、高图触顶自动等比缩到完整居中，都不被裁（废弃旧的固定 <code>width:min(1180px,…)</code>）。</li>
+        <li><strong>苍岚分稿按命名规范重命名</strong> —— <code>苍岚-战斗设计.html</code> + <code>苍岚-养成与效果.html</code>（原「审阅稿 / 效果与养成-gacha 演示」）。</li>
+      </ul>
+    </div>
+
+    <div class="group">
+      <span class="tag fix">修复 Fixed</span>
+      <ul>
+        <li>无破坏性修复；本次以内容 / 范式补全为主。</li>
+      </ul>
+    </div>
+
+    <div class="files">
+      <div class="ftitle">📁 本次涉及文件</div>
+      <p><span class="fk add">新增 3</span><code>templates/blank-character-design-doc.html</code> · <code>jin-yu/烬羽-战斗设计及养成效果.html</code> + <code>md/.md</code></p>
+      <p><span class="fk chg">修改 7</span><code>SKILL.md</code> · <code>README.md</code> · <code>上手指南.html</code> · <code>CHANGELOG.md</code> + 本页 · <code>references/design-doc-structure.md</code> · <code>references/review-html-components.md</code></p>
+      <p><span class="fk chg">重命名 2</span><code>cang-lan/</code> 下 <code>苍岚-战斗设计</code> + <code>苍岚-养成与效果</code>（html + md/）</p>
+      <p><span class="fk del">删除 0</span>无</p>
+    </div>
+  </section>
+
+  <section class="ver">
     <h2>v1.1 <span class="date">2026-06-18</span></h2>
     <p class="tldr">本次主要：新增<strong>自我更新机制</strong>（🧪 试验性）+ <strong>数值建模验证</strong>方法论 + <strong>gacha 示例项目</strong>，并让设计稿默认产出审阅 HTML。</p>
     <div class="notice">
@@ -97,7 +141,7 @@
 
     <div class="files">
       <div class="ftitle">📁 本次涉及文件</div>
-      <p><span class="fk add">新增 9</span><code>knowledge-local/</code>（README + 2 占位）· <code>conventions/example-conventions-gacha.md</code> · <code>references/effect-progression-design.md</code> · <code>cang-lan/苍岚-效果与养成-gacha演示.md</code> + <code>.html</code> · <code>CHANGELOG.md</code> + <code>CHANGELOG.html</code></p>
+      <p><span class="fk add">新增 9</span><code>knowledge-local/</code>（README + 2 占位）· <code>conventions/example-conventions-gacha.md</code> · <code>references/effect-progression-design.md</code> · <code>cang-lan/苍岚-养成与效果.md</code> + <code>.html</code> · <code>CHANGELOG.md</code> + <code>CHANGELOG.html</code></p>
       <p><span class="fk chg">修改 7</span><code>SKILL.md</code> · <code>README.md</code> · <code>USAGE.md</code> · <code>conventions/TEMPLATE.md</code> · <code>references/numbers-and-progression.md</code> · <code>上手指南.html</code> · <code>.gitignore</code></p>
       <p><span class="fk del">删除 0</span>无</p>
     </div>

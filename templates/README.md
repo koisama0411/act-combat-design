@@ -33,4 +33,4 @@
 1. 复制对应模板到 [`../output/characters/<单位>/`](../output/) 或 `../output/bosses/<单位>/`。
 2. HTML：改顶部 `LS_PREFIX`、`<title>`、各 `<section>` 内容、Tab 标签。
 3. 资源 md：删示例行、按你的设计填；要 xlsx 用 `../scripts/`。
-4. 想看填好的样子 → [`../output/characters/cang-lan/`](../output/characters/cang-lan/)（苍岚）、[`../output/bosses/gu-ya/`](../output/bosses/gu-ya/)（孤鸦，含 HTML + md + xlsx）。
+4. 想看填好的样子 → [`../output/characters/cang-lan/`](../output/characters/cang-lan/)（苍岚分稿）、[`../output/characters/jin-yu/`](../output/characters/jin-yu/)（烬羽完整稿）、[`../output/bosses/gu-ya/`](../output/bosses/gu-ya/)（孤鸦，含 HTML + md + xlsx）。
