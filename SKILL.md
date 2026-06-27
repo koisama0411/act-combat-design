@@ -1,6 +1,6 @@
 ---
 name: act-combat-design
-description: 二次元 / 动作游戏(ACT)战斗设计专家方法论 + 行业知识库。用户说"设计 XXX 角色"/"做 XXX 战斗设计"/"配 XXX 角色玩法"/"设计 XXX boss"/"设计 XXX 怪物"/"战斗策划专家"时触发。产出可给策划 / 美术审阅的战斗设计文档(markdown 或 HTML)，覆盖玩家角色与怪物 Boss。本方法论**不预设任何具体战斗体系**——招式集 / 分类轴 / 视觉预警 / 受击状态 / 配队 / 养成等由你的项目自己定义(见 conventions/TEMPLATE.md)；内置角色原型库、Boss 范式库、46 条元规则、跨游戏借鉴库(70+ 游戏)、打击感 / 数值 / Boss AI 工程基线。Anime/action-game combat design expert: methodology + industry knowledge base, project-agnostic.
+description: '二次元 / 动作游戏(ACT)战斗设计专家方法论 + 行业知识库。用户说"设计 XXX 角色"/"做 XXX 战斗设计"/"配 XXX 角色玩法"/"设计 XXX boss"/"设计 XXX 怪物"/"战斗策划专家"时触发。产出可给策划 / 美术审阅的战斗设计文档(markdown 或 HTML)，覆盖玩家角色与怪物 Boss。本方法论**不预设任何具体战斗体系**——招式集 / 分类轴 / 视觉预警 / 受击状态 / 配队 / 养成等由你的项目自己定义(见 conventions/TEMPLATE.md)；内置角色原型库、Boss 范式库、46 条元规则、跨游戏借鉴库(70+ 游戏)、打击感 / 数值 / Boss AI 工程基线。Anime/action-game combat design expert: methodology + industry knowledge base, project-agnostic.'
 ---
 
 # 二次元 ACT 战斗设计专家 · Anime ACT Combat Design Expert
